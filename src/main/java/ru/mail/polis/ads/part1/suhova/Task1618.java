@@ -22,7 +22,7 @@ public class Task1618 {
         int last = min(arr1.length, arr2.length);
         int first = 1;
         int position = last / 2;
-        while (first <= last) {
+        while (first <= last && position>0) {
             if (!isLengthContains(position, arr1, arr2)) {
                 last = position - 1;
             } else {
