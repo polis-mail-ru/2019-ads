@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.Jhoysbou;
 
 
 import java.util.Scanner;
-//Submission here https://www.e-olymp.com/ru/submissions/5722496
+//Submission here https://www.e-olymp.com/ru/submissions/5722724
 public class ThirdExercise {
     public static void main(String... arg){
         Scanner scanner = new Scanner(System.in);
@@ -27,7 +27,7 @@ public class ThirdExercise {
                     for (int factor = 1; factor < len; ++factor){
                         if (len % factor == 0){
                             boolean isPeriodic = true;
-                            for (int i = left + factor; i < right; ++i){
+                            for (int i = left + factor; i <= right; ++i){
                                 if (sequence.charAt(i) != sequence.charAt(i - factor)){ isPeriodic = false; break; }
                             }
                             if (isPeriodic){
@@ -44,7 +44,7 @@ public class ThirdExercise {
                 result[left][right] = min;
                 }
             }
-        System.out.print(result[0][length - 1]);
+        System.out.println(result[0][length - 1]);
 
         }
 }
