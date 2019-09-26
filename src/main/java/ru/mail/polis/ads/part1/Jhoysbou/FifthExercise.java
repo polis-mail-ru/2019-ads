@@ -1,6 +1,9 @@
 package ru.mail.polis.ads.part1.Jhoysbou;
 import java.util.LinkedList;
 import java.util.Scanner;
+
+// Submission here https://www.e-olymp.com/ru/submissions/5723170
+
 public class FifthExercise {
     public static void main(String... args){
         SimpleQueue.run();
