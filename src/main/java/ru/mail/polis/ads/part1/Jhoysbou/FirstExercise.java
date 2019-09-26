@@ -1,7 +1,7 @@
 package ru.mail.polis.ads.part1.Jhoysbou;
 
 import java.util.Scanner;
-// submition here https://www.e-olymp.com/ru/submissions/5714850
+// submission here https://www.e-olymp.com/ru/submissions/5714850
 public class FirstExercise{
     public static void main(String... args){
         Scanner scanner = new Scanner(System.in);

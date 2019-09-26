@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.Jhoysbou;
 
 
 import java.util.Scanner;
-
+//Submission here https://www.e-olymp.com/ru/submissions/5722496
 public class ThirdExercise {
     public static void main(String... arg){
         Scanner scanner = new Scanner(System.in);
