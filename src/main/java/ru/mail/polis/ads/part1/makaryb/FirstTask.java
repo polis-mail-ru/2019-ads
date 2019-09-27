@@ -12,8 +12,8 @@ import java.util.StringTokenizer;
  * Modified by БорискинМА
  * 27.09.19
  * gr. Java-10, Технополис
- * IntelliJ IDEA Ultimate 2019.2, for educational use only
- * e-olymp: https://www.e-olymp.com/ru/submissions/5712136
+ * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
+ * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5712136
  */
 public final class FirstTask {
     private FirstTask() {
@@ -21,17 +21,14 @@ public final class FirstTask {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        Scanner input = new Scanner(System.in);
-        PrintWriter output = new PrintWriter(System.out);
-
-        int total = input.nextInt();
+        int total = in.nextInt();
         int digit1,digit2;
 
         digit1=total/10;
         digit2=total%10;
-        output.println(digit1 +" " + digit2);
+        out.println(digit1 +" " + digit2);
 
-        output.flush();
+        out.flush();
     }
 
     private static class FastScanner {
