@@ -10,7 +10,8 @@ import java.util.StringTokenizer;
 public final class Task1 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        //int inNumber = in.next();
+        String inNumber = in.next();
+        out.print(inNumber.charAt(0) + " " +inNumber.charAt(1));
     }
 
 
