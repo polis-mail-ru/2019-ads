@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5723170
+// Submission here https://www.e-olymp.com/ru/submissions/5727106
 
 public class FifthExercise {
     public static void main(String... args){
