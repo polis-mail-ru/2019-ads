@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.bogdanMendli;
+package ru.mail.polis.ads.part1.bogdanmendli;
 
 import java.io.PrintWriter;
 import java.util.Scanner;

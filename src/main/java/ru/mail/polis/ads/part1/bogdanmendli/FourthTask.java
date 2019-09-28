@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.bogdanMendli;
+package ru.mail.polis.ads.part1.bogdanmendli;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -8,7 +8,9 @@ public final class FourthTask {
     private FourthTask() {
     }
 
-    private static void solve(final Scanner in, final PrintWriter out) {
+    private static void solve() {
+        final Scanner in = new Scanner(System.in);
+        final PrintWriter out = new PrintWriter(System.out);
         final int lengthFirstSequence = in.nextInt();
         int[] firstSequence = new int[lengthFirstSequence + 1];
         for (int i = 1; i <= lengthFirstSequence ; i++) {
@@ -36,9 +38,6 @@ public final class FourthTask {
     }
 
     public static void main(final String[] arg) {
-        final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve();
     }
 }
