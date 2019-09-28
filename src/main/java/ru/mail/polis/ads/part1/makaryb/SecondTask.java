@@ -1,7 +1,8 @@
 package ru.mail.polis.ads.part1.makaryb;
 
 import java.io.PrintWriter;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import static java.lang.Math.min;
@@ -11,21 +12,18 @@ import static java.lang.Math.min;
  * 28.09.19
  * gr. Java-10, Технополис
  * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
- * e-olymp 81%: https://www.e-olymp.com/ru/submissions/5731171
+ * e-olymp 81%: https://www.e-olymp.com/ru/submissions/5735719
  */
 public final class SecondTask {
-    // Исходная последовательность содержит
-    // не более 100 скобок (по условию)
-    private static int max = 100;
     // рассматриваемая последовательность
     private static String pts = "";
-    // информация для восстановления строки,
-    // считаемой за правильную
-    private static int[][] repair = new int[max][max];
+    // repair - информация для восстановления строки,
+    // считаемой за правильную;
     // minS - наименьшее количество символов,
     // которые необходимо вставить в строку,
-    // чтобы она стала правильной
-    private static int[][] minS = new int[max][max];
+    // чтобы она стала правильной.
+    private static List<List<Integer>> repair = new ArrayList<>();
+    private static List<List<Integer>> minS = new ArrayList<>();
 
     private SecondTask() {}
 
@@ -33,15 +31,47 @@ public final class SecondTask {
         pts = in.nextLine();
         int len = pts.length();
 
-        for (int[] ints : repair)
-            Arrays.fill(ints, -1);
+        // Исходная последовательность содержит
+        // не более 100 скобок (по условию)
+        if (len > 100) {
+            System.out.println("Вы ввели больше " + 100 + " скобок");
+            System.exit(1);
+        }
 
-        for (int[] ints : minS)
-            Arrays.fill(ints, 0x3F);
+        int defValue = -1;
+        int defInf = 0x3F;
+
+        for (int col = 0; col < len; col++) {
+            List<Integer> row1 = new ArrayList<>();
+            List<Integer> row2 = new ArrayList<>();
+            for (int i = 0; i < len; i++) {
+                row1.add(defValue);
+                row2.add(defInf);
+            }
+            repair.add(row1);
+            minS.add(row2);
+        }
+
+        //выведет дефолтную матрицу
+        /*for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++)
+                System.out.print(repair.get(i).get(j));
+            System.out.print("\n");
+        }*/
 
         fillSolutionMatrices(0, len-1);
+
+        // выведет текущую переходную матрицу
+        /*for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++)
+                System.out.print(repair.get(i).get(j)+" ");
+            System.out.print("\n");
+        }
+        System.out.print("\n");*/
+
         printResult(0, len-1);
 
+        System.out.print("\n");
         out.flush();
     }
 
@@ -51,20 +81,20 @@ public final class SecondTask {
         // неправильный вход
         else if (i > j) return 0;
         // когда записали
-        if (minS[i][j] != 0x3F)
-            return minS[i][j];
+        if (minS.get(i).get(j) != 0x3F)
+            return minS.get(i).get(j);
         // правильная ли постановка символов
         if ((pts.charAt(i) == '(' && pts.charAt(j) == ')') || (pts.charAt(i) == '[' && pts.charAt(j) == ']'))
-            minS[i][j] = min(minS[i][j], fillSolutionMatrices(i+1,j-1));
+            minS.get(i).set(j, min(minS.get(i).get(j), fillSolutionMatrices(i+1,j-1)));
         // составляем матрицы minS и repair для нашего ввода
         for (int k = i; k < j; k++) {
             int temp = fillSolutionMatrices(i,k) + fillSolutionMatrices(k+1,j);
-            if (temp < minS[i][j]) {
-                repair[i][j] = k;
-                minS[i][j] = temp;
+            if (temp < minS.get(i).get(j)) {
+                repair.get(i).set(j,k);
+                minS.get(i).set(j, temp);
             }
         }
-        return minS[i][j];
+        return minS.get(i).get(j);
     }
 
     private static void printResult(int i, int j) {
@@ -74,13 +104,13 @@ public final class SecondTask {
                 System.out.print("()");
             else
                 System.out.print("[]");
-        } else if (repair[i][j] == -1) {
+        } else if (repair.get(i).get(j) == -1) {
             System.out.print(pts.charAt(i));
             printResult(i + 1, j - 1);
             System.out.print(pts.charAt(j));
         } else {
-            printResult(i, repair[i][j]);
-            printResult(repair[i][j] + 1, j);
+            printResult(i, repair.get(i).get(j));
+            printResult(repair.get(i).get(j) + 1, j);
         }
     }
 
