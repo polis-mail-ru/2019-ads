@@ -1,9 +1,9 @@
-package ru.mail.polis.ads.part1.BogdanMendli;
+package ru.mail.polis.ads.part1.bogdanMendli;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
 
-public class OwnQueue {
+public final class OwnQueue {
 
     private final double loadFactor;
 
@@ -12,19 +12,9 @@ public class OwnQueue {
     private int head;
     private int size;
     private int maxSize;
-    private PrintWriter pw;
+    private final PrintWriter pw;
 
-    private OwnQueue() {
-        maxSize = 16;
-        elements = new int[maxSize];
-        loadFactor = 0.75d;
-        tail = -1;
-        head = 0;
-        size = 0;
-        pw = new PrintWriter(System.out);
-    }
-
-    private OwnQueue(int maxSize) {
+    private OwnQueue(final int maxSize) {
         if (maxSize < 1) {
             this.maxSize = 1;
         } else {
@@ -32,38 +22,6 @@ public class OwnQueue {
         }
         elements = new int[maxSize];
         loadFactor = 0.75d;
-        tail = -1;
-        head = 0;
-        size = 0;
-        pw = new PrintWriter(System.out);
-    }
-
-    private OwnQueue(int maxSize, double loadFactor) {
-        if (maxSize < 1) {
-            this.maxSize = 1;
-        } else {
-            this.maxSize = maxSize;
-        }
-        if ((loadFactor > 1) || (loadFactor < 0.5)) {
-            this.loadFactor = 0.75d;
-        } else {
-            this.loadFactor = loadFactor;
-        }
-        elements = new int[maxSize];
-        tail = -1;
-        head = 0;
-        size = 0;
-        pw = new PrintWriter(System.out);
-    }
-
-    private OwnQueue(double loadFactor) {
-        maxSize = 16;
-        elements = new int[maxSize];
-        if ((loadFactor > 1) || (loadFactor < 0.5)) {
-            this.loadFactor = 0.75d;
-        } else {
-            this.loadFactor = loadFactor;
-        }
         tail = -1;
         head = 0;
         size = 0;
@@ -75,7 +33,7 @@ public class OwnQueue {
         return size;
     }
 
-    private void push(int element) {
+    private void push(final int element) {
         if (size == 0) {
             head = 0;
             tail = -1;
@@ -86,7 +44,7 @@ public class OwnQueue {
 
         if (tail > maxSize * loadFactor) {
             maxSize *= 2;
-            int []temp = elements;
+            final int []temp = elements;
             elements = new int[maxSize];
             for (int i = 0; i < size; i++) {
                 elements[i] = temp[head + i];
@@ -99,15 +57,8 @@ public class OwnQueue {
     }
 
     private int front() {
-        if (size == 0) {
-            throw new NullPointerException("queue is empty");
-        }
         pw.println(elements[head]);
         return elements[head];
-    }
-
-    private boolean isEmpty() {
-        return size == 0;
     }
 
     private void clear() {
@@ -120,9 +71,6 @@ public class OwnQueue {
     }
 
     private int pop() {
-        if (size == 0) {
-            throw new NullPointerException("queue is empty");
-        }
         size--;
         pw.println(elements[head]);
         return elements[head++];
@@ -134,9 +82,9 @@ public class OwnQueue {
         System.exit(0);
     }
 
-    public static void main(String[] args) {
-        OwnQueue queue = new OwnQueue(100);
-        Scanner scanner = new Scanner(System.in);
+    public static void main(final String[] args) {
+        final OwnQueue queue = new OwnQueue(100);
+        final Scanner scanner = new Scanner(System.in);
         String[] in;
         while (true) {
             in = scanner.nextLine().trim().split(" ");
@@ -163,6 +111,7 @@ public class OwnQueue {
                 }
                 case "exit" : {
                     queue.exit();
+                    break;
                 }
                 default : {
                     throw new IllegalArgumentException("Wrong command");
