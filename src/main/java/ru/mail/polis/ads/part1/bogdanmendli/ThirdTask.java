@@ -14,14 +14,8 @@ public final class ThirdTask {
     }
 
 
-    private static void findMinimumSequence(int left, int right, int i) {
-        for (int right1 = left; right1 < right; right1++) {
-            final int left2 = right1 + 1;
-            final String temp = packed[left][right1] + packed[left2][right];
-            if (temp.length() < minSequence.length()) {
-                minSequence = temp;
-            }
-        }
+    private static void findMinimumSequence(final int left, final int right, final int i) {
+        checkLength(left, right);
         for (int j = 1; j < i; j++) {
             if (i % j == 0) {
                 boolean isRepeat = true;
@@ -37,6 +31,16 @@ public final class ThirdTask {
                         minSequence = temp;
                     }
                 }
+            }
+        }
+    }
+
+    static void checkLength(final int left, final int right) {
+        for (int right1 = left; right1 < right; right1++) {
+            final int left2 = right1 + 1;
+            final String temp = packed[left][right1] + packed[left2][right];
+            if (temp.length() < minSequence.length()) {
+                minSequence = temp;
             }
         }
     }
