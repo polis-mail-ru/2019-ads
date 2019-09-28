@@ -18,23 +18,43 @@ public final class SecondTask {
             for (int left = 0; left + i - 1 < length; left++) {
                 final int right = left + i - 1;
                 if (i == 1) {
-                    if (sequence.charAt(left) == '(' || sequence.charAt(left) == ')') {
-                        resultSequences[left][right] = "()";
-                    } else if (sequence.charAt(left) == '[' || sequence.charAt(left) == ']') {
-                        resultSequences[left][right] = "[]";
-                    } else throw new IllegalArgumentException("Something went wrong");
+                    resultSequences[left][right] = checkBracketLengthByOne(sequence.charAt(left), left, right);
                 } else if (i == 2) {
-                    if (sequence.charAt(left) == '(' && sequence.charAt(right) == ')') {
-                        resultSequences[left][right] = "()";
-                    } else if (sequence.charAt(left) == '[' && sequence.charAt(right) == ']') {
-                        resultSequences[left][right] = "[]";
-                    } else {
-                        resultSequences[left][right] = resultSequences[left][left] + resultSequences[right][right];
-                    }
+                    resultSequences[left][right] = checkBracketLengthByTwo(
+                        sequence.charAt(left),
+                        sequence.charAt(right),
+                        left,
+                        right
+                    );
                 } else {
                     findMinimumSequence(left, right);
                 }
             }
+        }
+    }
+
+    private static String checkBracketLengthByOne(final char bracket, final int left, final int right) {
+        if (bracket == '(' || bracket == ')') {
+            return "()";
+        } else if (bracket == '[' || bracket == ']') {
+            return "[]";
+        } else {
+            throw new IllegalArgumentException("Something went wrong");
+        }
+    }
+
+    private static String checkBracketLengthByTwo(
+        final char bracketLeft,
+        final char bracketRight,
+        final int left,
+        final int right
+    ) {
+        if (bracketLeft == '(' || bracketRight == ')') {
+            return "()";
+        } else if (bracketLeft == '[' || bracketRight == ']') {
+            return "[]";
+        } else {
+            return resultSequences[left][left] + resultSequences[right][right];
         }
     }
 
@@ -50,7 +70,7 @@ public final class SecondTask {
                 minSequence = temp;
             }
         }
-        resultSequences[left][right] = minSequence.toString();
+        resultSequences[left][right] = minSequence;
     }
 
     private static void solve() {

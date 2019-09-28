@@ -18,20 +18,22 @@ public final class ThirdTask {
         checkLength(left, right);
         for (int j = 1; j < i; j++) {
             if (i % j == 0) {
-                boolean isRepeat = true;
-                for (int k = left + j; k <= right; k++) {
-                    if (sequence.charAt(k) != sequence.charAt(k - j)) {
-                        isRepeat = false;
-                        break;
-                    }
-                }
-                if (isRepeat) {
-                    final String temp = i / j + "(" + packed[left][left + j - 1] + ")";
-                    if (temp.length() < minSequence.length()) {
-                        minSequence = temp;
-                    }
-                }
+                checkRepeat(left, right, i, j);
             }
+        }
+    }
+
+    private static void checkRepeat(final int left, final int right, final int j, final int i) {
+        boolean isRepeat = true;
+        for (int k = left + j; k <= right; k++) {
+            if (sequence.charAt(k) != sequence.charAt(k - j)) {
+                isRepeat = false;
+                break;
+            }
+        }
+        final String temp = i / j + "(" + packed[left][left + j - 1] + ")";
+        if (temp.length() < minSequence.length() && isRepeat) {
+            minSequence = temp;
         }
     }
 
