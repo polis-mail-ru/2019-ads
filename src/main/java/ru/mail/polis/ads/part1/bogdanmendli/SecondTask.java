@@ -18,7 +18,7 @@ public final class SecondTask {
             for (int left = 0; left + i - 1 < length; left++) {
                 final int right = left + i - 1;
                 if (i == 1) {
-                    resultSequences[left][right] = checkBracketLengthByOne(sequence.charAt(left), left, right);
+                    resultSequences[left][right] = checkBracketLengthByOne(sequence.charAt(left));
                 } else if (i == 2) {
                     resultSequences[left][right] = checkBracketLengthByTwo(
                         sequence.charAt(left),
@@ -33,7 +33,7 @@ public final class SecondTask {
         }
     }
 
-    private static String checkBracketLengthByOne(final char bracket, final int left, final int right) {
+    private static String checkBracketLengthByOne(final char bracket) {
         if (bracket == '(' || bracket == ')') {
             return "()";
         } else if (bracket == '[' || bracket == ']') {
