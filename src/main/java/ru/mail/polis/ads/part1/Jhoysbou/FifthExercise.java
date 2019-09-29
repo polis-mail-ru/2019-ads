@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5727106
+// Submission here https://www.e-olymp.com/ru/submissions/5743541
 
 public class FifthExercise {
     public static void main(String... args){
@@ -15,6 +15,8 @@ public class FifthExercise {
         private static LinkedList<Integer> arrayList = new LinkedList<>();
         private static boolean isRunning = false;
         private static String functionArgument;
+        private static int beginIndex = 0;
+        private static int endIndex = 0;
 
 
         private static void run(){
@@ -36,33 +38,30 @@ public class FifthExercise {
             int length = functionArgument.length();
             String command = "";
             int commandArgument = 0;
-            boolean isArgumnt = false;
-            for (int i = 0; i < length; ++i){
-                if (functionArgument.charAt(i) == ' ')
-                {
-                    command = functionArgument.substring(0, i);
-                    commandArgument = Integer.parseInt(functionArgument.substring(i+1));
-                    isArgumnt = true;
-                }
-            }
-            if (!isArgumnt) { command = functionArgument; }
+            String[] temp = functionArgument.split(" ");
+            command = temp[0];
+            try {
+                commandArgument = Integer.parseInt(temp[1]);
+            }catch(java.lang.ArrayIndexOutOfBoundsException e){ }
 
             switch (command){
                 case "push":
                     arrayList.add(commandArgument);
                     System.out.println("ok");
+                    endIndex++;
                     break;
                 case "pop":
-                    System.out.println(arrayList.pop());
+                    System.out.println(arrayList.get(beginIndex));
+                    arrayList.remove(beginIndex);
                     break;
                 case "front":
-                    System.out.println(arrayList.peekFirst());
+                    System.out.println(arrayList.get(beginIndex));
                     break;
                 case "size":
                     System.out.println(arrayList.size());
                     break;
                 case "clear":
-                    arrayList = new LinkedList<Integer>();
+                    arrayList.clear();
                     System.out.println("ok");
                     break;
                 case "exit":
