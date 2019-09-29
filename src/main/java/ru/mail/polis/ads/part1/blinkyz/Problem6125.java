@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.blinky_z;
+package ru.mail.polis.ads.part1.blinkyz;
 
 import java.io.*;
 import java.util.NoSuchElementException;
