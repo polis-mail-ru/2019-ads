@@ -37,7 +37,7 @@ public final class FifthTask {
                     push(x, out);
                     break;
                 case "pop":
-                    pop(x, out);
+                    pop(out);
                     break;
                 case "front":
                     front(out);
@@ -48,8 +48,11 @@ public final class FifthTask {
                 case "clear":
                     clear(out);
                     break;
+                default:
+                    throw new IllegalArgumentException("unexpected");
             }
-        } while(!x.equals("exit"));
+        }
+        while(!x.equals("exit"));
         out.println("bye");
 
         out.flush();
@@ -60,7 +63,7 @@ public final class FifthTask {
         out.println("ok");
     }
 
-    private static void pop(String x, PrintWriter out) {
+    private static void pop(PrintWriter out) {
         out.println(queue.get(start));
         queue.remove(start);
     }

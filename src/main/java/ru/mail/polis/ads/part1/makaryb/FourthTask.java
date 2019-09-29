@@ -55,11 +55,10 @@ public final class FourthTask {
 
     private static String packPeriodic(int length, String startIn, int lBorder, int rBorder, String compressed, String[][] finalOut) {
         for (int cursor = 1; cursor < length; cursor++) {
-            if (length % cursor == 0) {
-                if (hasPeriod(startIn, lBorder, cursor, rBorder)) {
-                    String temp = length / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
-                    if (temp.length() < compressed.length())
-                        compressed = temp;
+            if (length % cursor == 0 && hasPeriod(startIn, lBorder, cursor, rBorder)) {
+                String temp = length / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
+                if (temp.length() < compressed.length()) {
+                    compressed = temp;
                 }
             }
         }
