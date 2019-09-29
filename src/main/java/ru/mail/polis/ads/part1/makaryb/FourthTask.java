@@ -17,6 +17,8 @@ public final class FourthTask {
 
     private static Logger logger = Logger.getLogger(FourthTask.class.getName());
 
+    private static String[][] finalOut;
+
     private FourthTask() {}
 
     private static void solve(final Scanner in) {
@@ -29,31 +31,30 @@ public final class FourthTask {
     }
 
     private static String recalculateAndPack(final String startIn, final int length) {
-        String[][] finalOut;
         finalOut = new String[length][length];
 
         for (int i = 1; i < length + 1; i++) {
-            mileage(i, length, startIn, finalOut);
+            mileage(i, length, startIn);
         }
         return finalOut[0][length - 1];
     }
 
-    private static void mileage(final int i, final int len, final String in, final String[][] out) {
+    private static void mileage(final int i, final int len, final String in) {
         for (int l = 0; i + l - 1 < len; l++) {
             final int r = i + l - 1;
             String compressed = in.substring(l, r + 1);
 
             if (i > 4) {
-                compressed = pack(l, r, out, compressed);
+                compressed = pack(l, r, finalOut, compressed);
 
                 for (int cursor = 1; cursor < i; cursor++) {
                     if (i % cursor == 0 && hasPeriod(in, l, cursor, r)) {
-                        final String temp = i / cursor + "(" + out[l][l + cursor -1] + ")";
+                        final String temp = i / cursor + "(" + finalOut[l][l + cursor -1] + ")";
                         compressed = periodEval(compressed, temp);
                     }
                 }
             }
-            out[l][r] = compressed;
+            finalOut[l][r] = compressed;
         }
     }
 

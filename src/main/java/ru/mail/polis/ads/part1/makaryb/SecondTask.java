@@ -45,9 +45,12 @@ public final class SecondTask {
             System.exit(1);
         }
 
+        List<Integer> row1;
+        List<Integer> row2;
+
         for (int col = 0; col < len; col++) {
-            final List<Integer> row1 = new ArrayList<>();
-            final List<Integer> row2 = new ArrayList<>();
+            row1 = new ArrayList<>();
+            row2 = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 row1.add(-1);
                 row2.add(MAX_VALUE);
