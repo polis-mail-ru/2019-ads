@@ -9,13 +9,17 @@ import java.util.NoSuchElementException;
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736570}.
  */
 public class Problem6125 {
+    private Problem6125() {
+
+    }
+
     /**
      * Queue implementation based on ring buffer.
      */
     private static final class ArrayQueue {
         private Integer[] queue;
 
-        private static final int arraySize = 128;
+        private static final int ARRAY_SIZE = 128;
 
         private int head;
 
@@ -24,18 +28,18 @@ public class Problem6125 {
         private int size;
 
         ArrayQueue() {
-            queue = new Integer[arraySize];
+            queue = new Integer[ARRAY_SIZE];
             head = 0;
             tail = 0;
             size = 0;
         }
 
         void push(final Integer elem) throws IllegalStateException {
-            if (tail + 1 == head || head == 0 && tail + 1 == arraySize) {
+            if (tail + 1 == head || head == 0 && tail + 1 == ARRAY_SIZE) {
                 throw new IllegalStateException("Queue is full!");
             }
             queue[tail] = elem;
-            if (tail + 1 == arraySize) {
+            if (tail + 1 == ARRAY_SIZE) {
                 tail = 0;
             } else {
                 ++tail;
@@ -50,7 +54,7 @@ public class Problem6125 {
 
             final Integer elem = queue[head];
             queue[head] = null;
-            if (head + 1 == arraySize) {
+            if (head + 1 == ARRAY_SIZE) {
                 head = 0;
             } else {
                 ++head;
@@ -73,7 +77,7 @@ public class Problem6125 {
         void clear() {
             while (head != tail) {
                 queue[head] = null;
-                if (head + 1 == arraySize) {
+                if (head + 1 == ARRAY_SIZE) {
                     head = 0;
                 } else {
                     ++head;

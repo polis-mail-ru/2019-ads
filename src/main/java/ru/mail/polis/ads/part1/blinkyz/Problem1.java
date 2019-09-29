@@ -3,6 +3,10 @@ package ru.mail.polis.ads.part1.blinkyz;
 import java.io.PrintWriter;
 
 public class Problem1 {
+    private Problem1() {
+
+    }
+
     private static void solve(final FastScanner in, final PrintWriter out) {
         final int num = in.nextInt();
         out.println(num / 10 + " " + num % 10);

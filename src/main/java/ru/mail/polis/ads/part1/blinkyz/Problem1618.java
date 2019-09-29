@@ -11,6 +11,10 @@ import java.util.List;
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736502}.
  */
 public class Problem1618 {
+    private Problem1618() {
+
+    }
+
     /**
      * Subsequence struct.
      *
@@ -80,8 +84,7 @@ public class Problem1618 {
                     // as said we can insert a new element only and only if new entrance pos < lastPos
                     if (curSub.lastPos < curEntrancePos && (curSub.size + 1) > lastInsertedSize) {
                         final int newSize = curSub.size + 1;
-                        final Subsequence newSub = new Subsequence(newSize, curEntrancePos);
-                        subsToAdd.add(newSub);
+                        subsToAdd.add(new Subsequence(newSize, curEntrancePos));
                         lastInsertedSize = newSize;
                         isInsertedInCurrentSub[j] = true;
                         break;
