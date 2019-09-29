@@ -33,27 +33,32 @@ public final class FourthTask {
         finalOut = new String[length][length];
 
         for (int i = 1; i < length + 1; i++) {
-            for (int lBorder = 0; i + lBorder - 1 < length; lBorder++) {
+            for (int l = 0; i + l - 1 < length; l++) {
 
-                final int rBorder = i + lBorder - 1;
-                String compressed = startIn.substring(lBorder, rBorder + 1);
+                final int r = i + l - 1;
+                String compressed = startIn.substring(l, r + 1);
 
                 if (i > 4) {
-                    compressed = defPack(lBorder, rBorder, finalOut, compressed);
+                    compressed = pack(l, r, finalOut, compressed);
 
                     for (int cursor = 1; cursor < i; cursor++) {
-                        if (i % cursor == 0 && hasPeriod(startIn, lBorder, cursor, rBorder)) {
-                            final String temp = i / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
-                            if (temp.length() < compressed.length()) {
-                                compressed = temp;
-                            }
+                        if (i % cursor == 0 && hasPeriod(startIn, l, cursor, r)) {
+                            final String temp = i / cursor + "(" + finalOut[l][l + cursor -1] + ")";
+                            compressed = periodicEvaluation(compressed, temp);
                         }
                     }
                 }
-                finalOut[lBorder][rBorder] = compressed;
+                finalOut[l][r] = compressed;
             }
         }
         return finalOut[0][length - 1];
+    }
+
+    private static String periodicEvaluation(String compressed, String temporaryCompressed) {
+        if (temporaryCompressed.length() < compressed.length()) {
+            compressed = temporaryCompressed;
+        }
+        return compressed;
     }
 
     private static boolean hasPeriod(final String startIn, final int lBorder, final int cursor, final int rBorder) {
@@ -65,11 +70,11 @@ public final class FourthTask {
         return true;
     }
 
-    private static String defPack(final int lBorder, final int rBorder, final String[][] finalOut, final String compressed) {
+    private static String pack(final int l, final int r, final String[][] finalOut, final String compressed) {
         String temporary = compressed;
-        for (int inRBorder = lBorder; inRBorder < rBorder; inRBorder++) {
+        for (int inRBorder = l; inRBorder < r; inRBorder++) {
             final int inLBorder = inRBorder + 1;
-            final String symbol = finalOut[lBorder][inRBorder] + finalOut[inLBorder][rBorder];
+            final String symbol = finalOut[l][inRBorder] + finalOut[inLBorder][r];
             if (symbol.length() < temporary.length()) {
                 temporary = symbol;
             }
