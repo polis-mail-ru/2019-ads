@@ -1,12 +1,10 @@
 package ru.mail.polis.ads.part1.blinkyz;
 
-import java.io.*;
+import java.io.PrintWriter;
 import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 /**
  * Problem 6125.
- * <p>
  * Link: {@code https://www.e-olymp.com/ru/problems/6125}.
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736570}.
  */
@@ -19,7 +17,7 @@ public class Problem6125 {
      * Queue implementation based on ring buffer.
      */
     private static final class ArrayQueue {
-        private Integer[] q;
+        private Integer[] queue;
 
         private final int arraySize = 128;
 
@@ -30,24 +28,23 @@ public class Problem6125 {
         private int size;
 
         ArrayQueue() {
-            q = new Integer[arraySize];
+            queue = new Integer[arraySize];
             head = 0;
             tail = 0;
             size = 0;
         }
 
-        Integer push(Integer e) throws IllegalStateException {
+        void push(final Integer elem) throws IllegalStateException {
             if ((tail + 1 == head) || (head == 0 && tail + 1 == arraySize)) {
                 throw new IllegalStateException("Queue is full!");
             }
-            q[tail] = e;
+            queue[tail] = elem;
             if (tail + 1 == arraySize) {
                 tail = 0;
             } else {
                 ++tail;
             }
             ++size;
-            return e;
         }
 
         Integer pop() throws NoSuchElementException {
@@ -55,22 +52,22 @@ public class Problem6125 {
                 throw new NoSuchElementException("Queue is empty");
             }
 
-            Integer e = q[head];
-            q[head] = null;
+            final Integer elem = queue[head];
+            queue[head] = null;
             if (head + 1 == arraySize) {
                 head = 0;
             } else {
                 ++head;
             }
             --size;
-            return e;
+            return elem;
         }
 
         Integer front() throws NoSuchElementException {
             if (head == tail) {
                 throw new NoSuchElementException("Queue is empty");
             }
-            return q[head];
+            return queue[head];
         }
 
         int size() {
@@ -79,7 +76,7 @@ public class Problem6125 {
 
         void clear() {
             while (head != tail) {
-                q[head] = null;
+                queue[head] = null;
                 if (head + 1 == arraySize) {
                     head = 0;
                 } else {
@@ -91,7 +88,7 @@ public class Problem6125 {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        ArrayQueue q = new ArrayQueue();
+        final ArrayQueue q = new ArrayQueue();
         String command;
         while (true) {
             command = in.next();
@@ -126,30 +123,6 @@ public class Problem6125 {
                     throw new UnsupportedOperationException("Unsupported or unknown queue operation: " + command);
                 }
             }
-        }
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
         }
     }
 
