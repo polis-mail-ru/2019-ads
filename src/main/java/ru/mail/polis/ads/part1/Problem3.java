@@ -1,91 +1,76 @@
 package ru.mail.polis.ads.part1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 /**
  * submission - https://www.e-olymp.com/ru/submissions/5741169
  */
 public final class Problem3 {
+
+    private static String str;
+    private static String[][] shortest;
+
     private Problem3() {
         // Should not be instantiated
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        String str = in.next();
+    private static void solve() {
+        final Scanner sc = new Scanner(System.in);
+        str = sc.nextLine();
         int length = str.length();
-        String[][] shortest = new String[length][length];
+        shortest = new String[length][length];
 
         for (int len = 1; len <= length; len++) {
             for (int left = 0; left < length - len + 1; left++) {
                 int right = left + len - 1;
                 String min = str.substring(left, right + 1);
                 if (len > 4) {
-                    for (int i = left; i < right; i++) {
-                        String currentShortest = shortest[left][i] + shortest[i + 1][right];
-                        if (currentShortest.length() < min.length()) {
-                            min = currentShortest;
-                        }
-                    }
-                    for (int period = 1; period <= len / 2; period++) {
-                        if (len % period == 0) {
-                            boolean isPeriodic = true;
-                            for (int j = left + period; j <= right; j++) {
-                                if (str.charAt(j) != str.charAt(j - period)) {
-                                    isPeriodic = false;
-                                    break;
-                                }
-                            }
-                            if (isPeriodic) {
-                                String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
-                                if (currentShortest.length() < min.length()) {
-                                    min = currentShortest;
-                                }
-                            }
-                        }
-                    }
+                    min = makeFromMatrix(shortest, left, right, min);
+                    min = wrapSequence(len, left, right, min);
                 }
                 shortest[left][right] = min;
             }
         }
-
         System.out.println(shortest[0][length - 1]);
     }
 
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
+    private static String makeFromMatrix(String[][] shortest, int left, int right, String min) {
+        for (int i = left; i < right; i++) {
+            String currentShortest = shortest[left][i] + shortest[i + 1][right];
+            if (currentShortest.length() < min.length()) {
+                min = currentShortest;
+            }
         }
+        return min;
+    }
 
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
+    private static String wrapSequence(int len, int left, int right, String min) {
+        for (int period = 1; period <= len / 2; period++) {
+            if (len % period == 0) {
+                boolean isPeriodic = checkIsPeriodic(left, right, period);
+                if (isPeriodic) {
+                    String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
+                    if (currentShortest.length() < min.length()) {
+                        min = currentShortest;
+                    }
                 }
             }
-            return tokenizer.nextToken();
         }
+        return min;
+    }
 
-        int nextInt() {
-            return Integer.parseInt(next());
+    private static boolean checkIsPeriodic(int left, int right, int period) {
+        boolean isPeriodic = true;
+        for (int j = left + period; j <= right; j++) {
+            if (str.charAt(j) != str.charAt(j - period)) {
+                isPeriodic = false;
+                break;
+            }
         }
+        return isPeriodic;
     }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve();
     }
 }

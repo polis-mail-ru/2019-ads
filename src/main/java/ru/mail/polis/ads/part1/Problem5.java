@@ -87,6 +87,9 @@ public final class Problem5 {
                     System.out.println("ok");
                     break;
                 }
+                default: {
+
+                }
             }
         }
         System.out.println("bye");
