@@ -17,22 +17,22 @@ public final class FourthTask {
     private FourthTask() {}
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        String x = in.nextLine();
-        int len = x.length();
+        final String x = in.nextLine();
+        final int len = x.length();
 
         System.out.println(recalculateAndPack(x, len));
 
         out.flush();
     }
 
-    private static String recalculateAndPack(String startIn, int length) {
+    private static String recalculateAndPack(final String startIn, final int length) {
         String[][] finalOut;
         finalOut = new String[length][length];
 
         for (int i = 1; i < length + 1; i++) {
             for (int lBorder = 0; i + lBorder - 1 < length; lBorder++) {
 
-                int rBorder = i + lBorder - 1;
+                final int rBorder = i + lBorder - 1;
                 String compressed = startIn.substring(lBorder, rBorder + 1);
 
                 if (i > 4) {
@@ -45,18 +45,19 @@ public final class FourthTask {
         return finalOut[0][length - 1];
     }
 
-    private static boolean hasPeriod(String startIn, int lBorder, int cursor, int rBorder) {
+    private static boolean hasPeriod(final String startIn, final int lBorder, final int cursor, final int rBorder) {
         for (int j = lBorder + cursor; j < rBorder + 1; j++) {
-            if (startIn.charAt(j) != startIn.charAt(j - cursor))
+            if (startIn.charAt(j) != startIn.charAt(j - cursor)) {
                 return false;
+            }
         }
         return true;
     }
 
-    private static String packPeriodic(int length, String startIn, int lBorder, int rBorder, String compressed, String[][] finalOut) {
+    private static String packPeriodic(final int length, final String startIn, final int lBorder, final int rBorder, String compressed, final String[][] finalOut) {
         for (int cursor = 1; cursor < length; cursor++) {
             if (length % cursor == 0 && hasPeriod(startIn, lBorder, cursor, rBorder)) {
-                String temp = length / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
+                final String temp = length / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
                 if (temp.length() < compressed.length()) {
                     compressed = temp;
                 }
@@ -65,12 +66,13 @@ public final class FourthTask {
         return compressed;
     }
 
-    private static String defaultPack(int lBorder, int rBorder, String[][] finalOut, String compressed) {
+    private static String defaultPack(final int lBorder, final int rBorder, final String[][] finalOut, String compressed) {
         for (int inRBorder = lBorder; inRBorder < rBorder; inRBorder++) {
-            int inLBorder = inRBorder + 1;
-            String symbol = finalOut[lBorder][inRBorder] + finalOut[inLBorder][rBorder];
-            if (symbol.length() < compressed.length())
+            final int inLBorder = inRBorder + 1;
+            final String symbol = finalOut[lBorder][inRBorder] + finalOut[inLBorder][rBorder];
+            if (symbol.length() < compressed.length()) {
                 compressed = symbol;
+            }
         }
         return compressed;
     }

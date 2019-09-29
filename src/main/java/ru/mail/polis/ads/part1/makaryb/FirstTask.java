@@ -16,7 +16,7 @@ public final class FirstTask {
     private FirstTask() {}
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        int total = in.nextInt();
+        final int total = in.nextInt();
         int digit1;
         int digit2;
 

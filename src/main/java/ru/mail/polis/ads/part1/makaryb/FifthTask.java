@@ -49,7 +49,7 @@ public final class FifthTask {
                     clear(out);
                     break;
                 default:
-                    throw new IllegalArgumentException("unexpected");
+                    break;
             }
         }
         while(!x.equals("exit"));
@@ -58,25 +58,25 @@ public final class FifthTask {
         out.flush();
     }
 
-    private static void push(String x, PrintWriter out) {
+    private static void push(final String x, final PrintWriter out) {
         queue.add(Integer.parseInt(x.split(" ")[1]));
         out.println("ok");
     }
 
-    private static void pop(PrintWriter out) {
+    private static void pop(final PrintWriter out) {
         out.println(queue.get(start));
         queue.remove(start);
     }
 
-    private static void front(PrintWriter out) {
+    private static void front(final PrintWriter out) {
         out.println(queue.get(start));
     }
 
-    private static void size(PrintWriter out) {
+    private static void size(final PrintWriter out) {
         out.println(queue.size());
     }
 
-    private static void clear(PrintWriter out) {
+    private static void clear(final PrintWriter out) {
         queue.clear();
         out.println("ok");
     }

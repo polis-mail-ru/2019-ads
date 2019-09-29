@@ -31,19 +31,19 @@ public final class SecondTask {
 
     private static void solve(final Scanner in) {
         pts = in.nextLine();
-        int len = pts.length();
+        final int len = pts.length();
 
         // Исходная последовательность содержит
         // не более 100 скобок (по условию)
-        int max = 100;
+        final int max = 100;
         if (len > max) {
             System.out.println("Вы ввели больше " + max + " скобок");
             System.exit(1);
         }
 
         for (int col = 0; col < len; col++) {
-            List<Integer> row1 = new ArrayList<>();
-            List<Integer> row2 = new ArrayList<>();
+            final List<Integer> row1 = new ArrayList<>();
+            final List<Integer> row2 = new ArrayList<>();
             for (int i = 0; i < len; i++) {
                 row1.add(-1);
                 row2.add(MAX_VALUE);
@@ -59,7 +59,7 @@ public final class SecondTask {
         System.out.print("\n");
     }
 
-    private static int fillSolutionMatrices(int i, int j) {
+    private static int fillSolutionMatrices(final int i, final int j) {
         if (i == j) {
             return 1;
         }
@@ -77,7 +77,7 @@ public final class SecondTask {
         }
         // составляем матрицы minS и repair для нашего ввода
         for (int k = i; k < j; k++) {
-            int temp = fillSolutionMatrices(i,k) + fillSolutionMatrices(k+1,j);
+            final int temp = fillSolutionMatrices(i,k) + fillSolutionMatrices(k+1,j);
             if (temp < minS.get(i).get(j)) {
                 repair.get(i).set(j,k);
                 minS.get(i).set(j, temp);
@@ -86,7 +86,7 @@ public final class SecondTask {
         return minS.get(i).get(j);
     }
 
-    private static void printResult(int i, int j) {
+    private static void printResult(final int i, final int j) {
         if (i > j) {
             return;
         }

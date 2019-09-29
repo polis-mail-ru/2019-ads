@@ -22,14 +22,14 @@ public final class ThirdTask {
     private ThirdTask() {}
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        int len1 = in.nextInt();
+        final int len1 = in.nextInt();
         x = new int[len1 +1];
 
         for(int i = 1; i <= len1; i++) {
             x[i] = in.nextInt();
         }
 
-        int len2 = in.nextInt();
+        final int len2 = in.nextInt();
         y = new int[len2 +1];
 
         for(int i = 1; i <= len2; i++) {
@@ -41,7 +41,7 @@ public final class ThirdTask {
             Arrays.fill(last2rows[i], -1);
         }
 
-        int res = lcs(len1, len2);
+        final int res = lcs(len1, len2);
 
         System.out.println(res);
 
@@ -50,7 +50,7 @@ public final class ThirdTask {
 
     // https://www.geeksforgeeks.org/java-program-for-longest-common-subsequence/
 
-    private static int lcs(int len2, int len1) {
+    private static int lcs(final int len2, final int len1) {
         if (len2 == 0 || len1 == 0) {
             return 0;
         }

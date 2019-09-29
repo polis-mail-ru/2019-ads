@@ -26,9 +26,6 @@ plugins:
     enabled: true
     config:
       sonar.java.source: "11"
-    checks:
-      squid:S106:
-        enabled: false
 checks:
   method-lines:
     config:
