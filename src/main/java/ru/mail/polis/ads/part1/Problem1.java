@@ -16,7 +16,7 @@ public final class Problem1 {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        String str = in.next();
+        final String str = in.next();
         out.println(str.charAt(0) + " " + str.charAt(1));
     }
 

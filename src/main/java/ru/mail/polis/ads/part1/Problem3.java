@@ -27,35 +27,44 @@ public final class Problem3 {
                 int right = left + len - 1;
                 String min = str.substring(left, right + 1);
                 if (len > 4) {
-                    for (int i = left; i < right; i++) {
-                        String currentShortest = shortest[left][i] + shortest[i + 1][right];
-                        if (currentShortest.length() < min.length()) {
-                            min = currentShortest;
-                        }
-                    }
-                    for (int period = 1; period <= len / 2; period++) {
-                        if (len % period == 0) {
-                            boolean isPeriodic = true;
-                            for (int j = left + period; j <= right; j++) {
-                                if (str.charAt(j) != str.charAt(j - period)) {
-                                    isPeriodic = false;
-                                    break;
-                                }
-                            }
-                            if (isPeriodic) {
-                                String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
-                                if (currentShortest.length() < min.length()) {
-                                    min = currentShortest;
-                                }
-                            }
-                        }
-                    }
+                    min = makeFromMatrix(shortest, left, right, min);
+                    min = wrapSequence(str, shortest, len, left, right, min);
                 }
                 shortest[left][right] = min;
             }
         }
-
         System.out.println(shortest[0][length - 1]);
+    }
+
+    private static String makeFromMatrix(String[][] shortest, int left, int right, String min) {
+        for (int i = left; i < right; i++) {
+            String currentShortest = shortest[left][i] + shortest[i + 1][right];
+            if (currentShortest.length() < min.length()) {
+                min = currentShortest;
+            }
+        }
+        return min;
+    }
+
+    private static String wrapSequence(String str, String[][] shortest, int len, int left, int right, String min) {
+        for (int period = 1; period <= len / 2; period++) {
+            if (len % period == 0) {
+                boolean isPeriodic = true;
+                for (int j = left + period; j <= right; j++) {
+                    if (str.charAt(j) != str.charAt(j - period)) {
+                        isPeriodic = false;
+                        break;
+                    }
+                }
+                if (isPeriodic) {
+                    String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
+                    if (currentShortest.length() < min.length()) {
+                        min = currentShortest;
+                    }
+                }
+            }
+        }
+        return min;
     }
 
     private static class FastScanner {
