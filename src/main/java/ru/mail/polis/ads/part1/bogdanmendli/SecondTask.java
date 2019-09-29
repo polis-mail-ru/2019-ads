@@ -6,7 +6,7 @@ import java.util.Scanner;
 public final class SecondTask {
 
     private static String minSequence;
-    private static String[][] resultSequences;
+    private static String[][] resultSequences; 
     private static String sequence;
     private static int length;
 
