@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 /*
-*
+*   https://www.e-olymp.com/ru/submissions/5741202
 * */
 public class Task1 {
     private Task1() {
@@ -12,7 +12,9 @@ public class Task1 {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int a = in.nextInt();
+        out.println(a / 10 + " " + a % 10);
+        out.flush();
     }
 
     private static class FastScanner {
