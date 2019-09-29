@@ -53,15 +53,16 @@ public class Problem1618 {
     /**
      * This function attempts to insert every entrance into all subsequences.
      * We can insert entrance if and only if last pos in this subsequence is smaller than current entrance pos.
-     * More over, we don't want to insert entrance into the subsequence, if we got subsequence of the same size as in previous
-     * insertions, because entrances are sorted in ascending order and we want to support last pos of subsequence
-     * as small as possible.
+     * More over, we don't want to insert entrance into the subsequence, if we got subsequence of the same size as
+     * in previous insertions, because entrances are sorted in ascending order and we want to support last pos of
+     * subsequence as small as possible.
      *
      * @param subsequences subsequences
      * @param entrances    entrances of the current char
      * @return new subsequences in which we've inserted one of the entrances
      */
-    private static List<Subsequence> insert(final LinkedList<Subsequence> subsequences, final List<Integer> entrances) {
+    private static List<Subsequence> insert(final LinkedList<Subsequence> subsequences,
+                                            final List<Integer> entrances) {
         final List<Subsequence> subsToAdd = new ArrayList<>();
 
         // we DO NOT want to create a new subsequence with a greater entrance pos than previous, if current size is
@@ -113,7 +114,7 @@ public class Problem1618 {
 
         for (int i = 0; i < nSize; i++) {
             final int curChar = arr1.get(i); // current char
-            final List<Integer> entrances = new ArrayList<>(); // all entrances of the current char in the other sequence
+            final List<Integer> entrances = new ArrayList<>(); // all char entrances in the other sequence
             for (int ii = 0; ii < arr2.size(); ii++) {
                 if (arr2.get(ii) == curChar) {
                     entrances.add(ii);
