@@ -11,10 +11,6 @@ import java.util.List;
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736502}.
  */
 public class Problem1618 {
-    private Problem1618() {
-
-    }
-
     /**
      * Subsequence struct.
      *
@@ -61,8 +57,7 @@ public class Problem1618 {
      * @param entrances    entrances of the current char
      * @return new subsequences in which we've inserted one of the entrances
      */
-    private static List<Subsequence> insert(final LinkedList<Subsequence> subsequences,
-                                            final List<Integer> entrances) {
+    private static List<Subsequence> insert(final List<Subsequence> subsequences, final List<Integer> entrances) {
         final List<Subsequence> subsToAdd = new ArrayList<>();
 
         // we DO NOT want to create a new subsequence with a greater entrance pos than previous, if current size is
@@ -112,9 +107,10 @@ public class Problem1618 {
             arr2.add(in.nextInt());
         }
 
+        final List<Integer> entrances = new ArrayList<>(); // all char entrances in the other sequence
         for (int i = 0; i < nSize; i++) {
             final int curChar = arr1.get(i); // current char
-            final List<Integer> entrances = new ArrayList<>(); // all char entrances in the other sequence
+            entrances.clear();
             for (int ii = 0; ii < arr2.size(); ii++) {
                 if (arr2.get(ii) == curChar) {
                     entrances.add(ii);
@@ -135,7 +131,7 @@ public class Problem1618 {
                 subsToAdd.add(new Subsequence(1, entrances.get(0)));
             }
 
-            for (Subsequence subToAdd : subsToAdd) {
+            for (final Subsequence subToAdd : subsToAdd) {
                 insertNewSubsequence(subsequences, subToAdd);
             }
         }
@@ -148,7 +144,7 @@ public class Problem1618 {
         out.println(0);
     }
 
-    private static void insertNewSubsequence(LinkedList<Subsequence> subsequences, Subsequence newSub) {
+    private static void insertNewSubsequence(final List<Subsequence> subsequences, final Subsequence newSub) {
         for (int i = 0; i < subsequences.size(); i++) {
             final Subsequence curSub = subsequences.get(i);
             if (curSub.size == newSub.size) {

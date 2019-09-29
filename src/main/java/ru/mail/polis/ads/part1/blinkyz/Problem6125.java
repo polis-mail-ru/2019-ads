@@ -9,17 +9,13 @@ import java.util.NoSuchElementException;
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736570}.
  */
 public class Problem6125 {
-    private Problem6125() {
-
-    }
-
     /**
      * Queue implementation based on ring buffer.
      */
     private static final class ArrayQueue {
         private Integer[] queue;
 
-        private final int arraySize = 128;
+        private static final int arraySize = 128;
 
         private int head;
 
@@ -35,7 +31,7 @@ public class Problem6125 {
         }
 
         void push(final Integer elem) throws IllegalStateException {
-            if ((tail + 1 == head) || (head == 0 && tail + 1 == arraySize)) {
+            if (tail + 1 == head || head == 0 && tail + 1 == arraySize) {
                 throw new IllegalStateException("Queue is full!");
             }
             queue[tail] = elem;
@@ -95,28 +91,28 @@ public class Problem6125 {
             switch (command) {
                 case "push": {
                     q.push(in.nextInt());
-                    System.out.println("ok");
+                    out.println("ok");
                     break;
                 }
                 case "pop": {
-                    System.out.println(q.pop());
+                    out.println(q.pop());
                     break;
                 }
                 case "front": {
-                    System.out.println(q.front());
+                    out.println(q.front());
                     break;
                 }
                 case "size": {
-                    System.out.println(q.size());
+                    out.println(q.size());
                     break;
                 }
                 case "clear": {
                     q.clear();
-                    System.out.println("ok");
+                    out.println("ok");
                     break;
                 }
                 case "exit": {
-                    System.out.println("bye");
+                    out.println("bye");
                     return;
                 }
                 default: {
