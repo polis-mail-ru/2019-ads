@@ -10,13 +10,15 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class SolveTemplate {
+public class SolveTemplate {
     private SolveTemplate() {
         // Should not be instantiated
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+
+
+
     }
 
     private static class FastScanner {
@@ -48,5 +50,6 @@ public final class SolveTemplate {
         try (PrintWriter out = new PrintWriter(System.out)) {
             solve(in, out);
         }
+
     }
 }
