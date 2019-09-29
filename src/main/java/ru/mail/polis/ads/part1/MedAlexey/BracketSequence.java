@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  *  Название задачи: Скобочная последовательность
- *  Тестирование: https://www.e-olymp.com/ru/submissions/5740005
+ *  Тестирование: https://www.e-olymp.com/ru/submissions/5740807
  */
 public class BracketSequence {
 
@@ -29,6 +29,8 @@ public class BracketSequence {
             // проходим по всем подстрокам данной длины
             for (int left = 0; left + len -1 < input.length(); left++) {
                 int right = left + len - 1;
+                int minNumberOfBrackets = -1;
+                String curSequence = "";
 
                 // т.к. к единичной скобке можно добавить пару
                 if (left == right) {
@@ -37,29 +39,26 @@ public class BracketSequence {
                     continue;
                 }
 
+
                 // если текущая подстрока правильно закрыта
                 if (bracketsArePair(input.charAt(left),input.charAt(right))) {
-                    numberOfBracketsToAdd[left][right] = numberOfBracketsToAdd[left+1][right-1];
-                    resultSequence[left][right] = getSequence(resultSequence, input, left+1, right-1);
-                    continue;
+                    minNumberOfBrackets = numberOfBracketsToAdd[left+1][right-1];
+                    curSequence = getSequence(resultSequence, input, left+1, right-1);
                 }
 
-                int minNumberOfBrackets = -1;
-                String firstSequence = "";
-                String secondSequence = "";
+
                 for (int right1 = left; right1 < right; right1++) {
                     int left2 = right1 + 1;
 
                     if (minNumberOfBrackets == -1
                             || numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right] < minNumberOfBrackets) {
                         minNumberOfBrackets = numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right];
-                        firstSequence = resultSequence[left][right1];
-                        secondSequence = resultSequence[left2][right];
+                        curSequence = concatSequences(input, resultSequence[left][right1], resultSequence[left2][right]);
                     }
                 }
 
                 numberOfBracketsToAdd[left][right] = minNumberOfBrackets;
-                resultSequence[left][right] = concatSequences(input, firstSequence, secondSequence);
+                resultSequence[left][right] = curSequence;
             }
         }
 
