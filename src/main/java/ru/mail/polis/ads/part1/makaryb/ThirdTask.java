@@ -1,5 +1,7 @@
 package ru.mail.polis.ads.part1.makaryb;
 
+// 1618
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
