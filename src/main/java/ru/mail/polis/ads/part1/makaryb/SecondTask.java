@@ -62,10 +62,9 @@ public final class SecondTask {
             row1.add(-1);
             row2.add(MAX_VALUE);
         }
-        final List<List<Integer>> rows = new ArrayList<>() {{
-            add(row1);
-            add(row2);
-        }};
+        final List<List<Integer>> rows = new ArrayList<>();
+        rows.add(row1);
+        rows.add(row2);
         return rows;
     }
 
