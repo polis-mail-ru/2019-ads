@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.StringTokenizer;
 
 /*
- *
+ *  https://www.e-olymp.com/ru/submissions/5741150
  * */
 public class Task5 {
     private Task5() {
@@ -43,7 +43,7 @@ public class Task5 {
                         break;
                     }
                     case "exit": {
-                        System.out.println("buy");
+                        System.out.println("bye");
                         break loop;
                     }
                     default: {
