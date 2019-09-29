@@ -5,6 +5,8 @@ package ru.mail.polis.ads.part1.makaryb;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Math.min;
@@ -17,6 +19,8 @@ import static java.lang.Math.min;
  * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5743083
  */
 public final class SecondTask {
+
+    private static Logger logger = Logger.getLogger(SecondTask.class.getName());
     // рассматриваемая последовательность
     private static String pts = "";
     // repair - информация для восстановления строки,
@@ -37,7 +41,7 @@ public final class SecondTask {
         // не более 100 скобок (по условию)
         final int max = 100;
         if (len > max) {
-            System.out.println("Вы ввели больше " + max + " скобок");
+            logger.log(Level.INFO,"Вы ввели больше " + max + " скобок");
             System.exit(1);
         }
 
@@ -55,8 +59,6 @@ public final class SecondTask {
         fillSolutionMatrices(0, len-1);
 
         printResult(0, len-1);
-
-        System.out.print("\n");
     }
 
     private static int fillSolutionMatrices(final int i, final int j) {
@@ -92,15 +94,15 @@ public final class SecondTask {
         }
         if (i == j) {
             if (pts.charAt(i) == '(' || pts.charAt(i) == ')') {
-                System.out.print("()");
+                logger.log(Level.INFO,"()");
             }
             else {
-                System.out.print("[]");
+                logger.log(Level.INFO,"[]");
             }
         } else if (repair.get(i).get(j) == -1) {
-            System.out.print(pts.charAt(i));
+            logger.log(Level.INFO, String.valueOf(pts.charAt(i)));
             printResult(i + 1, j - 1);
-            System.out.print(pts.charAt(j));
+            logger.log(Level.INFO, String.valueOf(pts.charAt(j)));
         } else {
             printResult(i, repair.get(i).get(j));
             printResult(repair.get(i).get(j) + 1, j);

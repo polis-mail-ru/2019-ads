@@ -2,10 +2,11 @@ package ru.mail.polis.ads.part1.makaryb;
 
 // 6125
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Made by БорискинМА
@@ -15,6 +16,8 @@ import java.util.Scanner;
  * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5742838
  */
 public final class FifthTask {
+
+    private static Logger logger = Logger.getLogger(FifthTask.class.getName());
 
     private static String x;
 
@@ -29,62 +32,59 @@ public final class FifthTask {
 
     private FifthTask() {}
 
-    private static void solve(final Scanner in, final PrintWriter out) {
+    private static void solve(final Scanner in) {
         do {
             x = in.nextLine();
             switch (x.split(" ")[0]) {
                 case "push":
-                    push(x, out);
+                    push(x);
                     break;
                 case "pop":
-                    pop(out);
+                    pop();
                     break;
                 case "front":
-                    front(out);
+                    front();
                     break;
                 case "size":
-                    size(out);
+                    size();
                     break;
                 case "clear":
-                    clear(out);
+                    clear();
                     break;
                 default:
                     break;
             }
         }
-        while(!x.equals("exit"));
-        out.println("bye");
+        while(!"exit".equals(x));
+        logger.log(Level.INFO,"bye");
 
-        out.flush();
     }
 
-    private static void push(final String x, final PrintWriter out) {
+    private static void push(final String x) {
         queue.add(Integer.parseInt(x.split(" ")[1]));
-        out.println("ok");
+        logger.log(Level.INFO, "ok");
     }
 
-    private static void pop(final PrintWriter out) {
-        out.println(queue.get(start));
+    private static void pop() {
+        logger.log(Level.INFO, String.valueOf(queue.get(start)));
         queue.remove(start);
     }
 
-    private static void front(final PrintWriter out) {
-        out.println(queue.get(start));
+    private static void front() {
+        logger.log(Level.INFO, String.valueOf(queue.get(start)));
     }
 
-    private static void size(final PrintWriter out) {
-        out.println(queue.size());
+    private static void size() {
+        logger.log(Level.INFO, String.valueOf(queue.size()));
     }
 
-    private static void clear(final PrintWriter out) {
+    private static void clear() {
         queue.clear();
-        out.println("ok");
+        logger.log(Level.INFO,"ok");
     }
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }

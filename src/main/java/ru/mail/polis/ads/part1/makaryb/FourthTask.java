@@ -4,6 +4,8 @@ package ru.mail.polis.ads.part1.makaryb;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Made by БорискинМА
@@ -14,13 +16,15 @@ import java.util.Scanner;
  */
 public final class FourthTask {
 
+    private static Logger logger = Logger.getLogger(FourthTask.class.getName());
+
     private FourthTask() {}
 
     private static void solve(final Scanner in, final PrintWriter out) {
         final String x = in.nextLine();
         final int len = x.length();
 
-        System.out.println(recalculateAndPack(x, len));
+        logger.log(Level.INFO, String.valueOf(recalculateAndPack(x, len)));
 
         out.flush();
     }
@@ -36,8 +40,16 @@ public final class FourthTask {
                 String compressed = startIn.substring(lBorder, rBorder + 1);
 
                 if (i > 4) {
-                    compressed = defaultPack(lBorder, rBorder, finalOut, compressed);
-                    compressed = packPeriodic(i, startIn, lBorder, rBorder, compressed, finalOut);
+                    compressed = defPack(lBorder, rBorder, finalOut, compressed);
+
+                    for (int cursor = 1; cursor < i; cursor++) {
+                        if (i % cursor == 0 && hasPeriod(startIn, lBorder, cursor, rBorder)) {
+                            final String temp = i / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
+                            if (temp.length() < compressed.length()) {
+                                compressed = temp;
+                            }
+                        }
+                    }
                 }
                 finalOut[lBorder][rBorder] = compressed;
             }
@@ -54,27 +66,16 @@ public final class FourthTask {
         return true;
     }
 
-    private static String packPeriodic(final int length, final String startIn, final int lBorder, final int rBorder, String compressed, final String[][] finalOut) {
-        for (int cursor = 1; cursor < length; cursor++) {
-            if (length % cursor == 0 && hasPeriod(startIn, lBorder, cursor, rBorder)) {
-                final String temp = length / cursor + "(" + finalOut[lBorder][lBorder + cursor -1] + ")";
-                if (temp.length() < compressed.length()) {
-                    compressed = temp;
-                }
-            }
-        }
-        return compressed;
-    }
-
-    private static String defaultPack(final int lBorder, final int rBorder, final String[][] finalOut, String compressed) {
+    private static String defPack(final int lBorder, final int rBorder, final String[][] finalOut, String compressed) {
+        String temporary = compressed;
         for (int inRBorder = lBorder; inRBorder < rBorder; inRBorder++) {
             final int inLBorder = inRBorder + 1;
             final String symbol = finalOut[lBorder][inRBorder] + finalOut[inLBorder][rBorder];
-            if (symbol.length() < compressed.length()) {
-                compressed = symbol;
+            if (symbol.length() < temporary.length()) {
+                temporary = symbol;
             }
         }
-        return compressed;
+        return temporary;
     }
 
     public static void main(final String[] arg) {

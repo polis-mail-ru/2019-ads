@@ -5,6 +5,8 @@ package ru.mail.polis.ads.part1.makaryb;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Made by БорискинМА
@@ -14,6 +16,8 @@ import java.util.Scanner;
  * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5736029
  */
 public final class ThirdTask {
+
+    private static Logger logger = Logger.getLogger(ThirdTask.class.getName());
 
     private static int[] x;
     private static int[] y;
@@ -43,7 +47,7 @@ public final class ThirdTask {
 
         final int res = lcs(len1, len2);
 
-        System.out.println(res);
+        logger.log(Level.INFO, String.valueOf(res));
 
         out.flush();
     }
