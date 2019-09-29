@@ -62,10 +62,11 @@ public final class SecondTask {
             row1.add(-1);
             row2.add(MAX_VALUE);
         }
-        return new ArrayList<>() {{
+        final List<List<Integer>> rows = new ArrayList<>() {{
             add(row1);
             add(row2);
         }};
+        return rows;
     }
 
     private static int fillSolutionMatrices(final int i, final int j) {
