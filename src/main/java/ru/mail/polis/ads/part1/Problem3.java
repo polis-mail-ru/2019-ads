@@ -17,12 +17,12 @@ public final class Problem3 {
     private static void solve() {
         final Scanner sc = new Scanner(System.in);
         str = sc.nextLine();
-        int length = str.length();
+        final int length = str.length();
         shortest = new String[length][length];
 
         for (int len = 1; len <= length; len++) {
             for (int left = 0; left < length - len + 1; left++) {
-                int right = left + len - 1;
+                final int right = left + len - 1;
                 String min = str.substring(left, right + 1);
                 if (len > 4) {
                     min = makeFromMatrix(shortest, left, right, min);
@@ -34,32 +34,34 @@ public final class Problem3 {
         System.out.println(shortest[0][length - 1]);
     }
 
-    private static String makeFromMatrix(String[][] shortest, int left, int right, String min) {
+    private static String makeFromMatrix(final String[][] shortest, final int left, final int right, final String min) {
+        String result = min;
         for (int i = left; i < right; i++) {
-            String currentShortest = shortest[left][i] + shortest[i + 1][right];
+            final String currentShortest = shortest[left][i] + shortest[i + 1][right];
             if (currentShortest.length() < min.length()) {
-                min = currentShortest;
+                result = currentShortest;
             }
         }
-        return min;
+        return result;
     }
 
-    private static String wrapSequence(int len, int left, int right, String min) {
+    private static String wrapSequence(final int len, final int left, final int right, final String min) {
+        String result = min;
         for (int period = 1; period <= len / 2; period++) {
             if (len % period == 0) {
-                boolean isPeriodic = checkIsPeriodic(left, right, period);
+                final boolean isPeriodic = checkIsPeriodic(left, right, period);
                 if (isPeriodic) {
-                    String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
+                    final String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
                     if (currentShortest.length() < min.length()) {
-                        min = currentShortest;
+                        result = currentShortest;
                     }
                 }
             }
         }
-        return min;
+        return result;
     }
 
-    private static boolean checkIsPeriodic(int left, int right, int period) {
+    private static boolean checkIsPeriodic(final int left, final int right, final int period) {
         boolean isPeriodic = true;
         for (int j = left + period; j <= right; j++) {
             if (str.charAt(j) != str.charAt(j - period)) {

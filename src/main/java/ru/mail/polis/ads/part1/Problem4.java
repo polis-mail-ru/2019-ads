@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
@@ -23,7 +22,7 @@ public final class Problem4 {
 
 
 
-    private static int getMaxSubsequence(int i, int j) {
+    private static int getMaxSubsequence(final int i, final int j) {
         if (i < 0 || j < 0) {
             return 0;
         }
@@ -38,13 +37,13 @@ public final class Problem4 {
         return matrix[i][j];
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        int n = in.nextInt();
+    private static void solve(final FastScanner in) {
+        final int n = in.nextInt();
         arr1 = new int[n];
         for (int i = 0; i < n; i++) {
             arr1[i] = in.nextInt();
         }
-        int m = in.nextInt();
+        final int m = in.nextInt();
         arr2 = new int[m];
         for (int i = 0; i < m; i++) {
             arr2[i] = in.nextInt();
@@ -82,8 +81,6 @@ public final class Problem4 {
 
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }

@@ -4,13 +4,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 /**
  * submission - https://www.e-olymp.com/ru/submissions/5738034
  */
 public final class Problem5 {
+
+    private static final String EXIT = "exit";
+    private static final String PUSH = "push";
+    private static final String POP = "pop";
+    private static final String FRONT = "front";
+    private static final String SIZE = "size";
+    private static final String CLEAR = "clear";
+    private static final String OK = "ok";
+    private static final String BYE = "bye";
 
     private static class Queue {
 
@@ -24,7 +32,7 @@ public final class Problem5 {
             clear();
         }
 
-        private void push(int elem) {
+        private void push(final int elem) {
             elems[(head + size) % 100] = elem;
             size++;
         }
@@ -55,44 +63,44 @@ public final class Problem5 {
         // Should not be instantiated
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
+    private static void solve(final FastScanner in) {
 
-        Queue queue = new Queue();
+        final Queue queue = new Queue();
 
         while (true) {
-            String cmd = in.next();
-            if (cmd.equalsIgnoreCase("exit")) {
+            final String cmd = in.next();
+            if (cmd.equalsIgnoreCase(EXIT)) {
                 break;
             }
             switch (cmd) {
-                case "push": {
+                case PUSH: {
                     queue.push(Integer.parseInt(in.next()));
-                    System.out.println("ok");
+                    System.out.println(OK);
                     break;
                 }
-                case "pop": {
+                case POP: {
                     System.out.println(queue.pop());
                     break;
                 }
-                case "front": {
+                case FRONT: {
                     System.out.println(queue.front());
                     break;
                 }
-                case "size": {
+                case SIZE: {
                     System.out.println(queue.size());
                     break;
                 }
-                case "clear": {
+                case CLEAR: {
                     queue.clear();
-                    System.out.println("ok");
+                    System.out.println(OK);
                     break;
                 }
                 default: {
-
+                    break;
                 }
             }
         }
-        System.out.println("bye");
+        System.out.println(BYE);
     }
 
     private static class FastScanner {
@@ -121,8 +129,6 @@ public final class Problem5 {
 
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }
