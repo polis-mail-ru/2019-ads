@@ -45,23 +45,27 @@ public final class SecondTask {
             System.exit(1);
         }
 
-        List<Integer> row1;
-        List<Integer> row2;
-
         for (int col = 0; col < len; col++) {
-            row1 = new ArrayList<>();
-            row2 = new ArrayList<>();
-            for (int i = 0; i < len; i++) {
-                row1.add(-1);
-                row2.add(MAX_VALUE);
-            }
-            repair.add(row1);
-            minS.add(row2);
+            repair.add(fillMatrices(len).get(0));
+            minS.add(fillMatrices(len).get(1));
         }
 
         fillSolutionMatrices(0, len-1);
 
         printResult(0, len-1);
+    }
+
+    private static List<List<Integer>> fillMatrices(final int length) {
+        final List<Integer> row1 = new ArrayList<>();
+        final List<Integer> row2 = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            row1.add(-1);
+            row2.add(MAX_VALUE);
+        }
+        return new ArrayList<>() {{
+            add(row1);
+            add(row2);
+        }};
     }
 
     private static int fillSolutionMatrices(final int i, final int j) {
