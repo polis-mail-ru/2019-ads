@@ -33,32 +33,36 @@ public final class FourthTask {
         finalOut = new String[length][length];
 
         for (int i = 1; i < length + 1; i++) {
-            for (int l = 0; i + l - 1 < length; l++) {
-
-                final int r = i + l - 1;
-                String compressed = startIn.substring(l, r + 1);
-
-                if (i > 4) {
-                    compressed = pack(l, r, finalOut, compressed);
-
-                    for (int cursor = 1; cursor < i; cursor++) {
-                        if (i % cursor == 0 && hasPeriod(startIn, l, cursor, r)) {
-                            final String temp = i / cursor + "(" + finalOut[l][l + cursor -1] + ")";
-                            compressed = periodicEvaluation(compressed, temp);
-                        }
-                    }
-                }
-                finalOut[l][r] = compressed;
-            }
+            mileage(i, length, startIn, finalOut);
         }
         return finalOut[0][length - 1];
     }
 
-    private static String periodicEvaluation(String compressed, String temporaryCompressed) {
-        if (temporaryCompressed.length() < compressed.length()) {
-            compressed = temporaryCompressed;
+    private static void mileage(final int i, final int len, final String in, final String[][] out) {
+        for (int l = 0; i + l - 1 < len; l++) {
+            final int r = i + l - 1;
+            String compressed = in.substring(l, r + 1);
+
+            if (i > 4) {
+                compressed = pack(l, r, out, compressed);
+
+                for (int cursor = 1; cursor < i; cursor++) {
+                    if (i % cursor == 0 && hasPeriod(in, l, cursor, r)) {
+                        final String temp = i / cursor + "(" + out[l][l + cursor -1] + ")";
+                        compressed = periodEval(compressed, temp);
+                    }
+                }
+            }
+            out[l][r] = compressed;
         }
-        return compressed;
+    }
+
+    private static String periodEval(final String compressed, final String temporaryCompressed) {
+        String temporary = compressed;
+        if (temporaryCompressed.length() < temporary.length()) {
+            temporary = temporaryCompressed;
+        }
+        return temporary;
     }
 
     private static boolean hasPeriod(final String startIn, final int lBorder, final int cursor, final int rBorder) {

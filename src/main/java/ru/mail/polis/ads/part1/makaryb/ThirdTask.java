@@ -2,7 +2,6 @@ package ru.mail.polis.ads.part1.makaryb;
 
 // 1618
 
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -25,7 +24,7 @@ public final class ThirdTask {
 
     private ThirdTask() {}
 
-    private static void solve(final Scanner in, final PrintWriter out) {
+    private static void solve(final Scanner in) {
         final int len1 = in.nextInt();
         x = new int[len1 +1];
 
@@ -48,8 +47,6 @@ public final class ThirdTask {
         final String result = String.valueOf(lcs(len1, len2));
 
         logger.log(Level.INFO, result);
-
-        out.flush();
     }
 
     // https://www.geeksforgeeks.org/java-program-for-longest-common-subsequence/
@@ -71,8 +68,6 @@ public final class ThirdTask {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }
