@@ -17,17 +17,15 @@ import java.util.StringTokenizer;
  * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5712136
  */
 public final class FirstTask {
-    private FirstTask() {
-        // Should not be instantiated
-    }
+    private FirstTask() {}
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int total = in.nextInt();
-        int digit1,digit2;
+        int digit1, digit2;
 
-        digit1=total/10;
-        digit2=total%10;
-        out.println(digit1 +" " + digit2);
+        digit1 = total / 10;
+        digit2 = total % 10;
+        out.println(digit1 + " " + digit2);
 
         out.flush();
     }
