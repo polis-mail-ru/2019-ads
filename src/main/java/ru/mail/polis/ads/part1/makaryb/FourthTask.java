@@ -2,7 +2,6 @@ package ru.mail.polis.ads.part1.makaryb;
 
 // 1090
 
-import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,13 +19,13 @@ public final class FourthTask {
 
     private FourthTask() {}
 
-    private static void solve(final Scanner in, final PrintWriter out) {
+    private static void solve(final Scanner in) {
         final String x = in.nextLine();
         final int len = x.length();
 
-        logger.log(Level.INFO, String.valueOf(recalculateAndPack(x, len)));
+        final String result = String.valueOf(recalculateAndPack(x,len));
 
-        out.flush();
+        logger.log(Level.INFO, result);
     }
 
     private static String recalculateAndPack(final String startIn, final int length) {
@@ -66,7 +65,7 @@ public final class FourthTask {
         return true;
     }
 
-    private static String defPack(final int lBorder, final int rBorder, final String[][] finalOut, String compressed) {
+    private static String defPack(final int lBorder, final int rBorder, final String[][] finalOut, final String compressed) {
         String temporary = compressed;
         for (int inRBorder = lBorder; inRBorder < rBorder; inRBorder++) {
             final int inLBorder = inRBorder + 1;
@@ -80,8 +79,6 @@ public final class FourthTask {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }

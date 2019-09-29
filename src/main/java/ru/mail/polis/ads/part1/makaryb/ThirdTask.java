@@ -45,9 +45,9 @@ public final class ThirdTask {
             Arrays.fill(last2rows[i], -1);
         }
 
-        final int res = lcs(len1, len2);
+        final String result = String.valueOf(lcs(len1, len2));
 
-        logger.log(Level.INFO, String.valueOf(res));
+        logger.log(Level.INFO, result);
 
         out.flush();
     }

@@ -41,7 +41,7 @@ public final class SecondTask {
         // не более 100 скобок (по условию)
         final int max = 100;
         if (len > max) {
-            logger.log(Level.INFO,"Вы ввели больше " + max + " скобок");
+            logger.log(Level.INFO,"Вы ввели больше 100 скобок");
             System.exit(1);
         }
 
@@ -100,9 +100,11 @@ public final class SecondTask {
                 logger.log(Level.INFO,"[]");
             }
         } else if (repair.get(i).get(j) == -1) {
-            logger.log(Level.INFO, String.valueOf(pts.charAt(i)));
+            String result = String.valueOf(pts.charAt(i));
+            logger.log(Level.INFO, result);
             printResult(i + 1, j - 1);
-            logger.log(Level.INFO, String.valueOf(pts.charAt(j)));
+            result = String.valueOf(pts.charAt(j));
+            logger.log(Level.INFO, result);
         } else {
             printResult(i, repair.get(i).get(j));
             printResult(repair.get(i).get(j) + 1, j);

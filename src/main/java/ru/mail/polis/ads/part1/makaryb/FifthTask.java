@@ -66,16 +66,19 @@ public final class FifthTask {
     }
 
     private static void pop() {
-        logger.log(Level.INFO, String.valueOf(queue.get(start)));
+        final String result = String.valueOf(queue.get(start));
+        logger.log(Level.INFO, result);
         queue.remove(start);
     }
 
     private static void front() {
-        logger.log(Level.INFO, String.valueOf(queue.get(start)));
+        final String result = String.valueOf(queue.get(start));
+        logger.log(Level.INFO, result);
     }
 
     private static void size() {
-        logger.log(Level.INFO, String.valueOf(queue.size()));
+        final String result = String.valueOf(queue.size());
+        logger.log(Level.INFO, result);
     }
 
     private static void clear() {
