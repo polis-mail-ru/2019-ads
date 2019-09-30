@@ -19,21 +19,20 @@ public final class Task2 {
 
     }
 
-    private static int getMinSequenceLength(final int left, final int right) {
+    private static int getMinLength(final int left, final int right) {
         int answer;
-        if (length[left][right] != -1) {
+        if (!(length[left][right] == -1)) {
             answer = length[left][right];
         } else if (left == right) {
             length[left][right] = 0;
             answer = 0;
         } else if (brackets.charAt(left) == BR1_CLOSE || brackets.charAt(left) == BR2_CLOSE) {
             decisions[left][right] = left + 1;
-            int len = getMinSequenceLength(left + 1, right) + 2;
-            length[left][right] = len;
-            answer = len;
+            answer = getMinLength(left + 1, right) + 2;
+            length[left][right] = answer;
         } else if (brackets.charAt(right - 1) == BR1_OPEN || brackets.charAt(right - 1) == BR2_OPEN) {
             decisions[left][right] = right - 1;
-            answer = getMinSequenceLength(left, right - 1) + 2;
+            answer = getMinLength(left, right - 1) + 2;
             length[left][right] = answer;
         } else {
             final int nextLeft = left + 1;
@@ -42,13 +41,13 @@ public final class Task2 {
                     || brackets.charAt(left) == BR2_OPEN && brackets.charAt(prevRight) == BR2_CLOSE) {
 
                 decisions[left][right] = 0;
-                answer = getMinSequenceLength(nextLeft, prevRight) + 2;
+                answer = getMinLength(nextLeft, prevRight) + 2;
             } else {
                 answer = 200;
             }
 
             for (int ind = nextLeft; ind < right; ++ind) {
-                final int newLen = getMinSequenceLength(left, ind) + getMinSequenceLength(ind, right);
+                final int newLen = getMinLength(left, ind) + getMinLength(ind, right);
 
                 if (newLen < answer) {
                     decisions[left][right] = ind;
@@ -99,7 +98,7 @@ public final class Task2 {
                 length[i][j] = -1;
             }
         }
-        getMinSequenceLength(0, brackets.length());
+        getMinLength(0, brackets.length());
         printAnswer(0, brackets.length());
     }
 

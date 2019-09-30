@@ -18,7 +18,8 @@ public final class Task5 {
         {
             int value;
             MyElement next;
-            MyElement(final int value) {
+            MyElement(final int value)
+            {
                 this.value = value;
             }
         }
@@ -37,7 +38,7 @@ public final class Task5 {
 
                 last = head;
             } else {
-                MyElement tmp = new MyElement(value);
+                final MyElement tmp = new MyElement(value);
                 tmp.next = last;
                 last = tmp;
             }
@@ -62,7 +63,6 @@ public final class Task5 {
         }
 
         int front() {
-            assert(size != 0);
             return head.value;
         }
 
