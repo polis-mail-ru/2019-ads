@@ -38,22 +38,33 @@ public final class Problem3 {
         String result = min;
         for (int period = 1; period <= len / 2; period++) {
             if (len % period == 0) {
-                boolean isPeriodic = true;
-                for (int j = left + period; j <= right; j++) {
-                    if (str.charAt(j) != str.charAt(j - period)) {
-                        isPeriodic = false;
-                        break;
-                    }
-                }
-                if (isPeriodic) {
-                    final String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
-                    if (currentShortest.length() < result.length()) {
-                        result = currentShortest;
-                    }
-                }
+                result = wrapIfPeriodic(left, right, result, period);
             }
         }
         return result;
+    }
+
+    private static String wrapIfPeriodic(int left, int right, String result, int period) {
+        final int len = right - left + 1;
+        boolean isPeriodic = checkIsPeriodic(left, right, period);
+        if (isPeriodic) {
+            final String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
+            if (currentShortest.length() < result.length()) {
+                result = currentShortest;
+            }
+        }
+        return result;
+    }
+
+    private static boolean checkIsPeriodic(final int left, final int right, final int period) {
+        boolean isPeriodic = true;
+        for (int j = left + period; j <= right; j++) {
+            if (str.charAt(j) != str.charAt(j - period)) {
+                isPeriodic = false;
+                break;
+            }
+        }
+        return isPeriodic;
     }
 
     private static String mergeFromArray(final int left, final int right, final String min) {

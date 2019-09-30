@@ -20,7 +20,7 @@ public final class Problem2 {
         if (str.isEmpty()) {
             return;
         }
-        int length = str.length();
+        final int length = str.length();
         shortest = new String[length][length];
 
         for (int len = 1; len <= length; len++) {
@@ -38,7 +38,7 @@ public final class Problem2 {
         System.out.println(shortest[0][length - 1]);
     }
 
-    private static void onLengthMoreThanTwo(int left, int right) {
+    private static void onLengthMoreThanTwo(final int left, final int right) {
         final StringBuilder builder = new StringBuilder();
         for (int i =0; i < 201; i++) {
             builder.append('.');
@@ -62,7 +62,7 @@ public final class Problem2 {
         shortest[left][right] = min;
     }
 
-    private static void onLengthTwo(int left, int right) {
+    private static void onLengthTwo(final int left, final int right) {
         if (str.charAt(left) == '(' && str.charAt(right) == ')') {
             shortest[left][right] = "()";
         } else if (str.charAt(left) == '[' && str.charAt(right) == ']') {
@@ -72,7 +72,7 @@ public final class Problem2 {
         }
     }
 
-    private static void onLengthOne(int left, int right) {
+    private static void onLengthOne(final int left, final int right) {
         if (str.charAt(left) == '(' || str.charAt(right) == ')') {
             shortest[left][right] = "()";
         } else if (str.charAt(left) == '[' || str.charAt(right) == ']') {
