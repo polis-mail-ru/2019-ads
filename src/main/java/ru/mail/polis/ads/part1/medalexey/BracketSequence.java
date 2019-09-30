@@ -1,20 +1,21 @@
-package ru.mail.polis.ads.part1.MedAlexey;
+package ru.mail.polis.ads.part1.medalexey;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Scanner;
+
 
 /**
  *  Название задачи: Скобочная последовательность
  *  Тестирование: https://www.e-olymp.com/ru/submissions/5740807
  */
-public class BracketSequence {
+public final class BracketSequence {
 
     private BracketSequence() {
 
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        String input = in.nextLine();
+        final String input = in.nextLine();
 
         if (input.trim().equals("")) {
             out.println(input);
@@ -28,7 +29,7 @@ public class BracketSequence {
         for (int len = 1; len <= input.length(); len++) {
             // проходим по всем подстрокам данной длины
             for (int left = 0; left + len -1 < input.length(); left++) {
-                int right = left + len - 1;
+                final int right = left + len - 1;
                 int minNumberOfBrackets = -1;
                 String curSequence = "";
 
@@ -48,12 +49,17 @@ public class BracketSequence {
 
 
                 for (int right1 = left; right1 < right; right1++) {
-                    int left2 = right1 + 1;
+                    final int left2 = right1 + 1;
 
                     if (minNumberOfBrackets == -1
-                            || numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right] < minNumberOfBrackets) {
+                            || numberOfBracketsToAdd[left][right1]
+                            + numberOfBracketsToAdd[left2][right] < minNumberOfBrackets) {
                         minNumberOfBrackets = numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right];
-                        curSequence = concatSequences(input, resultSequence[left][right1], resultSequence[left2][right]);
+                        curSequence = concatSequences(
+                                input,
+                                resultSequence[left][right1],
+                                resultSequence[left2][right]
+                        );
                     }
                 }
 
@@ -67,19 +73,18 @@ public class BracketSequence {
 
 
     // являются ли скобки парой
-    private static boolean bracketsArePair(char left, char right) {
-        switch (left) {
-            case '(':
-                return right == ')';
-            case '[':
-                return right == ']';
+    private static boolean bracketsArePair(char left, final char right) {
+        if (left == '(') {
+            return right == ')';
+        } else if (left == '[') {
+            return right == ']';
         }
 
         return false;
     }
 
     //добавляет подходящую скобку
-    private static String addBracketToSequence(String sequence,int bracketIndex) {
+    private static String addBracketToSequence(String sequence, final int bracketIndex) {
         switch (sequence.charAt(bracketIndex)) {
             case '(':
                 sequence = sequence.substring(0,bracketIndex + 1) + ')' + sequence.substring(bracketIndex + 1);
@@ -93,18 +98,23 @@ public class BracketSequence {
             case ']':
                 sequence = sequence.substring(0,bracketIndex) + '[' + sequence.substring(bracketIndex);
                 break;
+            default:
+                break;
         }
 
         return sequence;
     }
 
-    private static String getSequence(String[][] matrix, String string, int i, int j) {
+    private static String getSequence(final String[][] matrix, final String string, final int i, final int j) {
         return (matrix[i][j] == null) ? string : matrix[i][j];
     }
 
 
-    private static String concatSequences(String mainString, String firstSequence, String secondSequence) {
-        StringBuilder result = new StringBuilder();
+    private static String concatSequences(
+            final String mainString,
+            final String firstSequence,
+            final String secondSequence) {
+        final StringBuilder result = new StringBuilder();
         int mainStringPointer = 0;
         int firstSequencePointer = 0;
         int secondSequencePointer = 0;

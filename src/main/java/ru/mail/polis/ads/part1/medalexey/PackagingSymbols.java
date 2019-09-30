@@ -1,20 +1,21 @@
-package ru.mail.polis.ads.part1.MedAlexey;
+package ru.mail.polis.ads.part1.medalexey;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Scanner;
+
 
 /**
  * Название задачи: упаковка символов
  * Тестирование: https://www.e-olymp.com/ru/submissions/5738646
  */
-public class PackagingSymbols {
+public final class PackagingSymbols {
 
     private PackagingSymbols() {
 
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        String input = in.nextLine();
+        final String input = in.nextLine();
         String[][] matrix = new String[input.length()][input.length()];
 
         // перебираем все возможные длины подстрок входной строки
@@ -22,7 +23,7 @@ public class PackagingSymbols {
             // проходим по всем таким подстрокам
             for (int left = 0; left + len - 1 < input.length(); left++) {
                 //определяем конец текущей подстроки
-                int right = left + len -1;
+                final int right = left + len -1;
                 // определяем текущую подстроку
                 String min_substring = input.substring(left, right+1);
 
@@ -30,8 +31,8 @@ public class PackagingSymbols {
                 if(len > 4) {
                     // поиск минимальной подстроки данной подстроки
                     for (int right1 = left; right1 < right; right1++) {
-                        int left2 = right1 + 1;
-                        String tmp = matrix[left][right1] + matrix[left2][right];
+                        final int left2 = right1 + 1;
+                        final String tmp = matrix[left][right1] + matrix[left2][right];
 
                         if (tmp.length() < min_substring.length()) {
                             min_substring = tmp;
@@ -50,7 +51,7 @@ public class PackagingSymbols {
                             }
                             // упаковываем строку, если она периодична
                             if (isPeriodic) {
-                                String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
+                                final String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
                                 if (tmp.length() < min_substring.length()) {
                                     min_substring = tmp;
                                 }

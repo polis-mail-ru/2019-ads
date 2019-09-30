@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.MedAlexey;
+package ru.mail.polis.ads.part1.medalexey;
 
 import java.io.BufferedReader;
 import java.io.IOException;

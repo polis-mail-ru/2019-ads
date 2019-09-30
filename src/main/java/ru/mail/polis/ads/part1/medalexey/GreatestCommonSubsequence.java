@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.MedAlexey;
+package ru.mail.polis.ads.part1.medalexey;
 
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -7,18 +7,18 @@ import java.util.Scanner;
  *  Название задачи: Наибольшая общая подпоследовательность
  *  Тестирование: https://www.e-olymp.com/ru/submissions/5741410
  */
-public class GreatestCommonSubsequence {
+public final class GreatestCommonSubsequence {
 
     private GreatestCommonSubsequence() {
         // Should not be instantiated
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        int firstLineLength = Integer.parseInt(in.nextLine());
-        String[] firstLine = in.nextLine().split(" ");
-        int secondLineLength = Integer.parseInt(in.nextLine());
-        String[] secondLine = in.nextLine().split(" ");
-        int[][] matrix = new int[firstLineLength+1][secondLineLength+1];
+        final int firstLineLength = Integer.parseInt(in.nextLine());
+        final String[] firstLine = in.nextLine().split(" ");
+        final int secondLineLength = Integer.parseInt(in.nextLine());
+        final String[] secondLine = in.nextLine().split(" ");
+        final int[][] matrix = new int[firstLineLength+1][secondLineLength+1];
 
         fillMatrix(matrix, firstLine, secondLine);
 
@@ -26,7 +26,7 @@ public class GreatestCommonSubsequence {
     }
 
 
-    private static void fillMatrix(int[][] matrix, String[] firstLine, String[] secondLine) {
+    private static void fillMatrix(int[][] matrix, final String[] firstLine, final String[] secondLine) {
 
         for (int i = 1; i <= firstLine.length; i++) {
             for (int j = 1; j <= secondLine.length; j++) {
