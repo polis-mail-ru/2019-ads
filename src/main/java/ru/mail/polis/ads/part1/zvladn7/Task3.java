@@ -82,7 +82,7 @@ public final class Task3 {
     }
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     try (PrintWriter out = new PrintWriter(System.out)) {
       solve(in, out);

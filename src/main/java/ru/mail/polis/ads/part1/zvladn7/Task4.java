@@ -1,13 +1,18 @@
 package ru.mail.polis.ads.part1.zvladn7;
-import java.io.*;
+
+import java.io.PrintWriter;
+import java.io.BufferedInputStream;
 import java.util.Scanner;
 
-public class Task4 {
-  static int[][] maxLen;
-  static int[] arr1;
-  static int[] arr2;
+public final class Task4 {
+  private Task4() {
+  }
 
-  public static int calc(int i, int j) {
+  private static int[][] maxLen;
+  private static int[] arr1;
+  private static int[] arr2;
+
+  private static int calc(final int i, final int j) {
     if (i == 0 || j == 0) {
       return 0;
     }
@@ -15,20 +20,22 @@ public class Task4 {
       return maxLen[i][j];
     }
     if (arr1[i] == arr2[j]) {
-      return maxLen[i][j] = 1 + calc(i - 1, j - 1);
+      maxLen[i][j] = 1 + calc(i - 1, j - 1);
+      return maxLen[i][j];
     } else {
-      return maxLen[i][j] = Math.max(calc(i - 1, j), calc(i, j - 1));
+      maxLen[i][j] = Math.max(calc(i - 1, j), calc(i, j - 1));
+      return maxLen[i][j];
     }
   }
 
-  public static void solve(Scanner in, PrintWriter out) {
+  private static void solve(final Scanner in, final PrintWriter out) {
 
-    int size1 = in.nextInt();
+    final int size1 = in.nextInt();
     arr1 = new int[size1 + 1];
     for (int i = 1; i <= size1; ++i) {
       arr1[i] = in.nextInt();
     }
-    int size2 = in.nextInt();
+    final int size2 = in.nextInt();
     arr2 = new int[size2 + 1];
     for (int i = 1; i <= size2; ++i) {
       arr2[i] = in.nextInt();
@@ -44,8 +51,8 @@ public class Task4 {
     out.println(calc(size1, size2));
   }
 
-  public static void main(String[] args) {
-    Scanner in = new Scanner(new BufferedInputStream(System.in));
+  public static void main(final String[] args) {
+    final Scanner in = new Scanner(new BufferedInputStream(System.in));
     try (PrintWriter out = new PrintWriter(System.out)) {
       solve(in, out);
     }

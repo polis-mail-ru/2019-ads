@@ -7,7 +7,7 @@ import java.io.IOException;
 
 
 public final class Task1 {
-  private Task1(){
+  private Task1() {
   }
 
   private static void solve(final BufferedReader in, final PrintWriter out) {

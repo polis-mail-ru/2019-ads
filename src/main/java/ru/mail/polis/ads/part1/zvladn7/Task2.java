@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 public final class Task2 {
+  private Task2() {
+  }
+
   private static int[][] lenCorrectSeq;
   private static int[][] insrtPos;
   private static char[] chars;
