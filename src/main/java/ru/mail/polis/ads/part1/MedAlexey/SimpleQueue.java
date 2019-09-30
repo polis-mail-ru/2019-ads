@@ -11,6 +11,7 @@ import java.util.StringTokenizer;
 
 /**
  *  Название задачи: "Простая очередь"
+ *  Тестирование: https://www.e-olymp.com/ru/submissions/5728980
  *
  */
 public class SimpleQueue {

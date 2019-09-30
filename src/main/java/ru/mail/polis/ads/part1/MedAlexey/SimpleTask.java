@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 
 /**
  *   Название задачи: "Простая задача?"
+ *   Тестирование: https://www.e-olymp.com/ru/submissions/5723843
  */
 public class SimpleTask {
 

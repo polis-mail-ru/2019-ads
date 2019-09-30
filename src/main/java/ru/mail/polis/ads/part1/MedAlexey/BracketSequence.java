@@ -138,7 +138,6 @@ public class BracketSequence {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        //in.useLocale(new Locale("US"));
         try (PrintWriter out = new PrintWriter(System.out)) {
             solve(in, out);
         }
