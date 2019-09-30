@@ -1,53 +1,22 @@
 package ru.mail.polis.ads.part1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 /**
- * Problem solution template.
+ *  submission - https://www.e-olymp.com/ru/submissions/5745908
  */
 public final class Problem1 {
     private Problem1() {
         // Should not be instantiated
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        String str = in.next();
-        out.println(str.charAt(0) + " " + str.charAt(1));
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
+    private static void solve() {
+        final Scanner sc = new Scanner(System.in);
+        final String str = String.valueOf(sc.nextInt());
+        System.out.println(str.charAt(0) + " " + str.charAt(1));
     }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve();
     }
 }

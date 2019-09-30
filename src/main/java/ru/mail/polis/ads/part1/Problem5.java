@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 /**
@@ -24,7 +23,7 @@ public final class Problem5 {
             clear();
         }
 
-        private void push(int elem) {
+        private void push(final int elem) {
             elems[(head + size) % 100] = elem;
             size++;
         }
@@ -55,7 +54,7 @@ public final class Problem5 {
         // Should not be instantiated
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
+    private static void solve(final FastScanner in) {
 
         Queue queue = new Queue();
 
@@ -118,8 +117,6 @@ public final class Problem5 {
 
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve(in);
     }
 }
