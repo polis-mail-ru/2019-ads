@@ -1,11 +1,7 @@
-package ru.mail.polis.ads.part1.Marashov_Alexander;
+package ru.mail.polis.ads.part1.marashov.alexander;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public final class Task5 {
     private Task5() {
@@ -14,16 +10,18 @@ public final class Task5 {
 
     private static class MyQueue {
 
-        private static class MyElement {
+        private MyElement head;
+        private MyElement last;
+        private int size;
+
+        private static class MyElement
+        {
             int value;
             MyElement next;
-            MyElement(int value) {
+            MyElement(final int value) {
                 this.value = value;
             }
         }
-
-        private MyElement head, last;
-        private int size;
 
         MyQueue() {
             head = null;
@@ -31,7 +29,7 @@ public final class Task5 {
             size = 0;
         }
 
-        void push(int value) {
+        void push(final int value) {
             size++;
             if (last == null) {
                 head = new MyElement(value);
@@ -46,19 +44,20 @@ public final class Task5 {
         }
 
         int pop() {
-            assert(size != 0);
             size--;
-            int first = head.value;
-            if (last == head) {
+            final int first = head.value;
+
+            if (last.equals(head)) {
                 last = null;
                 head = null;
-                return first;
-            }
+            } else {
 
-            MyElement tmp = last;
-            while (tmp.next != head)
-                tmp = tmp.next;
-            head = tmp;
+                MyElement tmp = last;
+                while (tmp.next != head) {
+                    tmp = tmp.next;
+                }
+                head = tmp;
+            }
             return first;
         }
 
@@ -78,11 +77,11 @@ public final class Task5 {
         }
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        MyQueue queue = new MyQueue();
+    private static void solve(final Scanner in, final PrintWriter out) {
+        final MyQueue queue = new MyQueue();
 
         String command = "";
-        while (!command.equals("exit")) {
+        while (!"exit".equals(command)) {
             command = in.next();
             switch (command) {
                 case "push":
@@ -102,37 +101,14 @@ public final class Task5 {
                     queue.clear();
                     out.println("ok");
                     break;
+                default:
             }
         }
         out.println("bye");
     }
 
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-    }
-
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
+        final Scanner in = new Scanner(System.in);
         try (PrintWriter out = new PrintWriter(System.out)) {
             solve(in, out);
         }
