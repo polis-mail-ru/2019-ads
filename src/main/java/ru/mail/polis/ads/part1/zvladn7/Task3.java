@@ -6,20 +6,20 @@ import java.io.PrintWriter;
 import java.io.IOException;
 
 
-public class Task3 {
-  static char[] chars;
-  static String rowString;
-  static String theShortestString;
-  static String[][] boxed;
+public final class Task3 {
+  private static char[] chars;
+  private static String rowString;
+  private static String theShortestString;
+  private static String[][] boxed;
 
   private Task3() {
   }
 
-  public static String minLenString(final String str1, final String str2) {
+  private static String minLenString(final String str1, final String str2) {
     return str1.length() < str2.length() ? str1 : str2;
   }
 
-  public static boolean isRepeated(final int left, final int right, final int lenPeriod) {
+  private static boolean isRepeated(final int left, final int right, final int lenPeriod) {
     boolean isRepeatedly = true;
     for (int i = left + lenPeriod; i <= right; ++i) {
       if (chars[i - lenPeriod] != chars[i]) {
@@ -30,7 +30,7 @@ public class Task3 {
     return isRepeatedly;
   }
 
-  public static void partlyBoxing(final int left, final int right) {
+  private static void partlyBoxing(final int left, final int right) {
     for (int rightBorder = left; rightBorder < right; ++rightBorder) {
       final int leftBorder = rightBorder + 1;
       final String tempString = boxed[left][rightBorder] + boxed[leftBorder][right];
@@ -38,7 +38,7 @@ public class Task3 {
     }
   }
 
-  public static void checkPeriodic(final int left, final int right, final int length) {
+  private static void checkPeriodic(final int left, final int right, final int length) {
     for (int lenPeriod = 1; lenPeriod < length; ++lenPeriod) {
       if (length % lenPeriod == 0) {
         if (isRepeated(left, right, lenPeriod)) {
@@ -49,13 +49,13 @@ public class Task3 {
     }
   }
 
-  public static void findTheShortest(final int left, final int right, final int length) {
+  private static void findTheShortest(final int left, final int right, final int length) {
     partlyBoxing(left, right);
     checkPeriodic(left, right, length);
   }
 
 
-  public static void boxing() {
+  private static void boxing() {
     for (int length = 1; length <= chars.length; ++length) {
       for (int left = 0; length + left - 1 < chars.length; ++left) {
         final int right = length + left - 1;
@@ -70,7 +70,7 @@ public class Task3 {
 
 
 
-  public static void solve(final BufferedReader in, final PrintWriter out) {
+  private static void solve(final BufferedReader in, final PrintWriter out) {
     try {
       rowString = in.readLine();
       chars = rowString.toCharArray();

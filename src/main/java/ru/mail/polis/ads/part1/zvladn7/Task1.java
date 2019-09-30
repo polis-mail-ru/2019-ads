@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 
-public class Task1 {
+public final class Task1 {
   private Task1(){
   }
 
-  public static void solve(final BufferedReader in, final PrintWriter out) {
+  private static void solve(final BufferedReader in, final PrintWriter out) {
     try {
       final String[] separateNum = in.readLine().split("");
       final StringBuilder str = new StringBuilder();

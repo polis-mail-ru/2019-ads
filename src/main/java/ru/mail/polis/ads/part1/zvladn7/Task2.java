@@ -1,12 +1,16 @@
 package ru.mail.polis.ads.part1.zvladn7;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.IOException;
 
-public class Task2 {
-  public static int[][] lenCorrectSeq;
-  public static int[][] insrtPos;
-  public static char[] chars;
-  public static int calc(int begin, int end) {
+public final class Task2 {
+  private static int[][] lenCorrectSeq;
+  private static int[][] insrtPos;
+  private static char[] chars;
+
+  private static int calc(final int begin, final int end) {
     if (begin == end) {
       return 1;
     }
@@ -16,11 +20,11 @@ public class Task2 {
     if (lenCorrectSeq[begin][end] != Integer.MAX_VALUE) {
       return lenCorrectSeq[begin][end];
     }
-    if ((chars[begin] == '(' && chars[end] == ')') || (chars[begin] == '[' && chars[end] == ']')) {
+    if (chars[begin] == '(' && chars[end] == ')' || chars[begin] == '[' && chars[end] == ']') {
       lenCorrectSeq[begin][end] = calc(begin + 1, end - 1);
     }
     for (int k = begin; k < end; ++k) {
-      int tmpCorrectSeqLen = calc(begin, k) + calc(k + 1, end);
+      final int tmpCorrectSeqLen = calc(begin, k) + calc(k + 1, end);
       if (tmpCorrectSeqLen < lenCorrectSeq[begin][end]) {
         insrtPos[begin][end] = k;
         lenCorrectSeq[begin][end] = tmpCorrectSeqLen;
@@ -29,7 +33,7 @@ public class Task2 {
     return lenCorrectSeq[begin][end];
   }
 
-  public static void printResult(int begin, int end, PrintWriter out) {
+  private static void printResult(final int begin, final int end, final PrintWriter out) {
     if (begin > end) {
       return;
     }
@@ -49,7 +53,7 @@ public class Task2 {
     }
   }
 
-  public static void initArraysByDefaults() {
+  private static void initArraysByDefaults() {
     for (int i = 0; i < insrtPos.length; ++i) {
       for (int j = 0; j < insrtPos.length; ++j) {
         insrtPos[i][j] = -1;
@@ -63,7 +67,7 @@ public class Task2 {
   }
 
 
-  public static void solve(BufferedReader in, PrintWriter out) {
+  private static void solve(final BufferedReader in, final PrintWriter out) {
     try {
       chars = in.readLine().toCharArray();
       lenCorrectSeq = new int[chars.length][chars.length];
@@ -76,8 +80,8 @@ public class Task2 {
     }
   }
 
-  public static void main(String[] args) throws IOException {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+  public static void main(final String[] args) {
+    final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     try (PrintWriter out = new PrintWriter(System.out)) {
       solve(in, out);
     }
