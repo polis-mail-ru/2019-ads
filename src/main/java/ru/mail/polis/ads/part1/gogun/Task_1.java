@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.gogun;
 
 import java.util.Scanner;
 
-public class Task_1 {
+public final class Task_1 {
     private static void solve(int num) {
         int num1 = num / 10;
         int num2 = num % 10;
