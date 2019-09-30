@@ -47,20 +47,22 @@ public final class Task2 {
                 answer = getMinLength(left + 1, right - 1) + 2;
             }
 
-            for (int ind = left + 1; ind < right; ++ind) {
-                answer = maxLength(getMinLength(left, ind) + getMinLength(ind, right), answer, left, right, ind);
-            }
+            answer = minLengthAt(left, right, answer);
             length[left][right] = answer;
         }
         return answer;
     }
 
-    private static int maxLength(final int newLen, int maxLen, final int left, final int right, final int delimiter) {
-        if (newLen < maxLen) {
-            decisions[left][right] = delimiter;
-            maxLen = newLen;
+    private static int minLengthAt(final int left, final int right, final int min) {
+        int answer = min;
+        for (int ind = left + 1; ind < right; ++ind) {
+            final int newLen = getMinLength(left, ind) + getMinLength(ind, right);
+            if (newLen < answer) {
+                decisions[left][right] = ind;
+                answer = newLen;
+            }
         }
-        return maxLen;
+        return answer;
     }
 
     private static void printAnswer(final int left, final int right) {
