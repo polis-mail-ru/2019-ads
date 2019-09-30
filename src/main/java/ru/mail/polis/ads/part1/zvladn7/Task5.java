@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
-public class Task5 {
-  public static void solve(final BufferedReader in, final PrintWriter out) {
+public final class Task5 {
+  private Task5() {
+  }
+
+  private static void solve(final BufferedReader in, final PrintWriter out) {
     final LinkedList<Integer> queue = new LinkedList<>();
     try {
       String[] str = in.readLine().split(" ");
