@@ -25,11 +25,13 @@ public final class Task2 {
             return length[left][right];
         }
 
-        int answer = 200;
         if (left == right) {
             length[left][right] = 0;
-            answer = 0;
-        } else if (brackets.charAt(left) == BR1_CLOSE || brackets.charAt(left) == BR2_CLOSE) {
+            return 0;
+        }
+
+        int answer = 200;
+        if (brackets.charAt(left) == BR1_CLOSE || brackets.charAt(left) == BR2_CLOSE) {
             decisions[left][right] = left + 1;
             answer = getMinLength(left + 1, right) + 2;
             length[left][right] = answer;
@@ -46,16 +48,19 @@ public final class Task2 {
             }
 
             for (int ind = left + 1; ind < right; ++ind) {
-                final int newLen = getMinLength(left, ind) + getMinLength(ind, right);
-
-                if (newLen < answer) {
-                    decisions[left][right] = ind;
-                    answer = newLen;
-                }
+                answer = maxLength(getMinLength(left, ind) + getMinLength(ind, right), answer, left, right, ind);
             }
             length[left][right] = answer;
         }
         return answer;
+    }
+
+    private static int maxLength(final int newLen, int maxLen, final int left, final int right, final int delimiter) {
+        if (newLen < maxLen) {
+            decisions[left][right] = delimiter;
+            maxLen = newLen;
+        }
+        return maxLen;
     }
 
     private static void printAnswer(final int left, final int right) {
