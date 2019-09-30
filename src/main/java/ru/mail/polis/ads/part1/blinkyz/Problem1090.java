@@ -73,6 +73,17 @@ public class Problem1090 {
         return new Result(res.toString(), null);
     }
 
+    private static int countRepeats(final String source, final String rep, int from) {
+        int repeats = 0;
+        final int sourceLength = source.length();
+        final int repLength = rep.length();
+        while (source.substring(from, Math.min(from + repLength, sourceLength)).equals(rep)) {
+            repeats++;
+            from = from + repLength;
+        }
+        return repeats;
+    }
+
     private static Result findMaxRepeat(final String s) {
         int repeats;
         int maxRepeats = 0;
@@ -83,25 +94,21 @@ public class Problem1090 {
             final String sub = s.substring(0, i);
             int from;
             for (int j = 0; j < sub.length(); j++) {
-                final String cur = sub.substring(j);
-                if (!containsAlphanumerics(cur)) {
+                final String curRep = sub.substring(j);
+                if (!containsAlphanumerics(curRep)) {
                     break;
                 }
                 from = i;
-                repeats = 0;
-                while (s.substring(from, Math.min(from + cur.length(), s.length())).equals(cur)) {
-                    repeats++;
-                    from = from + cur.length();
-                }
-
+                repeats = countRepeats(s, curRep, from);
                 if (repeats == 0) {
                     continue;
                 }
-                final int curLen = (repeats + 1) * cur.length();
+
+                final int curLen = (repeats + 1) * curRep.length();
                 if (curLen > 4 && curLen > maxLen) {
                     maxLen = curLen;
-                    startIndex = i - cur.length();
-                    rep = cur;
+                    startIndex = i - curRep.length();
+                    rep = curRep;
                     maxRepeats = repeats;
                 }
             }
