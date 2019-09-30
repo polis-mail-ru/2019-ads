@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * Link: {@code https://www.e-olymp.com/ru/problems/6125}.
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736570}.
  */
-public class Problem6125 {
+public final class Problem6125 {
     private Problem6125() {
 
     }

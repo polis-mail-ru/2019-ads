@@ -10,7 +10,7 @@ import java.util.List;
  * Link: {@code https://www.e-olymp.com/ru/problems/1618}.
  * Tests: {@code https://www.e-olymp.com/ru/submissions/5736502}.
  */
-public class Problem1618 {
+public final class Problem1618 {
     private Problem1618() {
 
     }

@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.blinkyz;
 
 import java.io.PrintWriter;
 
-public class Problem1 {
+public final class Problem1 {
     private Problem1() {
 
     }
