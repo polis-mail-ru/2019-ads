@@ -19,17 +19,6 @@ public final class Task3 {
     return str1.length() < str2.length() ? str1 : str2;
   }
 
-  private static boolean isRepeated(final int left, final int right, final int lenPeriod) {
-    boolean isRepeatedly = true;
-    for (int i = left + lenPeriod; i <= right; ++i) {
-      if (chars[i - lenPeriod] != chars[i]) {
-        isRepeatedly = false;
-        break;
-      }
-    }
-    return isRepeatedly;
-  }
-
   private static void partlyBoxing(final int left, final int right) {
     for (int rightBorder = left; rightBorder < right; ++rightBorder) {
       final int leftBorder = rightBorder + 1;
@@ -41,7 +30,14 @@ public final class Task3 {
   private static void checkPeriodic(final int left, final int right, final int length) {
     for (int lenPeriod = 1; lenPeriod < length; ++lenPeriod) {
       if (length % lenPeriod == 0) {
-        if (isRepeated(left, right, lenPeriod)) {
+        boolean isRepeatedly = true;
+        for (int i = left + lenPeriod; i <= right; ++i) {
+          if (chars[i - lenPeriod] != chars[i]) {
+            isRepeatedly = false;
+            break;
+          }
+        }
+        if (isRepeatedly) {
           final String tempString = length / lenPeriod + "(" + boxed[left][left + lenPeriod - 1] + ")";
           theShortestString = minLenString(tempString, theShortestString);
         }
@@ -83,7 +79,7 @@ public final class Task3 {
   }
 
   public static void main(final String[] args) {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     try (PrintWriter out = new PrintWriter(System.out)) {
       solve(in, out);
     }

@@ -5,12 +5,12 @@ import java.io.BufferedInputStream;
 import java.util.Scanner;
 
 public final class Task4 {
-  private Task4() {
-  }
-
   private static int[][] maxLen;
   private static int[] arr1;
   private static int[] arr2;
+
+  private Task4() {
+  }
 
   private static int calc(final int i, final int j) {
     if (i == 0 || j == 0) {

@@ -13,18 +13,16 @@ public final class Task1 {
   private static void solve(final BufferedReader in, final PrintWriter out) {
     try {
       final String[] separateNum = in.readLine().split("");
-      final StringBuilder str = new StringBuilder();
       for (final String s : separateNum) {
-        str.append(s).append(" ");
+        out.print(s + " ");
       }
-      out.print(str);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   public static void main(final String[] args) {
-    BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     try (PrintWriter out = new PrintWriter(System.out)) {
       solve(in, out);
     }
