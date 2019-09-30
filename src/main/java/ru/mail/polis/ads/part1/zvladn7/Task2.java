@@ -17,7 +17,7 @@ public class Task2 {
       return lenCorrectSeq[begin][end];
     }
     if ((chars[begin] == '(' && chars[end] == ')') || (chars[begin] == '[' && chars[end] == ']')) {
-      lenCorrectSeq[begin][end] = Math.min(lenCorrectSeq[begin][end], calc(begin + 1, end - 1));
+      lenCorrectSeq[begin][end] = calc(begin + 1, end - 1);
     }
     for (int k = begin; k < end; ++k) {
       int tmpCorrectSeqLen = calc(begin, k) + calc(k + 1, end);
@@ -49,22 +49,26 @@ public class Task2 {
     }
   }
 
+  public static void initArraysByDefaults() {
+    for (int i = 0; i < insrtPos.length; ++i) {
+      for (int j = 0; j < insrtPos.length; ++j) {
+        insrtPos[i][j] = -1;
+      }
+    }
+    for (int i = 0; i < insrtPos.length; ++i) {
+      for (int j = 0; j < insrtPos.length; ++j) {
+        lenCorrectSeq[i][j] = Integer.MAX_VALUE;
+      }
+    }
+  }
+
 
   public static void solve(BufferedReader in, PrintWriter out) {
     try {
       chars = in.readLine().toCharArray();
       lenCorrectSeq = new int[chars.length][chars.length];
       insrtPos = new int[chars.length][chars.length];
-      for (int i = 0; i < insrtPos.length; ++i) {
-        for (int j = 0; j < insrtPos.length; ++j) {
-          insrtPos[i][j] = -1;
-        }
-      }
-      for (int i = 0; i < insrtPos.length; ++i) {
-        for (int j = 0; j < insrtPos.length; ++j) {
-          lenCorrectSeq[i][j] = Integer.MAX_VALUE;
-        }
-      }
+      initArraysByDefaults();
       calc(0, chars.length - 1);
       printResult(0, chars.length - 1, out);
     } catch (IOException e) {
