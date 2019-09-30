@@ -43,37 +43,38 @@ public class Problem1090 {
             final StringBuilder res = new StringBuilder();
             final StringBuilder resSmaller = new StringBuilder();
 
-            int i = 0;
-            while (i < source.length()) {
-                if (i == startIndex) {
+            int index = 0;
+            while (index < source.length()) {
+                if (index == startIndex) {
                     res.append(maxRepeats + 1).append('(').append(rep).append(')');
                     resSmaller.append(maxRepeats).append('(').append(rep).append(')');
                     resSmaller.append(rep);
-                    i = i + replaceLen - 1;
+                    index = index + replaceLen - 1;
                     continue;
                 }
-                res.append(source.charAt(i));
-                resSmaller.append(source.charAt(i));
-                ++i;
+                res.append(source.charAt(index));
+                resSmaller.append(source.charAt(index));
+                ++index;
             }
             return new Result(res.toString(), resSmaller.toString());
         }
 
         final StringBuilder res = new StringBuilder();
-        int i = 0;
-        while (i < source.length()) {
-            if (i == startIndex) {
+        int index = 0;
+        while (index < source.length()) {
+            if (index == startIndex) {
                 res.append(maxRepeats + 1).append('(').append(rep).append(')');
-                i = i + replaceLen - 1;
+                index = index + replaceLen - 1;
                 continue;
             }
-            res.append(source.charAt(i));
-            ++i;
+            res.append(source.charAt(index));
+            ++index;
         }
         return new Result(res.toString(), null);
     }
 
-    private static int countRepeats(final String source, final String rep, int from) {
+    private static int countRepeats(final String source, final String rep, final int startPos) {
+        int from = startPos;
         int repeats = 0;
         final int sourceLength = source.length();
         final int repLength = rep.length();
@@ -136,7 +137,7 @@ public class Problem1090 {
         }
 
         String minLenRes = s1;
-        for (String curStringToTry : stringsToTry) {
+        for (final String curStringToTry : stringsToTry) {
             final String curRes = tryCurrentS(curStringToTry);
             if (curRes.length() < minLenRes.length()) {
                 minLenRes = curRes;
