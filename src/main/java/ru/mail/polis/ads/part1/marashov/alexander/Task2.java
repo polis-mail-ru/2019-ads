@@ -20,10 +20,13 @@ public final class Task2 {
     }
 
     private static int getMinLength(final int left, final int right) {
-        int answer;
-        if (!(length[left][right] == -1)) {
-            answer = length[left][right];
-        } else if (left == right) {
+        final boolean noAnswer = length[left][right] == -1;
+        if (!noAnswer) {
+            return length[left][right];
+        }
+
+        int answer = 200;
+        if (left == right) {
             length[left][right] = 0;
             answer = 0;
         } else if (brackets.charAt(left) == BR1_CLOSE || brackets.charAt(left) == BR2_CLOSE) {
@@ -35,18 +38,14 @@ public final class Task2 {
             answer = getMinLength(left, right - 1) + 2;
             length[left][right] = answer;
         } else {
-            final int nextLeft = left + 1;
-            final int prevRight = right - 1;
-            if (brackets.charAt(left) == BR1_OPEN && brackets.charAt(prevRight) == BR1_CLOSE
-                    || brackets.charAt(left) == BR2_OPEN && brackets.charAt(prevRight) == BR2_CLOSE) {
+            if (brackets.charAt(left) == BR1_OPEN && brackets.charAt(right - 1) == BR1_CLOSE
+                    || brackets.charAt(left) == BR2_OPEN && brackets.charAt(right - 1) == BR2_CLOSE) {
 
                 decisions[left][right] = 0;
-                answer = getMinLength(nextLeft, prevRight) + 2;
-            } else {
-                answer = 200;
+                answer = getMinLength(left + 1, right - 1) + 2;
             }
 
-            for (int ind = nextLeft; ind < right; ++ind) {
+            for (int ind = left + 1; ind < right; ++ind) {
                 final int newLen = getMinLength(left, ind) + getMinLength(ind, right);
 
                 if (newLen < answer) {

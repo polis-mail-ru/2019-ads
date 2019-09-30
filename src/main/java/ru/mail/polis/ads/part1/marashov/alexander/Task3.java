@@ -53,7 +53,7 @@ public final class Task3 {
         }
     }
 
-    private static void updateMinStr(String newMinStr) {
+    private static void updateMinStr(final String newMinStr) {
         if (newMinStr.length() < minStr.length()) {
             minStr = newMinStr;
         }
@@ -61,7 +61,7 @@ public final class Task3 {
 
     private static void trySplit(final int left, final int right) {
         for (int index = left; index < right; ++index) {
-            String newMinStr = strings[left][index] + strings[index + 1][right];
+            final String newMinStr = strings[left][index] + strings[index + 1][right];
             updateMinStr(newMinStr);
         }
     }

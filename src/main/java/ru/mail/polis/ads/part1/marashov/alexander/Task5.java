@@ -14,12 +14,11 @@ public final class Task5 {
         private MyElement last;
         private int size;
 
-        private static class MyElement
-        {
+        private static class MyElement {
             int value;
             MyElement next;
-            MyElement(final int value)
-            {
+
+            MyElement(final int value) {
                 this.value = value;
             }
         }
