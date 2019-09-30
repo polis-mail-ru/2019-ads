@@ -1,14 +1,14 @@
-package ru.mail.polis.ads.part1.suhova;
-
-import java.io.*;
+package ru.mail.polis.ads.part1.suhova;import java.io.*;
+import java.util.Scanner;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Task1084 {
+public class Task1084{
     private static int[][] len;
 
     private static void solve(final Task1084.FastScanner in, final PrintWriter out) {
-        String str = in.next();
+        Scanner scanner = new Scanner(System.in);
+        String str = scanner.nextLine();
         len = new int[str.length()][str.length()];
         for (int i = 0; i < str.length(); i++) {
             Arrays.fill(len[i], -1);
@@ -18,7 +18,7 @@ public class Task1084 {
     }
 
     private static String seqCreator(int l, int r, String str) {
-        if (l == r + 1) return "";
+        if (l >= r + 1) return "";
         switch (str.charAt(l)) {
             case ']':
                 return "[]" + seqCreator(l + 1, r, str);
