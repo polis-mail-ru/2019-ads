@@ -117,6 +117,7 @@ public final class Problem5 {
                     tokenizer = new StringTokenizer(reader.readLine());
                 } catch (IOException e) {
                     e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
             return tokenizer.nextToken();

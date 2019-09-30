@@ -68,7 +68,7 @@ public final class Problem3 {
         return isPeriodic;
     }
 
-    static String mergeFromArray(String[][] shortest, final int left, final int right, final String min) {
+    static String mergeFromArray(final String[][] shortest, final int left, final int right, final String min) {
         String result = min;
         for (int i = left; i < right; i++) {
             final String currentShortest = shortest[left][i] + shortest[i + 1][right];
