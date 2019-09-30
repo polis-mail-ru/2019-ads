@@ -16,7 +16,7 @@ public final class Problem4 {
         // Should not be instantiated
     }
 
-    private static int getMaxSubsequence(int i, int j) {
+    private static int getMaxSubsequence(final int i, final int j) {
         if (i < 0 || j < 0) {
             return 0;
         }
@@ -32,7 +32,7 @@ public final class Problem4 {
     }
 
     private static void solve() {
-        Scanner sc = new Scanner(System.in);
+        final Scanner sc = new Scanner(System.in);
         final int n = sc.nextInt();
         arr1 = new int[n];
         for (int i = 0; i < n; i++) {
