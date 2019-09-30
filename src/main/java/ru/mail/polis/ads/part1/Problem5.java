@@ -112,7 +112,7 @@ public final class Problem5 {
         }
 
         String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+            if (tokenizer == null || !tokenizer.hasMoreTokens()) {
                 try {
                     tokenizer = new StringTokenizer(reader.readLine());
                 } catch (IOException e) {

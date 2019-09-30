@@ -44,12 +44,7 @@ public final class Problem2 {
             builder.append('.');
         }
         String min = builder.toString();
-        for (int i = left; i < right; i++) {
-            final String currentShortest = shortest[left][i] + shortest[i + 1][right];
-            if (min.length() > currentShortest.length()) {
-                min = currentShortest;
-            }
-        }
+        Problem3.mergeFromArray(shortest, left, right, min);
         if (
             str.charAt(left) == '(' && str.charAt(right) == ')'
                 || str.charAt(left) == '[' && str.charAt(right) == ']'

@@ -25,7 +25,7 @@ public final class Problem3 {
                 final int right = left + len - 1;
                 String min = str.substring(left, right + 1);
                 if (len > 4) {
-                    min = mergeFromArray(left, right, min);
+                    min = mergeFromArray(shortest, left, right, min);
                     min = wrapIfPeriodic(len, left, right, min);
                 }
                 shortest[left][right] = min;
@@ -44,16 +44,17 @@ public final class Problem3 {
         return result;
     }
 
-    private static String wrapIfPeriodic(int left, int right, String result, int period) {
+    private static String wrapIfPeriodic(final int left, final int right, final String result, final int period) {
+        String res = result;
         final int len = right - left + 1;
-        boolean isPeriodic = checkIsPeriodic(left, right, period);
+        final boolean isPeriodic = checkIsPeriodic(left, right, period);
         if (isPeriodic) {
             final String currentShortest = (len / period) + "(" + shortest[left][left + period - 1] + ")";
-            if (currentShortest.length() < result.length()) {
-                result = currentShortest;
+            if (currentShortest.length() < res.length()) {
+                res = currentShortest;
             }
         }
-        return result;
+        return res;
     }
 
     private static boolean checkIsPeriodic(final int left, final int right, final int period) {
@@ -67,7 +68,7 @@ public final class Problem3 {
         return isPeriodic;
     }
 
-    private static String mergeFromArray(final int left, final int right, final String min) {
+    static String mergeFromArray(String[][] shortest, final int left, final int right, final String min) {
         String result = min;
         for (int i = left; i < right; i++) {
             final String currentShortest = shortest[left][i] + shortest[i + 1][right];
