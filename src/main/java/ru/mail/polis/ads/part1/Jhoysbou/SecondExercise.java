@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part1.Jhoysbou;
 import java.util.Scanner;
 
 public class SecondExercise {
-    public static void main(String... arg){
+    public static void main(String... args){
 
     }
 
