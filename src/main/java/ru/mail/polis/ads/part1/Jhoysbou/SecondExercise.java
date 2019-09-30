@@ -2,9 +2,9 @@ package ru.mail.polis.ads.part1.Jhoysbou;
 
 import java.util.Scanner;
 
-public class SecondExercise {
-    public static void main(String... args){
-
+public abstract class SecondExercise {
+    public static void main(final String... args){
+        //TODO: Do not forget to solve the second problem
     }
 
     private static String makeSequance(String sequance){

@@ -1,32 +1,35 @@
 package ru.mail.polis.ads.part1.Jhoysbou;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
+import java.util.List;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5743541
 
 public class FifthExercise {
-    public static void main(String... args){
+    public static void main(final String... args){
         SimpleQueue.run();
     }
 
-    private static class SimpleQueue {
-        private static LinkedList<Integer> arrayList = new LinkedList<>();
-        private static boolean isRunning = false;
+    private static abstract class SimpleQueue {
+        private static List<Integer> arrayList = new LinkedList<>();
+        private static boolean isRunning;
         private static String functionArgument;
-        private static int beginIndex = 0;
-        private static int endIndex = 0;
+        private static int beginIndex;
+        private static int endIndex;
 
 
         private static void run(){
             isRunning = true;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
             while (isRunning){
                 try{
                     functionArgument = reader.readLine();
                 }catch (IOException e){
+                    isRunning = false;
                     e.printStackTrace();
                 }
                 SimpleQueue.execute();
@@ -35,14 +38,14 @@ public class FifthExercise {
     }
 
         private static void execute(){
-            int length = functionArgument.length();
             String command = "";
             int commandArgument = 0;
-            String[] temp = functionArgument.split(" ");
+            final String[] temp = functionArgument.split(" ");
             command = temp[0];
-            try {
+
+            if (temp.length > 1) {
                 commandArgument = Integer.parseInt(temp[1]);
-            }catch(java.lang.ArrayIndexOutOfBoundsException e){ }
+            }
 
             switch (command){
                 case "push":
@@ -70,6 +73,7 @@ public class FifthExercise {
                     break;
                 default:
                     isRunning = false;
+
             }
         }
     }
