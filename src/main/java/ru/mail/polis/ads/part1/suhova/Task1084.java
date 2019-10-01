@@ -1,9 +1,14 @@
-package ru.mail.polis.ads.part1.suhova;import java.io.*;
-import java.util.Scanner;
+package ru.mail.polis.ads.part1.suhova;
+
+import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
-public class Task1084{
+public class Task1084 {
+    /*
+    https://www.e-olymp.com/ru/submissions/5750619
+     */
     private static int[][] len;
 
     private static void solve(final Task1084.FastScanner in, final PrintWriter out) {
@@ -42,9 +47,9 @@ public class Task1084{
         int sum = 2 + minLen(l, r - 1, str);
         if (min > sum) {
             min = sum;
-            minIndex = r-1;
+            minIndex = r - 1;
         }
-        for (int i = l + 1; i < r-1; i++) {
+        for (int i = l + 1; i < r - 1; i++) {
             sum = minLen(l, i, str) + minLen(i + 1, r, str);
             if (min > sum) {
                 min = sum;
@@ -119,6 +124,7 @@ public class Task1084{
             }
             return tokenizer.nextToken();
         }
+
         int nextInt() {
             return Integer.parseInt(next());
         }

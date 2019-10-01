@@ -5,8 +5,11 @@ import java.util.ArrayDeque;
 import java.util.StringTokenizer;
 
 public class Task6125 {
+    /*
+    https://www.e-olymp.com/ru/submissions/5722133
+     */
+
     private static void solve(final Task6125.FastScanner in, final PrintWriter out) {
-        // Write me
         ArrayDeque<Integer> q=new ArrayDeque<>();
         String command=in.next();
         while(!command.contains("exit")){
