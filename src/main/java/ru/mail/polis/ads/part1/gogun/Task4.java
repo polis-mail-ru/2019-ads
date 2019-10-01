@@ -6,7 +6,7 @@ public class Task4 {
     private Task4(){
     }
 
-    public final static void main(final String[] args) {
+    public static void main(final String[] args) {
         final Scanner input = new Scanner(System.in);
 
         int n = input.nextInt();

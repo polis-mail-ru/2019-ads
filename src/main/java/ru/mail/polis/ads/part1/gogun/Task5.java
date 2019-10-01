@@ -8,6 +8,7 @@ import java.util.LinkedList;
 public final class Task5 {
     private Task5(){
     }
+
     private static void solve(BufferedReader bufferedReader) throws IOException {
         String input = "";
         final LinkedList<String> linkedList = new LinkedList<>();
