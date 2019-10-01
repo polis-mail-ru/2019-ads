@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part1.gogun;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Task2 {
+public final class Task2 {
     private Task2(){
     }
     /*
@@ -13,10 +13,10 @@ public class Task2 {
 
      */
     public static void main(final String[] argc) {
-        Scanner scan = new Scanner(System.in);
+        final Scanner scan = new Scanner(System.in);
         final String str = scan.nextLine();
         final LinkedList<Character> linkedList = new LinkedList<>();
-        String s = "";
+        final StringBuilder builder = new StringBuilder();
         for(final char c : str.toCharArray()) {
             if ((c == '(') | (c == '[')) {
                 linkedList.push(c);
@@ -26,24 +26,24 @@ public class Task2 {
                 char tmp;
                 while (!linkedList.isEmpty() && (tmp = linkedList.poll()) != bracket){
                     if (tmp == '(') {
-                        s = "(" + s + ")";
+                        builder.insert(0, "(").insert(builder.length(), ")");
                     }
                     if (tmp == '[') {
-                        s = "[" + s + "]";
+                        builder.insert(0, "[").insert(builder.length(), "]");
                     }
                 }
-                s = bracket + s + c;
+                builder.insert(0, bracket).insert(builder.length(), c);
             }
         }
         while (!linkedList.isEmpty()) {
             char a =  linkedList.pop();
             if (a == '(') {
-                s = "(" + ")" + s;
+                builder.insert(0, "(").insert(1, ")");
             }
             if (a == '[') {
-                s = "[" + "]" + s;
+                builder.insert(0, "[").insert(1,"]");
             }
         }
-        System.out.println(s);
+        System.out.println(builder);
     }
 }

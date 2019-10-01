@@ -13,8 +13,8 @@ public final class Task1 {
     }
 
     public static void main(final String[] argc) {
-        Scanner scan = new Scanner(System.in);
-        int num = scan.nextInt();
+        final Scanner scan = new Scanner(System.in);
+        final int num = scan.nextInt();
 
         solve(num);
     }
