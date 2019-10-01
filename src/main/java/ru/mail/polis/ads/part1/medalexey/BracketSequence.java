@@ -17,10 +17,7 @@ public final class BracketSequence {
     private static void solve(final Scanner in, final PrintWriter out) {
         final String input = in.nextLine();
 
-        if (input.trim().equals("")) {
-            out.println(input);
-            return ;
-        }
+        checkInput(input, out);
 
         int[][] numberOfBracketsToAdd = new int[input.length()][input.length()];
         String[][] resultSequence = new String[input.length()][input.length()];
@@ -37,7 +34,7 @@ public final class BracketSequence {
                 if (left == right) {
                     numberOfBracketsToAdd[left][right] = 1;
                     resultSequence[left][right] = addBracketToSequence(input,left);
-                    continue;
+
                 }
 
 
@@ -46,6 +43,7 @@ public final class BracketSequence {
                     minNumberOfBrackets = numberOfBracketsToAdd[left+1][right-1];
                     curSequence = getSequence(resultSequence, input, left+1, right-1);
                 }
+
 
 
                 for (int right1 = left; right1 < right; right1++) {
@@ -69,6 +67,14 @@ public final class BracketSequence {
         }
 
         out.println(resultSequence[0][input.length()-1]);
+    }
+
+
+    private static void checkInput(final String input, final PrintWriter out) {
+        if (input.trim().equals("")) {
+            out.println(input);
+            System.exit(0);
+        }
     }
 
 
@@ -121,18 +127,18 @@ public final class BracketSequence {
         int secondSequencePointer = 0;
 
         while (mainStringPointer < mainString.length()) {
-            if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer) &&
-                    mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer)) {
+            if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer)
+                    && mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer)) {
                 result.append(mainString.charAt(mainStringPointer));
                 mainStringPointer++;
                 firstSequencePointer++;
                 secondSequencePointer++;
-            } else if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer) &&
-                    mainString.charAt(mainStringPointer) != secondSequence.charAt(secondSequencePointer)) {
+            } else if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer)
+                    && mainString.charAt(mainStringPointer) != secondSequence.charAt(secondSequencePointer)) {
                 result.append(secondSequence.charAt(secondSequencePointer));
                 secondSequencePointer++;
-            } else if (mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer) &&
-                    mainString.charAt(mainStringPointer) != firstSequence.charAt(firstSequencePointer)) {
+            } else if (mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer)
+                    && mainString.charAt(mainStringPointer) != firstSequence.charAt(firstSequencePointer)) {
                 result.append(firstSequence.charAt(firstSequencePointer));
                 firstSequencePointer++;
             }
@@ -154,7 +160,7 @@ public final class BracketSequence {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
+        final PrintWriter out = new PrintWriter(System.out);
         solve(in, out);
         out.close();
         in.close();

@@ -7,7 +7,7 @@ import java.util.Scanner;
  *   Название задачи: "Простая задача?"
  *   Тестирование: https://www.e-olymp.com/ru/submissions/5723843
  */
-public class SimpleTask {
+public final class SimpleTask {
 
     private SimpleTask() {
 
@@ -20,7 +20,7 @@ public class SimpleTask {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
+        final PrintWriter out = new PrintWriter(System.out);
         solve(in, out);
         out.close();
         in.close();

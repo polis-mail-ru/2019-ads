@@ -10,17 +10,17 @@ import java.util.Scanner;
  *  Тестирование: https://www.e-olymp.com/ru/submissions/5728980
  *
  */
-public class SimpleQueue {
+public final class SimpleQueue {
 
     private SimpleQueue() {
 
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        Deque<Integer> queue = new ArrayDeque<>();
+        final Deque<Integer> queue = new ArrayDeque<>();
         String input = "";
 
-        while (!input.equals("exit")) {
+        while (!"exit".equals(input)) {
             input = in.next();
 
             if (input.matches("push")) {
@@ -46,7 +46,7 @@ public class SimpleQueue {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
+        final PrintWriter out = new PrintWriter(System.out);
         solve(in, out);
         out.close();
         in.close();

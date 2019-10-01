@@ -47,40 +47,39 @@ public final class PackagingSymbols {
     // упаковка строки, если она периодична
     private static String packString(final String[][] matrix,
                                      final String input,
-                                     String minSubstring,
+                                     final String minSubstring,
                                      final int len,
                                      final int left,
                                      final int right) {
 
+        String result = minSubstring;
         for (int period = 1; period < len; period++) {
-            if (len%period == 0) {
-                // упаковываем строку, если она периодична
-                if (isPeriodic(input, left, period, right)) {
+            if (len%period == 0 && isPeriodic(input, left, period, right)) {
                     final String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
-                    minSubstring = getMinSubstring(tmp, minSubstring);
-                }
+                    result = tmp.length() < result.length() ? tmp : result;
             }
         }
 
-        return minSubstring;
+        return result;
     }
 
 
     // поиск минимальной подстроки данной подстроки
     private static String getMinSubstring(final String[][] matrix,
-                                          String curMinSubstring,
+                                          final String curMinSubstring,
                                           final int left, final int right) {
 
+        String result= curMinSubstring;
         for (int right1 = left; right1 < right; right1++) {
             final int left2 = right1 + 1;
             final String tmp = matrix[left][right1] + matrix[left2][right];
 
-            if (tmp.length() < curMinSubstring.length()) {
-                curMinSubstring = tmp;
+            if (tmp.length() < result.length()) {
+                result = tmp;
             }
         }
 
-        return curMinSubstring;
+        return result;
     }
 
 
@@ -96,11 +95,6 @@ public final class PackagingSymbols {
         }
 
         return isPeriodic;
-    }
-
-    // определение строки меньшей длины
-    private static String getMinSubstring(final String first, final String second) {
-        return (first.length() < second.length()) ? first : second;
     }
 
 

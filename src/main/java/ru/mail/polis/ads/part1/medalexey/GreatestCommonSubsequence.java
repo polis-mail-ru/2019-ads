@@ -43,7 +43,7 @@ public final class GreatestCommonSubsequence {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
+        final PrintWriter out = new PrintWriter(System.out);
         solve(in, out);
         out.close();
         in.close();
