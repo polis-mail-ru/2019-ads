@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part1.gogun;
 import java.io.*;
 import java.util.LinkedList;
 
-public final class Task_5 {
+public final class Task5 {
     private static void solve(BufferedReader bufferedReader) throws IOException  {
         String input = "";
         LinkedList<String> linkedList = new LinkedList<>();

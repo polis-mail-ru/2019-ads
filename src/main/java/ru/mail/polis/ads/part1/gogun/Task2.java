@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part1.gogun;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-public class Task_2 {
+public class Task2 {
     /*
 
         На e-olymp добился только 56% со стеком
