@@ -10,13 +10,16 @@ import java.util.Scanner;
  */
 public final class PackagingSymbols {
 
+    private static String[][] matrix;
+    private static String input;
+
     private PackagingSymbols() {
 
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        final String input = in.nextLine();
-        String[][] matrix = new String[input.length()][input.length()];
+        input = in.nextLine();
+        matrix = new String[input.length()][input.length()];
 
         // перебираем все возможные длины подстрок входной строки
         for (int len = 1; len <= input.length(); len++) {
@@ -30,10 +33,10 @@ public final class PackagingSymbols {
                 // если длина подстроки меньше 4, то её нет смысла упаковывать
                 if(len > 4) {
                     // поиск минимальной подстроки данной подстроки
-                    minSubstring = getMinSubstring(matrix, minSubstring, left, right);
+                    minSubstring = getMinSubstring(minSubstring, left, right);
 
                     //упаковна строки
-                    minSubstring = packString(matrix, input, minSubstring, len, left, right);
+                    minSubstring = packString(minSubstring, len, left, right);
                 }
 
                 matrix[left][right] = minSubstring;
@@ -45,16 +48,14 @@ public final class PackagingSymbols {
 
 
     // упаковка строки, если она периодична
-    private static String packString(final String[][] matrix,
-                                     final String input,
-                                     final String minSubstring,
+    private static String packString(final String minSubstring,
                                      final int len,
                                      final int left,
                                      final int right) {
 
         String result = minSubstring;
         for (int period = 1; period < len; period++) {
-            if (len%period == 0 && isPeriodic(input, left, period, right)) {
+            if (len%period == 0 && isPeriodic(left, period, right)) {
                     final String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
                     result = tmp.length() < result.length() ? tmp : result;
             }
@@ -65,8 +66,7 @@ public final class PackagingSymbols {
 
 
     // поиск минимальной подстроки данной подстроки
-    private static String getMinSubstring(final String[][] matrix,
-                                          final String curMinSubstring,
+    private static String getMinSubstring(final String curMinSubstring,
                                           final int left, final int right) {
 
         String result= curMinSubstring;
@@ -84,7 +84,7 @@ public final class PackagingSymbols {
 
 
     // проверка периодичности строки
-    private static boolean isPeriodic(final String input, final int left, final int period, final int right) {
+    private static boolean isPeriodic(final int left, final int period, final int right) {
 
         boolean isPeriodic = true;
         for (int i = left + period; i <= right; i++) {
@@ -100,7 +100,7 @@ public final class PackagingSymbols {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        PrintWriter out = new PrintWriter(System.out);
+        final PrintWriter out = new PrintWriter(System.out);
         solve(in, out);
         out.close();
         in.close();

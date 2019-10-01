@@ -26,7 +26,7 @@ public final class GreatestCommonSubsequence {
     }
 
 
-    private static void fillMatrix(int[][] matrix, final String[] firstLine, final String[] secondLine) {
+    private static void fillMatrix(int[][] matrix, final String[] firstLine, final String... secondLine) {
 
         for (int i = 1; i <= firstLine.length; i++) {
             for (int j = 1; j <= secondLine.length; j++) {

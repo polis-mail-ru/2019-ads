@@ -10,17 +10,21 @@ import java.util.Scanner;
  */
 public final class BracketSequence {
 
+    private static int[][] numberOfBracketsToAdd;
+    private static String[][] resultSequence;
+    private static String input;
+
     private BracketSequence() {
 
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        final String input = in.nextLine();
+        input = in.nextLine();
 
         checkInput(input, out);
 
-        int[][] numberOfBracketsToAdd = new int[input.length()][input.length()];
-        String[][] resultSequence = new String[input.length()][input.length()];
+        numberOfBracketsToAdd = new int[input.length()][input.length()];
+        resultSequence = new String[input.length()][input.length()];
 
         // перебираем все возможные длины подстрок входной строки
         for (int len = 1; len <= input.length(); len++) {
@@ -44,29 +48,40 @@ public final class BracketSequence {
                     curSequence = getSequence(resultSequence, input, left+1, right-1);
                 }
 
+                findOptimalSequence(left, right, minNumberOfBrackets, curSequence);
 
-
-                for (int right1 = left; right1 < right; right1++) {
-                    final int left2 = right1 + 1;
-
-                    if (minNumberOfBrackets == -1
-                            || numberOfBracketsToAdd[left][right1]
-                            + numberOfBracketsToAdd[left2][right] < minNumberOfBrackets) {
-                        minNumberOfBrackets = numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right];
-                        curSequence = concatSequences(
-                                input,
-                                resultSequence[left][right1],
-                                resultSequence[left2][right]
-                        );
-                    }
-                }
-
-                numberOfBracketsToAdd[left][right] = minNumberOfBrackets;
-                resultSequence[left][right] = curSequence;
             }
         }
 
         out.println(resultSequence[0][input.length()-1]);
+    }
+
+
+    private static void findOptimalSequence(final int left,
+                                            final int right,
+                                            final int minNumberOfBrackets,
+                                            final String sequence) {
+
+        int curMinNumberOfBrackets = minNumberOfBrackets;
+        String curSequence = sequence;
+
+        for (int right1 = left; right1 < right; right1++) {
+            final int left2 = right1 + 1;
+
+            if (curMinNumberOfBrackets == -1
+                    || numberOfBracketsToAdd[left][right1]
+                    + numberOfBracketsToAdd[left2][right] < curMinNumberOfBrackets) {
+                curMinNumberOfBrackets = numberOfBracketsToAdd[left][right1] + numberOfBracketsToAdd[left2][right];
+                curSequence = concatSequences(
+                        input,
+                        resultSequence[left][right1],
+                        resultSequence[left2][right]
+                );
+            }
+        }
+
+        numberOfBracketsToAdd[left][right] = curMinNumberOfBrackets;
+        resultSequence[left][right] = curSequence;
     }
 
 
