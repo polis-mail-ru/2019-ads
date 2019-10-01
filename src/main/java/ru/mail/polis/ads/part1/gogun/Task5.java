@@ -1,10 +1,12 @@
 package ru.mail.polis.ads.part1.gogun;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
 
 public final class Task5 {
-    private static void solve(BufferedReader bufferedReader) throws IOException  {
+    private static void solve(BufferedReader bufferedReader) throws IOException {
         String input = "";
         LinkedList<String> linkedList = new LinkedList<>();
         while (!input.equals("exit")) {
@@ -30,6 +32,8 @@ public final class Task5 {
                 case ("clear"):
                     linkedList.clear();
                     System.out.println("ok");
+                    break;
+                default:
                     break;
             }
         }

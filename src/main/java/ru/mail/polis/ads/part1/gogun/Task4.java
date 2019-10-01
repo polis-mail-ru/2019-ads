@@ -16,18 +16,20 @@ public class Task4 {
         int y[] = new int[m+1];
         for(int i = 1; i <= m; i++) y[i] = input.nextInt();
 
-        int result_arr[][] = new int[2][m+1];
+        int[][] resultArr = new int[2][m+1];
 
         for(int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
-                if (x[i] == y[j])
-                    result_arr[i%2][j] = 1 + result_arr[(i - 1)%2][j - 1];
-                else
-                    result_arr[i%2][j] = Math.max(result_arr[(i - 1)%2][j],result_arr[i%2][j - 1]);
+                if (x[i] == y[j]) {
+                    resultArr[i % 2][j] = 1 + resultArr[(i - 1) % 2][j - 1];
+                }
+                else {
+                    resultArr[i % 2][j] = Math.max(resultArr[(i - 1) % 2][j], resultArr[i % 2][j - 1]);
+                }
             }
         }
 
-        System.out.println(result_arr[n%2][m]);
+        System.out.println(resultArr[n%2][m]);
     }
 
 }
