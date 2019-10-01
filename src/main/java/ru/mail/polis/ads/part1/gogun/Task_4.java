@@ -10,11 +10,11 @@ public class Task_4 {
 
         int n = input.nextInt();
         int x[] = new int[n+1];
-        for(int i = 0; i < n; i++) x[i] = input.nextInt();
+        for(int i = 1; i <= n; i++) x[i] = input.nextInt();
 
         int m = input.nextInt();
         int y[] = new int[m+1];
-        for(int i = 0; i < m; i++) y[i] = input.nextInt();
+        for(int i = 1; i <= m; i++) y[i] = input.nextInt();
 
         int result_arr[][] = new int[2][m+1];
 
