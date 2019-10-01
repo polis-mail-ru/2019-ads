@@ -4,10 +4,7 @@ import java.io.*;
 import java.util.LinkedList;
 
 public final class Task_5 {
-    public static void main(String[] argc) throws IOException {
-        InputStream inputStream = System.in;
-        Reader inputStreamReader = new InputStreamReader(inputStream);
-        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+    private static void solve(BufferedReader bufferedReader) throws IOException  {
         String input = "";
         LinkedList<String> linkedList = new LinkedList<>();
         while (!input.equals("exit")) {
@@ -34,12 +31,17 @@ public final class Task_5 {
                     linkedList.clear();
                     System.out.println("ok");
                     break;
-
-
             }
-
         }
+    }
 
+    public static void main(String[] argc){
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            solve(bufferedReader);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("bye");
     }
 }
