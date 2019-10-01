@@ -25,42 +25,18 @@ public final class PackagingSymbols {
                 //определяем конец текущей подстроки
                 final int right = left + len -1;
                 // определяем текущую подстроку
-                String min_substring = input.substring(left, right+1);
+                String minSubstring = input.substring(left, right+1);
 
                 // если длина подстроки меньше 4, то её нет смысла упаковывать
                 if(len > 4) {
                     // поиск минимальной подстроки данной подстроки
-                    for (int right1 = left; right1 < right; right1++) {
-                        final int left2 = right1 + 1;
-                        final String tmp = matrix[left][right1] + matrix[left2][right];
+                    minSubstring = getMinSubstring(matrix, minSubstring, left, right);
 
-                        if (tmp.length() < min_substring.length()) {
-                            min_substring = tmp;
-                        }
-                    }
-
-                    // определяем периодичность строки
-                    for (int period = 1; period < len; period++) {
-                        if (len%period == 0) {
-                            boolean isPeriodic = true;
-                            for (int i = left + period; i <= right; i++) {
-                                if (input.charAt(i) != input.charAt(i - period)) {
-                                    isPeriodic = false;
-                                    break;
-                                }
-                            }
-                            // упаковываем строку, если она периодична
-                            if (isPeriodic) {
-                                final String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
-                                if (tmp.length() < min_substring.length()) {
-                                    min_substring = tmp;
-                                }
-                            }
-                        }
-                    }
+                    //упаковна строки
+                    minSubstring = packString(matrix, input, minSubstring, len, left, right);
                 }
 
-                matrix[left][right] = min_substring;
+                matrix[left][right] = minSubstring;
             }
         }
 
@@ -68,11 +44,72 @@ public final class PackagingSymbols {
     }
 
 
+    // упаковка строки, если она периодична
+    private static String packString(final String[][] matrix,
+                                     final String input,
+                                     String minSubstring,
+                                     final int len,
+                                     final int left,
+                                     final int right) {
+
+        for (int period = 1; period < len; period++) {
+            if (len%period == 0) {
+                // упаковываем строку, если она периодична
+                if (isPeriodic(input, left, period, right)) {
+                    final String tmp = len/period + "(" + matrix[left][left + period - 1] + ")";
+                    minSubstring = getMinSubstring(tmp, minSubstring);
+                }
+            }
+        }
+
+        return minSubstring;
+    }
+
+
+    // поиск минимальной подстроки данной подстроки
+    private static String getMinSubstring(final String[][] matrix,
+                                          String curMinSubstring,
+                                          final int left, final int right) {
+
+        for (int right1 = left; right1 < right; right1++) {
+            final int left2 = right1 + 1;
+            final String tmp = matrix[left][right1] + matrix[left2][right];
+
+            if (tmp.length() < curMinSubstring.length()) {
+                curMinSubstring = tmp;
+            }
+        }
+
+        return curMinSubstring;
+    }
+
+
+    // проверка периодичности строки
+    private static boolean isPeriodic(final String input, final int left, final int period, final int right) {
+
+        boolean isPeriodic = true;
+        for (int i = left + period; i <= right; i++) {
+            if (input.charAt(i) != input.charAt(i - period)) {
+                isPeriodic = false;
+                break;
+            }
+        }
+
+        return isPeriodic;
+    }
+
+    // определение строки меньшей длины
+    private static String getMinSubstring(final String first, final String second) {
+        return (first.length() < second.length()) ? first : second;
+    }
+
+
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        PrintWriter out = new PrintWriter(System.out);
+        solve(in, out);
+        out.close();
+        in.close();
     }
 
 }

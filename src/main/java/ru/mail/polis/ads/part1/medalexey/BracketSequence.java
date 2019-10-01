@@ -73,7 +73,7 @@ public final class BracketSequence {
 
 
     // являются ли скобки парой
-    private static boolean bracketsArePair(char left, final char right) {
+    private static boolean bracketsArePair(final char left, final char right) {
         if (left == '(') {
             return right == ')';
         } else if (left == '[') {
@@ -84,25 +84,26 @@ public final class BracketSequence {
     }
 
     //добавляет подходящую скобку
-    private static String addBracketToSequence(String sequence, final int bracketIndex) {
+    private static String addBracketToSequence(final String sequence, final int bracketIndex) {
+        String result = sequence;
         switch (sequence.charAt(bracketIndex)) {
             case '(':
-                sequence = sequence.substring(0,bracketIndex + 1) + ')' + sequence.substring(bracketIndex + 1);
+                result = sequence.substring(0,bracketIndex + 1) + ')' + sequence.substring(bracketIndex + 1);
                 break;
             case '[':
-                sequence = sequence.substring(0,bracketIndex + 1) + ']' + sequence.substring(bracketIndex + 1);
+                result = sequence.substring(0,bracketIndex + 1) + ']' + sequence.substring(bracketIndex + 1);
                 break;
             case ')':
-                sequence = sequence.substring(0,bracketIndex) + '(' + sequence.substring(bracketIndex);
+                result = sequence.substring(0,bracketIndex) + '(' + sequence.substring(bracketIndex);
                 break;
             case ']':
-                sequence = sequence.substring(0,bracketIndex) + '[' + sequence.substring(bracketIndex);
+                result = sequence.substring(0,bracketIndex) + '[' + sequence.substring(bracketIndex);
                 break;
             default:
                 break;
         }
 
-        return sequence;
+        return result;
     }
 
     private static String getSequence(final String[][] matrix, final String string, final int i, final int j) {
@@ -120,24 +121,29 @@ public final class BracketSequence {
         int secondSequencePointer = 0;
 
         while (mainStringPointer < mainString.length()) {
-            if (mainString.charAt(mainStringPointer) != firstSequence.charAt(firstSequencePointer)) {
-                result.append(firstSequence.charAt(firstSequencePointer));
-                firstSequencePointer++;
-            } else if (mainString.charAt(mainStringPointer) != secondSequence.charAt(secondSequencePointer)) {
-                result.append(secondSequence.charAt(secondSequencePointer));
-                secondSequencePointer++;
-            } else {
+            if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer) &&
+                    mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer)) {
                 result.append(mainString.charAt(mainStringPointer));
                 mainStringPointer++;
                 firstSequencePointer++;
                 secondSequencePointer++;
+            } else if (mainString.charAt(mainStringPointer) == firstSequence.charAt(firstSequencePointer) &&
+                    mainString.charAt(mainStringPointer) != secondSequence.charAt(secondSequencePointer)) {
+                result.append(secondSequence.charAt(secondSequencePointer));
+                secondSequencePointer++;
+            } else if (mainString.charAt(mainStringPointer) == secondSequence.charAt(secondSequencePointer) &&
+                    mainString.charAt(mainStringPointer) != firstSequence.charAt(firstSequencePointer)) {
+                result.append(firstSequence.charAt(firstSequencePointer));
+                firstSequencePointer++;
             }
+
         }
 
 
         if (firstSequencePointer != firstSequence.length()) {
             result.append(firstSequence.charAt(firstSequencePointer));
-        } else if (secondSequencePointer != secondSequence.length()) {
+        }
+        if (secondSequencePointer != secondSequence.length()) {
             result.append(secondSequence.charAt(secondSequencePointer));
         }
 
@@ -148,9 +154,10 @@ public final class BracketSequence {
 
     public static void main(final String[] arg) {
         final Scanner in = new Scanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        PrintWriter out = new PrintWriter(System.out);
+        solve(in, out);
+        out.close();
+        in.close();
     }
 
 }

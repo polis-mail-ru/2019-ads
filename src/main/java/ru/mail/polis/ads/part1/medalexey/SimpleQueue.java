@@ -1,13 +1,9 @@
 package ru.mail.polis.ads.part1.medalexey;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 /**
  *  Название задачи: "Простая очередь"
@@ -20,11 +16,11 @@ public class SimpleQueue {
 
     }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
+    private static void solve(final Scanner in, final PrintWriter out) {
         Deque<Integer> queue = new ArrayDeque<>();
-        String input;
+        String input = "";
 
-        while (true) {
+        while (!input.equals("exit")) {
             input = in.next();
 
             if (input.matches("push")) {
@@ -37,46 +33,22 @@ public class SimpleQueue {
             } else if (input.matches("size")) {
                 out.write(queue.size() + "\n");
             } else if (input.matches("clear")) {
-                queue = new ArrayDeque<>();
+                queue.clear();
                 out.write("ok\n");
-            } else if (input.matches("exit")) {
-                out.write("bye");
-                out.flush();
-                System.exit(0);
             }
-
         }
+
+        out.write("bye");
+        out.flush();
 
     }
 
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-    }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        final Scanner in = new Scanner(System.in);
+        PrintWriter out = new PrintWriter(System.out);
+        solve(in, out);
+        out.close();
+        in.close();
     }
 }
