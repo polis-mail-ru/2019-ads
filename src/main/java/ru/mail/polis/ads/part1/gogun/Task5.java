@@ -6,30 +6,32 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 
 public final class Task5 {
+    private Task5(){
+    }
     private static void solve(BufferedReader bufferedReader) throws IOException {
         String input = "";
-        LinkedList<String> linkedList = new LinkedList<>();
+        final LinkedList<String> linkedList = new LinkedList<>();
         while (!input.equals("exit")) {
             input = bufferedReader.readLine();
             switch (input.split(" ")[0]) {
-                case ("push"):
+                case "push":
                     linkedList.add(input.split(" ")[1]);
                     System.out.println("ok");
                     break;
-                case ("pop"):
-                    if (linkedList.size() != 0) {
+                case "pop":
+                    if (linkedList.isEmpty()) {
                         System.out.println(linkedList.remove());
                     }
                     break;
-                case ("front"):
-                    if (linkedList.size() != 0) {
+                case "front":
+                    if (linkedList.isEmpty()) {
                         System.out.println(linkedList.getFirst());
                     }
                     break;
-                case ("size"):
+                case "size":
                     System.out.println(linkedList.size());
                     break;
-                case ("clear"):
+                case "clear":
                     linkedList.clear();
                     System.out.println("ok");
                     break;
@@ -39,8 +41,8 @@ public final class Task5 {
         }
     }
 
-    public static void main(String[] argc){
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+    public static void main(final String[] argc){
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         try {
             solve(bufferedReader);
         } catch (IOException e) {

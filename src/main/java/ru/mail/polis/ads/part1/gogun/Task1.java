@@ -5,6 +5,7 @@ import java.util.Scanner;
 public final class Task1 {
     private Task1(){
     }
+
     private static void solve(final int num) {
         final int num1 = num / 10;
         final int num2 = num % 10;

@@ -3,10 +3,11 @@ package ru.mail.polis.ads.part1.gogun;
 import java.util.Scanner;
 
 public class Task4 {
-    public static void main(String[] args)
+    private Task4(){
+    }
 
-    {
-        Scanner input = new Scanner(System.in);
+    public final static void main(final String[] args) {
+        final Scanner input = new Scanner(System.in);
 
         int n = input.nextInt();
         int x[] = new int[n+1];
