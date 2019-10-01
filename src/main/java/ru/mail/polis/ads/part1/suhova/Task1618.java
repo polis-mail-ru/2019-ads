@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Task1618 {
-    //1618
-
+    /*
+    https://www.e-olymp.com/ru/submissions/5735270
+     */
     private static void solve(final Task1618.FastScanner in, final PrintWriter out) {
         int n1 = in.nextInt();
         int[] arr1 = new int[n1];
