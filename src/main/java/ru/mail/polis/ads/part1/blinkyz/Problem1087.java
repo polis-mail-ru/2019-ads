@@ -2,8 +2,8 @@ package ru.mail.polis.ads.part1.blinkyz;
 
 import java.util.Scanner;
 
-public class Problem1090 {
-    private Problem1090() {
+public class Problem1087 {
+    private Problem1087() {
 
     }
 
@@ -40,10 +40,9 @@ public class Problem1090 {
                 d[i][j] = min;
                 split[i][j] = splitMin;
             }
-            restore(0, n - 1, s, d, split);
         }
+        restore(0, n - 1, s, d, split);
     }
-
 
     private static void restore(int i, int j,
                                 String s,
