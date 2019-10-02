@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class FourthExercise {
     public static void main(final String... args){
         final int maxSubsequence = getMaxSubsequence();
-        System.out.println(maxSubsequence);
+        System.out.println(maxSubsequence); // Noncompliant
     }
 
     private FourthExercise() {

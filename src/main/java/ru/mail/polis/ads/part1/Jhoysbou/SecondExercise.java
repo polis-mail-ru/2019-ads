@@ -16,7 +16,7 @@ public final class SecondExercise {
         final Scanner scanner = new Scanner(System.in);
         sequence = scanner.nextLine();
         if (sequence.isEmpty()){
-            System.out.println(sequence);
+            System.out.println(sequence); // Noncompliant
             return;
         }
 
@@ -63,11 +63,11 @@ public final class SecondExercise {
             switch (sequence.charAt(i)) {
                 case '(':
                 case ')':
-                    System.out.print("()");
+                    System.out.print("()"); // Noncompliant
                     break;
                 case '[':
                 case ']':
-                    System.out.print("[]");
+                    System.out.print("[]"); // Noncompliant
                     break;
                 default:
                     return;
@@ -75,13 +75,13 @@ public final class SecondExercise {
             return;
         }
         if (dinamicArray[i][j] == 0) {
-            System.out.print(sequence.substring(i, j + 1));
+            System.out.print(sequence.substring(i, j + 1)); // Noncompliant
             return;
         }
         if (split[i][j] == -1) {
-            System.out.print(sequence.charAt(i));
+            System.out.print(sequence.charAt(i)); // Noncompliant
             restore(i + 1, j - 1, dinamicArray, split);
-            System.out.print(sequence.charAt(j));
+            System.out.print(sequence.charAt(j)); // Noncompliant
             return;
         }
         final int index = split[i][j];

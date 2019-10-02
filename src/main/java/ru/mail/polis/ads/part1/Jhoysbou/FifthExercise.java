@@ -54,26 +54,26 @@ public final class FifthExercise {
             switch (command){
                 case "push":
                     arrayList.add(commandArgument);
-                    System.out.println("ok");
+                    System.out.println("ok"); // Noncompliant
                     endIndex++;
                     break;
                 case "pop":
-                    System.out.println(arrayList.get(beginIndex));
+                    System.out.println(arrayList.get(beginIndex)); // Noncompliant
                     arrayList.remove(beginIndex);
                     break;
                 case "front":
-                    System.out.println(arrayList.get(beginIndex));
+                    System.out.println(arrayList.get(beginIndex)); // Noncompliant
                     break;
                 case "size":
                     System.out.println(arrayList.size());
                     break;
                 case "clear":
                     arrayList.clear();
-                    System.out.println("ok");
+                    System.out.println("ok"); // Noncompliant
                     break;
                 case "exit":
                     isRunning = false;
-                    System.out.println("bye");
+                    System.out.println("bye"); // Noncompliant
                     break;
                 default:
                     isRunning = false;

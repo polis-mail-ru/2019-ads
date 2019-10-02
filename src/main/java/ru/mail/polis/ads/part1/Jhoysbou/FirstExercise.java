@@ -19,6 +19,6 @@ public final class FirstExercise{
 
     private static void doubleDigitSeparator(final int number){
         final String result = number / 10 + " " + number % 10;
-        System.out.print(result);
+        System.out.print(result); // Noncompliant
     }
 }
