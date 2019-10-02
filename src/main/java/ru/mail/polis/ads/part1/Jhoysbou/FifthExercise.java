@@ -38,8 +38,8 @@ public class FifthExercise {
     }
 
         private static void execute(){
-            final String OK_ANSWER = "ok";
-            final String EDN_ANSWER = "bye";
+            final String okAnswer = "ok";
+            final String ednAnswer = "bye";
             String command = "";
             int commandArgument = 0;
             final String[] temp = functionArgument.split(" ");
@@ -52,7 +52,7 @@ public class FifthExercise {
             switch (command){
                 case "push":
                     arrayList.add(commandArgument);
-                    System.out.println(OK_ANSWER);
+                    System.out.println(okAnswer);
                     endIndex++;
                     break;
                 case "pop":
@@ -65,16 +65,16 @@ public class FifthExercise {
                     System.out.println(number);
                     break;
                 case "size":
-                    int size = arrayList.size();
+                    final int size = arrayList.size();
                     System.out.println(size);
                     break;
                 case "clear":
                     arrayList.clear();
-                    System.out.println(OK_ANSWER);
+                    System.out.println(okAnswer);
                     break;
                 case "exit":
                     isRunning = false;
-                    System.out.println(EDN_ANSWER);
+                    System.out.println(ednAnswer);
                     break;
                 default:
                     isRunning = false;

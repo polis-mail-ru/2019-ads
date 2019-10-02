@@ -4,9 +4,14 @@ import java.util.Scanner;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5765475
 
-public class SecondExercise {
+public final class SecondExercise {
     private static String sequence;
     private static int min;
+
+    private SecondExercise() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void main(final String... args){
         final Scanner scanner = new Scanner(System.in);
         sequence = scanner.nextLine();
@@ -39,6 +44,8 @@ public class SecondExercise {
 
         restore(0, length-1, dinamicArray, split);
     }
+
+
     static int split(int i, int j, int[][] d) {
         for (int index = i; index < j; ++index){
             if (d[i][index] + d[index+1][j] < min){
