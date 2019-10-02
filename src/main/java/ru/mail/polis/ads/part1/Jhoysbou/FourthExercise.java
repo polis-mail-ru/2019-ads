@@ -6,14 +6,16 @@ import java.util.Scanner;
 
 public class FourthExercise {
     public static void main(final String... args){
-        int maxSubsequence = getMaxSubsequence();
+        final int maxSubsequence = getMaxSubsequence();
         System.out.println(maxSubsequence);
     }
 
-    /**
-     * Вычисляет максимальную длину общей подпоследоватльности
-     * @return Integer с макисмлаьной длиной такой подпоследовательности
-     *
+    private FourthExercise() {
+        throw new UnsupportedOperationException();
+    }
+
+    /** Вычисляет максимальную длину общей подпоследоватльности.
+     * @return Integer с макисмлаьной длиной такой подпоследовательности.
      */
     public static int getMaxSubsequence(){
         final Scanner scanner = new Scanner(System.in);

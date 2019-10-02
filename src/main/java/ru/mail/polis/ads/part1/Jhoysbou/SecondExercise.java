@@ -46,7 +46,7 @@ public final class SecondExercise {
     }
 
 
-    static int split(int i, int j, int[][] d) {
+    static int split(final int i, final int j, final int[][] d) {
         for (int index = i; index < j; ++index){
             if (d[i][index] + d[index+1][j] < min){
                 min = d[i][index] + d[index+1][j];

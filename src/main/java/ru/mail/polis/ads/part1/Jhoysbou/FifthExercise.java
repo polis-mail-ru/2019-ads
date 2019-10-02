@@ -8,7 +8,12 @@ import java.util.List;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5743541
 
-public class FifthExercise {
+public final class FifthExercise {
+
+    private FifthExercise() {
+        throw new UnsupportedOperationException();
+    }
+
     public static void main(final String... args){
         SimpleQueue.run();
     }
@@ -38,8 +43,6 @@ public class FifthExercise {
     }
 
         private static void execute(){
-            final String okAnswer = "ok";
-            final String ednAnswer = "bye";
             String command = "";
             int commandArgument = 0;
             final String[] temp = functionArgument.split(" ");
@@ -48,33 +51,29 @@ public class FifthExercise {
             if (temp.length > 1) {
                 commandArgument = Integer.parseInt(temp[1]);
             }
-            int number = 0;
             switch (command){
                 case "push":
                     arrayList.add(commandArgument);
-                    System.out.println(okAnswer);
+                    System.out.println("ok");
                     endIndex++;
                     break;
                 case "pop":
-                    number = arrayList.get(beginIndex);
-                    System.out.println(number);
+                    System.out.println(arrayList.get(beginIndex));
                     arrayList.remove(beginIndex);
                     break;
                 case "front":
-                    number = arrayList.get(beginIndex);
-                    System.out.println(number);
+                    System.out.println(arrayList.get(beginIndex));
                     break;
                 case "size":
-                    final int size = arrayList.size();
-                    System.out.println(size);
+                    System.out.println(arrayList.size());
                     break;
                 case "clear":
                     arrayList.clear();
-                    System.out.println(okAnswer);
+                    System.out.println("ok");
                     break;
                 case "exit":
                     isRunning = false;
-                    System.out.println(ednAnswer);
+                    System.out.println("bye");
                     break;
                 default:
                     isRunning = false;
