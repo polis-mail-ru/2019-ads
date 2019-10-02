@@ -8,7 +8,7 @@ import java.util.Scanner;
 * Решение: https://www.e-olymp.com/ru/submissions/5769024
 */
 
-public class SimpleTask {
+public final class SimpleTask {
 
     private SimpleTask(){
 

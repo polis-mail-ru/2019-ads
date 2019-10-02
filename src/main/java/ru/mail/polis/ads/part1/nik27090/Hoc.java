@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 
 
-public class Hoc {
+public final class Hoc {
 
     private Hoc(){
 
@@ -17,22 +17,17 @@ public class Hoc {
 
     public static void main(final String[] args) {
         final Scanner con = new Scanner(System.in);
-        int n;
-        int x[];
-        n = con.nextInt();
-        x = new int[n+1];
+        int n = con.nextInt();
+        int x[] = new int[n+1];
         for(int i = 1; i <= n; i++){
             x[i] = con.nextInt();
         }
-        int m;
-        m = con.nextInt();
-        int y[];
-        y = new int[m+1];
-        int dp[][];
+        int m = con.nextInt();
+        int y[] = new int[m+1];
         for(int i = 1; i <= m; i++){
             y[i] = con.nextInt();
         }
-        dp = new int[2][m+1];
+        int dp[][] = new int[2][m+1];
 
         for(int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {
