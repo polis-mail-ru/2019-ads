@@ -13,7 +13,7 @@ public abstract class ThirdExercise {
 
         }
 
-        private static String toPack(String sequence){
+        private static String toPack(final String sequence){
             final int length = sequence.length();
 
             String[][] result = new String[length][length];

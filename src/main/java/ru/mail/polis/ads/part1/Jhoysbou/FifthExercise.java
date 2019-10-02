@@ -8,12 +8,12 @@ import java.util.List;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5743541
 
-public class FifthExercise {
+public abstract class FifthExercise {
     public static void main(final String... args){
         SimpleQueue.run();
     }
 
-    private static abstract class SimpleQueue {
+    private abstract static class SimpleQueue {
         private static List<Integer> arrayList = new LinkedList<>();
         private static boolean isRunning;
         private static String functionArgument;
