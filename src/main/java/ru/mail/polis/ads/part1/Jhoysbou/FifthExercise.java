@@ -8,12 +8,12 @@ import java.util.List;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5743541
 
-public abstract class FifthExercise {
+public class FifthExercise {
     public static void main(final String... args){
         SimpleQueue.run();
     }
 
-    private abstract static class SimpleQueue {
+    private static class SimpleQueue {
         private static List<Integer> arrayList = new LinkedList<>();
         private static boolean isRunning;
         private static String functionArgument;
@@ -38,6 +38,8 @@ public abstract class FifthExercise {
     }
 
         private static void execute(){
+            final String OK_ANSWER = "ok";
+            final String EDN_ANSWER = "bye";
             String command = "";
             int commandArgument = 0;
             final String[] temp = functionArgument.split(" ");
@@ -46,33 +48,37 @@ public abstract class FifthExercise {
             if (temp.length > 1) {
                 commandArgument = Integer.parseInt(temp[1]);
             }
-
+            int number = 0;
             switch (command){
                 case "push":
                     arrayList.add(commandArgument);
-                    System.out.println("ok");
+                    System.out.println(OK_ANSWER);
                     endIndex++;
                     break;
                 case "pop":
-                    System.out.println(arrayList.get(beginIndex));
+                    number = arrayList.get(beginIndex);
+                    System.out.println(number);
                     arrayList.remove(beginIndex);
                     break;
                 case "front":
-                    System.out.println(arrayList.get(beginIndex));
+                    number = arrayList.get(beginIndex);
+                    System.out.println(number);
                     break;
                 case "size":
-                    System.out.println(arrayList.size());
+                    int size = arrayList.size();
+                    System.out.println(size);
                     break;
                 case "clear":
                     arrayList.clear();
-                    System.out.println("ok");
+                    System.out.println(OK_ANSWER);
                     break;
                 case "exit":
                     isRunning = false;
-                    System.out.println("bye");
+                    System.out.println(EDN_ANSWER);
                     break;
                 default:
                     isRunning = false;
+                    break;
 
             }
         }

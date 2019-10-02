@@ -4,15 +4,16 @@ import java.util.Scanner;
 
 // Submission here https://www.e-olymp.com/ru/submissions/5748699
 
-public abstract class FourthExercise {
+public class FourthExercise {
     public static void main(final String... args){
-        System.out.println(getMaxSubsequence());
+        int maxSubsequence = getMaxSubsequence();
+        System.out.println(maxSubsequence);
     }
 
     /**
+     * Вычисляет максимальную длину общей подпоследоватльности
+     * @return Integer с макисмлаьной длиной такой подпоследовательности
      *
-     * @return
-     * Возвращает максимальную длину общей подпоследовательности подпоследовательноси
      */
     public static int getMaxSubsequence(){
         final Scanner scanner = new Scanner(System.in);

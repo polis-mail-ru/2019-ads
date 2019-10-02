@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 //Submission here https://www.e-olymp.com/ru/submissions/5722724
 
-public abstract class ThirdExercise {
+public class ThirdExercise {
     public static void main(final String... arg){
         final Scanner scanner = new Scanner(System.in);
         final String sequence = scanner.nextLine();

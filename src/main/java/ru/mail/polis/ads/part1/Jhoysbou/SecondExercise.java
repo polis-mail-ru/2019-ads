@@ -2,52 +2,58 @@ package ru.mail.polis.ads.part1.Jhoysbou;
 
 import java.util.Scanner;
 
-public abstract class SecondExercise {
+// Submission here https://www.e-olymp.com/ru/submissions/5765475
 
+public class SecondExercise {
+    private static String sequence;
+    private static int min;
     public static void main(final String... args){
-        Scanner scanner = new Scanner(System.in);
-        String s = scanner.nextLine();
-        if (s.isEmpty()){
-            System.out.println();
+        final Scanner scanner = new Scanner(System.in);
+        sequence = scanner.nextLine();
+        if (sequence.isEmpty()){
+            System.out.println(sequence);
             return;
         }
 
-        int n = s.length();
-        int[][] d = new int [n][n];
-        int[][] split = new int[n][n];
+        final int length = sequence.length();
+        int[][] dinamicArray = new int [length][length];
+        int[][] split = new int[length][length];
 
-        for (int j = 0; j < n; ++j){
+        for (int j = 0; j < length; ++j){
             for (int i = j; i >= 0; --i) {
                 if (i == j) {
-                    d[i][j] = 1;
+                    dinamicArray[i][j] = 1;
                     continue;
                 }
-                int min = Integer.MAX_VALUE;
+                min = Integer.MAX_VALUE;
                 int splitMin = -1;
-                if (s.charAt(i) == '(' && s.charAt(j) == ')' ||
-                    s.charAt(i) == '[' && s.charAt(j) == ']'){
-                    min = d[i+1][j-1];
+                if (sequence.charAt(i) == '(' && sequence.charAt(j) == ')'
+                        || sequence.charAt(i) == '[' && sequence.charAt(j) == ']'){
+                    min = dinamicArray[i+1][j-1];
                 }
-                for (int k = i; k < j; ++k){
-                    if (d[i][k] + d[k+1][j] < min){
-                        min = d[i][k] + d[k+1][j];
-                        splitMin = k;
-                    }
-                }
-                d[i][j] = min;
+                splitMin = split(i, j, dinamicArray);
+                dinamicArray[i][j] = min;
                 split[i][j] = splitMin;
             }
         }
 
-        restore(0, n-1, s, d, split);
-
+        restore(0, length-1, dinamicArray, split);
+    }
+    static int split(int i, int j, int[][] d) {
+        for (int index = i; index < j; ++index){
+            if (d[i][index] + d[index+1][j] < min){
+                min = d[i][index] + d[index+1][j];
+                return index;
+            }
+        }
+        return 0;
     }
 
-    static void restore(int i, int j,
-                        String s,
-                        int[][] d, int[][] split) {
+
+    static void restore(final int i, final int j,
+                        final int[][] dinamicArray, final int[][] split) {
         if (i == j) {
-            switch (s.charAt(i)) {
+            switch (sequence.charAt(i)) {
                 case '(':
                 case ')':
                     System.out.print("()");
@@ -56,22 +62,24 @@ public abstract class SecondExercise {
                 case ']':
                     System.out.print("[]");
                     break;
+                default:
+                    return;
             }
             return;
         }
-        if (d[i][j] == 0) {
-            System.out.print(s.substring(i, j + 1));
+        if (dinamicArray[i][j] == 0) {
+            System.out.print(sequence.substring(i, j + 1));
             return;
         }
         if (split[i][j] == -1) {
-            System.out.print(s.charAt(i));
-            restore(i + 1, j - 1, s, d, split);
-            System.out.print(s.charAt(j));
+            System.out.print(sequence.charAt(i));
+            restore(i + 1, j - 1, dinamicArray, split);
+            System.out.print(sequence.charAt(j));
             return;
         }
-        int k = split[i][j];
-        restore(i, k, s, d, split);
-        restore(k+1, j, s, d, split);
+        final int index = split[i][j];
+        restore(i, index, dinamicArray, split);
+        restore(index+1, j, dinamicArray, split);
     }
 }
 
