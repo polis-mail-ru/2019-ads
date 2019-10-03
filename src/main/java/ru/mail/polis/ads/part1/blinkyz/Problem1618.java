@@ -21,7 +21,7 @@ public class Problem1618 {
                 return entrancesCache.get(ch);
             }
 
-            List<Integer> entrances = new ArrayList<>();
+            final List<Integer> entrances = new ArrayList<>();
             for (int i = 0; i < arr.length; i++) {
                 if (arr[i] == ch) {
                     entrances.add(i);
@@ -48,14 +48,14 @@ public class Problem1618 {
         // d - это словарь, где ключ - размер подпоследовательности, а значение - индекс последнего элемента
         // при желании можно расширить логику до хранения самих элементов, но в денной задаче это не нужно
         final Map<Integer, Integer> d = new HashMap<>();
-        // база динамики - размер 0, индекс последнего элемента - (-1)
+        // база динамики - размер 0, индекс последнего элемента (-1)
         d.put(0, -1);
         int maxSize = 0; // размер максимальной подпоследовательности, т.е. количество подпоследовательностей
         final EntrancesFinder entrancesFinder = new EntrancesFinder(arr2);
         for (int i = 0; i < n; i++) {
             final int ch = arr1[i];
 
-            List<Integer> entrances = entrancesFinder.find(ch);
+            final List<Integer> entrances = entrancesFinder.find(ch);
             if (entrances.size() == 0) {
                 continue;
             }
@@ -64,15 +64,15 @@ public class Problem1618 {
             // не имеет смысла пытаться вставлять последующие вхождения элемента в подпоследовательности размера,
             // меньшего чем lastSize, так как их мы гарантированно не улучшим, так как все последующие вхождения больше
             // предыдущих вхождений (по индексу)
-            for (int curEntrancePos : entrances) {
+            for (final int curEntrancePos : entrances) {
                 // size - размер текущей подпоследовательности, начинаем пытаться улучшать с максимального размера
                 for (int size = maxSize; size > lastSize; size--) {
                     // curLastPos - индекс последнего элемента в этой подпоследовательности
                     // мы можем вставить элемент, только если индекс текущего вхождения элемента больше индекса
                     // последнего элемента
-                    Integer curLastPos = d.get(size);
+                    final Integer curLastPos = d.get(size);
                     if (curLastPos < curEntrancePos) {
-                        Integer nextSubLastPos = d.get(size + 1);
+                        final Integer nextSubLastPos = d.get(size + 1);
                         // nextSubLastPos - это индекс последнего элемента в следующей подпоследовательности, т.е.
                         // подпоследовательности размера (size + 1)
                         // если nextSubLastPos == null, то мы получили подпоследовательность большего размера,
