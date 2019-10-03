@@ -1,64 +1,63 @@
 package ru.mail.polis.ads.part1.suhova;
 
 import java.io.*;
-import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class Task1090 {
-    /*
-    https://www.e-olymp.com/ru/submissions/5756855
-     */
-    private static String[][] res;
-
-    private static String packing(String str, String sub, int length, int l, int r) {
-        for (int i = 1; i <= length / 2; i++) {
-            int count = length / i;
-            if (length % i == 0) {
-                for (int j = l; j <= r - i; j++) {
-                    if (str.charAt(j) != str.charAt(j + i)) {
-                        count = 0;
-                        break;
-                    }
-                }
-            } else count = 0;
-            if (count > 1) {
-                String s = length / i + "(" + res[l][l + i - 1] + ")";
-                if (s.length() < sub.length())
-                    sub = s;
-            }
-        }
-        return sub;
-    }
-
-    private static void solve(final Scanner in, final PrintWriter out) {
-        String str = in.nextLine();
-        int len = str.length();
-        res = new String[len][len];
-        for (int n = 1; n <= len; n++) {
-            for (int l = 0; l <= len - n; l++) {
-                int r = n + l - 1;
-                String sub = str.substring(l, r + 1);
-                if (n > 4) {
-                    sub = packing(str, sub, n, l, r);
-                    for (int part = l; part < r; part++) {
-                        String newStr = res[l][part] + res[part + 1][r];
-                        if (newStr.length() < sub.length()) {
-                            sub = newStr;
-                        }
-                    }
-                }
-                res[l][r] = sub;
-            }
-        }
-        out.println(res[0][len - 1]);
+    //1090
+    private static void solve(final Task1090.FastScanner in, final PrintWriter out) {
+        // Write me
+        String str = in.next();
+        out.println(wrap(str));
         out.flush();
     }
 
     public static void main(final String[] arg) {
-        final Scanner in = new Scanner(System.in);
+        final Task1090.FastScanner in = new Task1090.FastScanner(System.in);
         try (PrintWriter out = new PrintWriter(System.out)) {
             solve(in, out);
         }
+    }
+
+    private static String wrap(String str) {
+        String newstr=str;
+        for (int i=str.length() / 2 ; i>1; i--) {
+            for (int j = 0; j < str.length() - i-1; j++) {
+                str= wrapper(str,str.substring(j,j+i));
+                if (str.length()<newstr.length()){
+                    newstr=str;
+                }
+            }
+        }
+        return newstr;
+    }
+
+    private static String wrapper(String str, String sub) {
+        String min = str;
+        for (int n = str.length() / sub.length(); n > 1; n--) {
+            if(str.contains(repeat(sub,n))) {
+                String newsub=sub;
+                for (int i=str.length() / 2 ; i>1; i--) {
+                    for (int j = 0; j <sub.length() - i; j++) {
+                        newsub= wrapper(sub,sub.substring(j,j+i));
+                        String newstr = str.replaceAll( Pattern.quote(repeat(sub,n)),n + "(" + sub + ")");
+                         System.out.println(newstr);
+                        if (min.length()<newstr.length()){
+                            System.out.println("!!!!!!!!!!!!!!!!!!!!");
+                            min=newstr;
+                        }
+                    }
+                }
+
+            }
+        }
+        return min;
+    }
+    private static String repeat(String str, int n){
+        String res="";
+        for(int i=0;i<n;i++) res+=str;
+        return res;
     }
 
     private static class FastScanner {

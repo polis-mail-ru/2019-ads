@@ -2,13 +2,12 @@ package ru.mail.polis.ads.part1.suhova;
 
 import java.io.*;
 import java.util.StringTokenizer;
-import java.util.Arrays;
+import static java.lang.Math.min;
 
 public class Task1618 {
-    /*
-    https://www.e-olymp.com/ru/submissions/5735270
-     */
+    //1618
     private static void solve(final Task1618.FastScanner in, final PrintWriter out) {
+        // Write me
         int n1 = in.nextInt();
         int[] arr1 = new int[n1];
         for (int i = 0; i < n1; i++) {
@@ -19,27 +18,63 @@ public class Task1618 {
         for (int i = 0; i < n2; i++) {
             arr2[i] = in.nextInt();
         }
-        int[][] map = new int[n1][n2];
-        for (int i = 0; i < n1; i++) {
-            Arrays.fill(map[i], -1);
+
+        int last = min(arr1.length, arr2.length);
+        int first = 1;
+        int position = last / 2;
+        while (first <= last) {
+            if (!isLengthContains(position, arr1, arr2)) {
+                last = position - 1;
+            } else {
+                first = position + 1;
+            }
+            position = (first + last) / 2;
         }
-        int count = maxSub(n1 - 1, n2 - 1, arr1, arr2, map);
-        out.println(count);
+        out.println(position);
         out.flush();
     }
 
-    private static int maxSub(int i, int j, int[] a, int[] b, int[][] map) {
-        if (i == -1 || j == -1)
-            return 0;
-        if (a[i] == b[j]) {
-            if (i == 0 || j == 0) return maxSub(i - 1, j - 1, a, b, map) + 1;
-            if (map[i - 1][j - 1] == -1) map[i - 1][j - 1] = maxSub(i - 1, j - 1, a, b, map);
-            return map[i - 1][j - 1] + 1;
+
+    private static boolean isLengthContains(int n, int[] a, int[] b) {
+        int[] arr = null;
+        int[] substr = new int[n];
+        while ((arr = generateCombinations(arr, n, a.length)) != null) {
+            for (int i = 0; i < n; i++) {
+                substr[i] = a[arr[i]];
+            }
+            if (isContains(n, substr, b)) return true;
         }
-        if (i == 0 || j == 0) return 0;
-        if (map[i][j - 1] == -1) map[i][j - 1] = maxSub(i, j - 1, a, b, map);
-        if (map[i - 1][j] == -1) map[i - 1][j] = maxSub(i - 1, j, a, b, map);
-        return Math.max(map[i][j - 1], map[i - 1][j]);
+        return false;
+    }
+
+    private static int[] generateCombinations(int[] sub, int m, int len) {
+        if (sub == null) {
+            sub = new int[len];
+            for (int i = 0; i < m; i++)
+                sub[i] = i;
+            return sub;
+        }
+        for (int i = m - 1; i >= 0; i--)
+            if (sub[i] < len - m + i) {
+                sub[i]++;
+                for (int j = i; j < m - 1; j++)
+                    sub[j + 1] = sub[j];
+                return sub;
+            }
+        return null;
+    }
+
+    private static boolean isContains(int n, int[] substr, int[] b) {
+        int i = 0;
+        for (int j = i; j <= b.length - n + i; j++) {
+            if (b[j] == substr[i]) {
+                i++;
+                if (i == n) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void main(final String[] arg) {
