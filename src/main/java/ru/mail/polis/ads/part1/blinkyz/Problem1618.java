@@ -1,170 +1,102 @@
 package ru.mail.polis.ads.part1.blinkyz;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-/**
- * Problem 1618.
- * Link: {@code https://www.e-olymp.com/ru/problems/1618}.
- * Tests: {@code https://www.e-olymp.com/ru/submissions/5736502}.
- */
-public final class Problem1618 {
+public class Problem1618 {
     private Problem1618() {
 
     }
 
-    /**
-     * Subsequence struct.
-     *
-     * @implNote We store only size and last char entrance position for the subsequence as we do not need to access
-     * the whole subsequence but only last position as we just want to know if we can insert a new element
-     * into this subsequence.
-     * Also we need to know size of the subsequence to know if there's benefit from changing last
-     * entrance pos to the new one, that is we update subsequence's last pos only and
-     * only if {@code (new entrance pos)} < {@code lastPos}.
-     */
-    private static final class Subsequence {
-        /**
-         * Size of the current subsequence.
-         */
-        final int size;
+    private static final class EntrancesFinder {
+        private final Map<Integer, List<Integer>> entrancesCache = new WeakHashMap<>();
 
-        /**
-         * Last char entrance position in this subsequence.
-         */
-        int lastPos;
+        private final int[] arr;
 
-        Subsequence(final int size, final int lastPos) {
-            this.size = size;
-            this.lastPos = lastPos;
+        EntrancesFinder(final int[] arr) {
+            this.arr = arr;
         }
 
-        @Override
-        public String toString() {
-            return "Subsequence{"
-                    + "size=" + size
-                    + ", lastPos=" + lastPos
-                    + '}';
+        List<Integer> find(final int ch) {
+            if (entrancesCache.get(ch) != null) {
+                return entrancesCache.get(ch);
+            }
+
+            List<Integer> entrances = new ArrayList<>();
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] == ch) {
+                    entrances.add(i);
+                }
+            }
+            entrancesCache.put(ch, entrances);
+            return entrances;
         }
     }
 
-    /**
-     * This function attempts to insert every entrance into all subsequences.
-     * We can insert entrance if and only if last pos in this subsequence is smaller than current entrance pos.
-     * More over, we don't want to insert entrance into the subsequence, if we got subsequence of the same size as
-     * in previous insertions, because entrances are sorted in ascending order and we want to support last pos of
-     * subsequence as small as possible.
-     *
-     * @param subsequences subsequences
-     * @param entrances    entrances of the current char
-     * @return new subsequences in which we've inserted one of the entrances
-     */
-    private static List<Subsequence> insert(final List<Subsequence> subsequences, final List<Integer> entrances) {
-        final List<Subsequence> subsToAdd = new ArrayList<>();
+    private static void solve() {
+        final Scanner scanner = new Scanner(System.in);
+        final int n = scanner.nextInt();
+        final int[] arr1 = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr1[i] = scanner.nextInt();
+        }
+        final int m = scanner.nextInt();
+        final int[] arr2 = new int[m];
+        for (int i = 0; i < m; i++) {
+            arr2[i] = scanner.nextInt();
+        }
 
-        // we DO NOT want to create a new subsequence with a greater entrance pos than previous, if current size is
-        // the same as with previous entrance
-        // there's just no point of doing this
-        // we want to create a new subsequence with this entrance only and only if size is greater,
-        // no matter how entrance pos big is
-        int lastInsertedSize = -1;
-        // why would we try to insert current char into the subsequence if we did it already with a smaller entrance
-        // pos of the same char?
-        final boolean[] isInsertedInCurrentSub = new boolean[subsequences.size()];
-        for (final int curEntrancePos : entrances) {
-            for (int j = subsequences.size() - 1; j >= 0; --j) {
-                // is there already was insertion into this subsequence?
-                // if true, we don't want to try insert current entrance as it is greater than previous and there's
-                // no benefit from
-                // doing it
-                if (!isInsertedInCurrentSub[j]) {
-                    final Subsequence curSub = subsequences.get(j);
-                    // as said we can insert a new element only and only if new entrance pos < lastPos
-                    if (curSub.lastPos < curEntrancePos && (curSub.size + 1) > lastInsertedSize) {
-                        final int newSize = curSub.size + 1;
-                        subsToAdd.add(new Subsequence(newSize, curEntrancePos));
-                        lastInsertedSize = newSize;
-                        isInsertedInCurrentSub[j] = true;
-                        break;
+        // d - это словарь, где ключ - размер подпоследовательности, а значение - индекс последнего элемента
+        // при желании можно расширить логику до хранения самих элементов, но в денной задаче это не нужно
+        final Map<Integer, Integer> d = new HashMap<>();
+        d.put(0, 0);
+        int maxSize = 0; // размер максимальной подпоследовательности, т.е. количество подпоследовательностей
+        final EntrancesFinder entrancesFinder = new EntrancesFinder(arr2);
+        for (int i = 0; i < n; i++) {
+            final int ch = arr1[i];
+
+            List<Integer> entrances = entrancesFinder.find(ch);
+            if (entrances.size() == 0) {
+                continue;
+            }
+
+            int lastSize = -1; // размер последней подпоследовательности, куда мы смогли вставить вхождение элемента
+            // не имеет смысла пытаться вставлять последующие вхождения элемента в подпоследовательности размера,
+            // меньшего чем lastSize, так как их мы гарантированно не улучшим, так как все последующие вхождения больше
+            // предыдущих вхождений (по индексу)
+            for (int curEntrancePos : entrances) {
+                // size - размер текущей подпоследовательности, начинаем пытаться улучшать с максимального размера
+                for (int size = maxSize; size > lastSize; size--) {
+                    // curLastPos - индекс последнего элемента в этой подпоследовательности
+                    // мы можем вставить вхождение элемента, только если вхождение больше индекса последнего элемента
+                    Integer curLastPos = d.get(size);
+                    if (curLastPos < curEntrancePos || curLastPos == 0) {
+                        Integer nextSubLastPos = d.get(size + 1);
+                        // nextSubLastPos - это индекс последнего элемента в следующей подпоследовательности, т.е.
+                        // подпоследовательности размера (size + 1)
+                        // если nextSubLastPos == null, то мы получили подпоследовательность большего размера,
+                        // чем maxSize,
+                        // иначе пытаемся улучшить текущую подпоследовательность
+                        // улучшение означает, что вставив элемент в подпоследовательность размера size, мы получаем
+                        // подпоследовательность размера (size + 1) с индексом последнего элемента меньшим, чем был
+                        // до этого
+                        if (nextSubLastPos == null) {
+                            d.put(size + 1, curEntrancePos);
+                            maxSize = size + 1;
+                            lastSize = maxSize;
+                            break;
+                        } else if (curEntrancePos < nextSubLastPos) {
+                            d.put(size + 1, curEntrancePos);
+                            lastSize = size + 1;
+                            break;
+                        }
                     }
                 }
             }
         }
-
-        return subsToAdd;
-    }
-
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        final LinkedList<Subsequence> subsequences = new LinkedList<>();
-
-        final List<Integer> arr1 = new ArrayList<>();
-        final List<Integer> arr2 = new ArrayList<>();
-        final int nSize = in.nextInt();
-        for (int i = 0; i < nSize; i++) {
-            arr1.add(in.nextInt());
-        }
-        final int mSize = in.nextInt();
-        for (int i = 0; i < mSize; i++) {
-            arr2.add(in.nextInt());
-        }
-
-        final List<Integer> entrances = new ArrayList<>(); // all char entrances in the other sequence
-        for (int i = 0; i < nSize; i++) {
-            final int curChar = arr1.get(i); // current char
-            entrances.clear();
-            for (int ii = 0; ii < arr2.size(); ii++) {
-                if (arr2.get(ii) == curChar) {
-                    entrances.add(ii);
-                }
-            }
-
-            if (entrances.isEmpty()) {
-                continue;
-            }
-
-            // this is a list with new subsequences we want to try to insert
-            final List<Subsequence> subsToAdd = insert(subsequences, entrances);
-
-            // have we found a place to insert one of the entrances?
-            // if not, this is a base case: there's just no subsequences present to look up for insertion
-            // so we shall create a new subsequence with the size of 1 and the smallest entrance pos
-            if (subsToAdd.isEmpty()) {
-                subsToAdd.add(new Subsequence(1, entrances.get(0)));
-            }
-
-            for (final Subsequence subToAdd : subsToAdd) {
-                insertNewSubsequence(subsequences, subToAdd);
-            }
-        }
-
-        if (!subsequences.isEmpty()) {
-            out.println(subsequences.getLast().size);
-            return;
-        }
-
-        out.println(0);
-    }
-
-    private static void insertNewSubsequence(final List<Subsequence> subsequences, final Subsequence newSub) {
-        for (int i = 0; i < subsequences.size(); i++) {
-            final Subsequence curSub = subsequences.get(i);
-            if (curSub.size == newSub.size) {
-                if (newSub.lastPos < curSub.lastPos) {
-                    subsequences.set(i, newSub);
-                }
-                return;
-            }
-        }
-        // we have a subsequence with a greater size than all of the present or we have empty subsequences list
-        subsequences.add(newSub);
+        System.out.println(maxSize);
     }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        solve();
     }
 }
