@@ -5,9 +5,10 @@ import java.util.StringTokenizer;
 
 public class Task1 {
     /*
-    https://www.e-olymp.com/ru/submissions/5710204
-     */
+https://www.e-olymp.com/ru/submissions/5710204
+*/
     private static void solve(final Task1.FastScanner in, final PrintWriter out) {
+        // Write me
         int x = in.nextInt();
         out.println((x / 10) + " " + (x % 10));
         out.flush();

@@ -8,7 +8,7 @@ public class Task1090 {
     /*
     https://www.e-olymp.com/ru/submissions/5756855
      */
-    static String[][] res;
+    private static String[][] res;
 
     private static String packing(String str, String sub, int length, int l, int r) {
         for (int i = 1; i <= length / 2; i++) {

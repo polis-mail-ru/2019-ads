@@ -1,8 +1,8 @@
 package ru.mail.polis.ads.part1.suhova;
 
 import java.io.*;
-import java.util.ArrayDeque;
 import java.util.StringTokenizer;
+import java.util.ArrayDeque;
 
 public class Task6125 {
     /*

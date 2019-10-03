@@ -1,8 +1,8 @@
 package ru.mail.polis.ads.part1.suhova;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
+import java.util.Arrays;
 
 public class Task1618 {
     /*
@@ -28,7 +28,7 @@ public class Task1618 {
         out.flush();
     }
 
-    public static int maxSub(int i, int j, int[] a, int[] b, int[][] map) {
+    private static int maxSub(int i, int j, int[] a, int[] b, int[][] map) {
         if (i == -1 || j == -1)
             return 0;
         if (a[i] == b[j]) {
