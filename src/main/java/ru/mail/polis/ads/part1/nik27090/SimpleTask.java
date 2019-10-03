@@ -1,5 +1,6 @@
 package ru.mail.polis.ads.part1.nik27090;
 
+
 import java.io.PrintWriter;
 import java.util.Scanner;
 

@@ -8,7 +8,6 @@ import java.util.Scanner;
 Решение: https://www.e-olymp.com/ru/submissions/5769040
  */
 
-
 public final class Hoc {
 
     private Hoc(){
