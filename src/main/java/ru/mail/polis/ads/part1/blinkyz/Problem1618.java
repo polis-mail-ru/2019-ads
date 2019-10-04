@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Problem1618 {
     private Problem1618() {
-
     }
 
     private static final class EntrancesFinder {
@@ -60,7 +59,8 @@ public class Problem1618 {
                 continue;
             }
 
-            int lastSize = -1; // размер последней подпоследовательности, куда мы смогли вставить вхождение элемента
+            int lastSize = -1; // размер последней подпоследовательности, куда мы смогли вставить предыдущее
+            // вхождение элемента
             // не имеет смысла пытаться вставлять последующие вхождения элемента в подпоследовательности размера,
             // меньшего чем lastSize, так как их мы гарантированно не улучшим, так как все последующие вхождения больше
             // предыдущих вхождений (по индексу)
@@ -72,9 +72,9 @@ public class Problem1618 {
                     // последнего элемента
                     final Integer curLastPos = d.get(size);
                     if (curLastPos < curEntrancePos) {
-                        final Integer nextSubLastPos = d.get(size + 1);
                         // nextSubLastPos - это индекс последнего элемента в следующей подпоследовательности, т.е.
                         // подпоследовательности размера (size + 1)
+                        final Integer nextSubLastPos = d.get(size + 1);
                         // если nextSubLastPos == null, то мы получили подпоследовательность большего размера,
                         // чем maxSize,
                         // иначе пытаемся улучшить текущую подпоследовательность

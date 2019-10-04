@@ -3,12 +3,7 @@ package ru.mail.polis.ads.part1.blinkyz;
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 
-/**
- * Problem 6125.
- * Link: {@code https://www.e-olymp.com/ru/problems/6125}.
- * Tests: {@code https://www.e-olymp.com/ru/submissions/5736570}.
- */
-public final class Problem6125 {
+public class Problem6125 {
     private Problem6125() {
 
     }
