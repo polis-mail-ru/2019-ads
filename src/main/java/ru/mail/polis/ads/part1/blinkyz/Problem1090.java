@@ -10,75 +10,68 @@ public class Problem1090 {
     private static void solve() {
         final Scanner scanner = new Scanner(System.in);
         final String s = scanner.nextLine();
-        final int n = s.length();
-        if (n == 0) {
+        final int length = s.length();
+
+        if (length == 0) {
             System.out.println();
             return;
         }
 
-        final int[][] d = new int[n][n];
-        final int[][] split = new int[n][n];
-        for (int j = 0; j < n; j++) {
-            for (int i = j; i >= 0; i--) {
-                if (i == j) {
-                    d[i][j] = 1;
+        String[][] d = new String[length][length];
+        for (int right = 0; right < length; right++) {
+            for (int left = right; left >= 0; left--) {
+                String curSub = s.substring(left, right + 1);
+                if (right - left < 4) {
+                    d[left][right] = curSub;
                     continue;
                 }
-                int min = Integer.MAX_VALUE;
-                int splitMin = -1;
-                if (s.charAt(i) == '(' && s.charAt(j) == ')' ||
-                        s.charAt(i) == '[' && s.charAt(j) == ']') {
-                    min = d[i + 1][j - 1];
-                }
-                for (int k = i; k < j; k++) {
-                    int curSplitCost = d[i][k] + d[k + 1][j];
-                    if (curSplitCost < min) {
-                        min = curSplitCost;
-                        splitMin = k;
+
+                String minReplace = curSub;
+
+                // left <= k < right, that is we evaluated d[left][k] and d[k+1][right] before
+                for (int k = left; k < right; k++) {
+                    String curReplace = d[left][k] + d[k + 1][right];
+                    if (curReplace.length() < minReplace.length()) {
+                        minReplace = curReplace;
                     }
                 }
-                d[i][j] = min;
-                split[i][j] = splitMin;
+
+                // check if current substring is periodic
+                for (int repeatLen = 1; repeatLen < (curSub.length() / 2) + 1; repeatLen++) {
+                    boolean isPeriodic = isPeriodic(repeatLen, left, right, d);
+                    if (isPeriodic) {
+                        final String curReplace = (curSub.length() / repeatLen) + "(" + d[left][left + repeatLen - 1] + ")";
+                        if (curReplace.length() < minReplace.length()) {
+                            minReplace = curReplace;
+                        }
+                    }
+                }
+
+                d[left][right] = minReplace;
             }
-            restore(0, n - 1, s, d, split);
         }
+        System.out.println(d[0][length - 1]);
     }
 
 
-    private static void restore(int i, int j,
-                                String s,
-                                int[][] d, int[][] split) {
-        if (i == j) {
-            switch (s.charAt(i)) {
-                case '(':
-                case ')': {
-                    System.out.print("()");
-                    break;
-                }
-                case '[':
-                case ']': {
-                    System.out.print("[]");
-                    break;
-                }
+    private static boolean isPeriodic(final int repeatLen, final int left, final int right, final String[][] d) {
+        final int subLen = right - left + 1;
+        if (subLen % repeatLen != 0) {
+            return false;
+        }
+
+        final String repeat = d[left][left + repeatLen - 1];
+        boolean isPeriodic = true;
+        int from = left;
+        while (from + repeatLen - 1 <= right) {
+            if (!repeat.equals(d[from][from + repeatLen - 1])) {
+                isPeriodic = false;
+                break;
             }
-            return;
+            from += repeatLen;
         }
 
-        if (d[i][j] == 0) {
-            System.out.print(s.substring(i, j + 1));
-            return;
-        }
-
-        final int k = split[i][j];
-        if (k == -1) {
-            System.out.print(s.charAt(i));
-            restore(i + 1, j - 1, s, d, split);
-            System.out.print(s.charAt(j));
-            return;
-        }
-
-        restore(i, k, s, d, split);
-        restore(k + 1, j, s, d, split);
+        return isPeriodic;
     }
 
     public static void main(final String[] arg) {
