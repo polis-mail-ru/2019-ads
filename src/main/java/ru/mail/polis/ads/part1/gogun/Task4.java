@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.gogun;
 
 import java.util.Scanner;
 
-public class Task4 {
+public final class Task4 {
     private Task4(){
     }
 

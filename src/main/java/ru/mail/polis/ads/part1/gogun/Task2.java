@@ -2,14 +2,14 @@ package ru.mail.polis.ads.part1.gogun;
 
 import java.util.Scanner;
 
-public class Task2 {
-    private Task2(){
-    }
-
+public final class Task2 {
     static int[][] split;
     static int[][] din;
 
-    static void make(String str, int n) {
+    private Task2(){
+    }
+
+    static void make(final String str, final int n) {
         for (int j = 0; j < n; j++) {
             for (int i = j; i >= 0; i--) {
                 if (i == j) {
@@ -59,13 +59,13 @@ public class Task2 {
             System.out.print(s.charAt(j));
             return;
         }
-        int kk = split[i][j];
+        final int kk = split[i][j];
         restore(i, kk, s);
         restore(kk + 1, j, s);
     }
 
     public static void main(final String[] argc) {
-        Scanner scan = new Scanner(System.in);
+        final Scanner scan = new Scanner(System.in);
         final String str = scan.nextLine();
         if (str.isEmpty()) {
             System.out.println();
