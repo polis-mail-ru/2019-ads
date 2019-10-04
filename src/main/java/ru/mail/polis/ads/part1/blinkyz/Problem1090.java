@@ -70,7 +70,6 @@ public class Problem1090 {
             }
             from += repeatLen;
         }
-
         return isPeriodic;
     }
 
