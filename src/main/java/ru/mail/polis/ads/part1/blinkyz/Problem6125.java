@@ -1,5 +1,7 @@
 package ru.mail.polis.ads.part1.blinkyz;
 
+import ru.mail.polis.ads.FastScanner;
+
 import java.io.PrintWriter;
 import java.util.NoSuchElementException;
 
