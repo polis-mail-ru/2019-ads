@@ -54,7 +54,8 @@ public final class FirstTask {
     }
 
     private static void setRoute(final int w, final int h) {
-        int i = w - 1, j = h - 1;
+        int i = w - 1;
+        int j = h - 1;
         while (i > 0 || j > 0) {
             if (i > 0 && j > 0) {
                 if (corns[i-1][j] > corns[i][j-1]) {
