@@ -5,10 +5,10 @@ import java.util.Scanner;
 
 /*
 Задача: НОП
-Решение: https://www.e-olymp.com/ru/submissions/5769040
+Решение: https://www.e-olymp.com/ru/submissions/5784629
  */
 
-public final class Hoc {
+public class Hoc {
 
     private Hoc(){
 
