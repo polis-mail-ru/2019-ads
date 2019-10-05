@@ -20,14 +20,9 @@ public class Expressions {
         int numberOfExpressions = in.nextInt();
 
         for (int i = 0; i < numberOfExpressions; i++) {
-            out.println(getQueueEquivalent(in.next()));
+            out.println(buildQueueEquivalent(buildTree(in.next())));
         }
 
-    }
-
-
-    private static String getQueueEquivalent(String sequence) {
-        return buildQueueEquivalent(buildTree(sequence));
     }
 
 
