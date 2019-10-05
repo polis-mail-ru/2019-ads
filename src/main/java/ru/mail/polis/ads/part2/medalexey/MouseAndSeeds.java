@@ -15,11 +15,11 @@ public class MouseAndSeeds {
     }
 
     private static void solve(final Scanner in, final PrintWriter out) {
-        String floorSize = in.nextLine();
-        int floorWidth = Integer.parseInt(floorSize.split(" ")[0]);
-        int floorLength = Integer.parseInt(floorSize.split(" ")[1]);
+        final String floorSize = in.nextLine();
+        final int floorWidth = Integer.parseInt(floorSize.split(" ")[0]);
+        final int floorLength = Integer.parseInt(floorSize.split(" ")[1]);
 
-        int[][] matrix = new int[floorWidth+1][floorLength+1];
+        final int[][] matrix = new int[floorWidth+1][floorLength+1];
 
         fillMatrix(matrix, in);
         countBestWayForEachCell(matrix);
@@ -30,7 +30,7 @@ public class MouseAndSeeds {
     // fill the matrix with input values
     private static void fillMatrix(final int[][] matrix, final Scanner in) {
         for (int i = 0; i < matrix.length-1; ++i) {
-            String[] line = in.nextLine().split(" ");
+            final String[] line = in.nextLine().split(" ");
             for (int j = 1; j < matrix[0].length; ++j) {
                 matrix[i][j] = Integer.parseInt(line[j-1]);
             }
@@ -48,7 +48,7 @@ public class MouseAndSeeds {
 
 
     private static String findBestWay(final int[][] matrix) {
-        StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder();
         int i = 0;
         int j = matrix[0].length - 1;
 

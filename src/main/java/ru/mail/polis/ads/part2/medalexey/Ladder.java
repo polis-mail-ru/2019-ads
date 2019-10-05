@@ -1,6 +1,11 @@
 package ru.mail.polis.ads.part2.medalexey;
 
-import java.io.*;
+
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.StringTokenizer;
 
 /**
@@ -23,8 +28,8 @@ public class Ladder {
     }
 
 
-    private static int countBestWayForEachCell(int[] stairs, final int maxStep) {
-        int[] bestWayForEachStair = new int[stairs.length];
+    private static int countBestWayForEachCell(final int[] stairs, final int maxStep) {
+        final int[] bestWayForEachStair = new int[stairs.length];
 
         for (int stairIndex = 1; stairIndex < stairs.length; stairIndex++) {
             bestWayForEachStair[stairIndex] = stairs[stairIndex] + bestWayForEachStair[stairIndex - 1];
@@ -43,7 +48,7 @@ public class Ladder {
 
 
     // fill array with input values
-    private static void fillStairs(int[] stairs, int numberOfStairs, final FastScanner in) {
+    private static void fillStairs(final int[] stairs, final int numberOfStairs, final FastScanner in) {
         for (int i = 1; i <= numberOfStairs; i++) {
             stairs[i] = in.nextInt();
         }

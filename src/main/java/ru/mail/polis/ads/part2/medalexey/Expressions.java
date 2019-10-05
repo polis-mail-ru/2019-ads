@@ -1,6 +1,10 @@
 package ru.mail.polis.ads.part2.medalexey;
 
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.StringTokenizer;
 
@@ -17,7 +21,7 @@ public class Expressions {
 
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        int numberOfExpressions = in.nextInt();
+        final int numberOfExpressions = in.nextInt();
 
         for (int i = 0; i < numberOfExpressions; i++) {
             out.println(buildQueueEquivalent(buildTree(in.next())));
@@ -27,8 +31,8 @@ public class Expressions {
 
 
     // строим дерево выражения
-    private static ArrayDeque<TreeNode> buildTree(String sequence) {
-        ArrayDeque<TreeNode> stack = new ArrayDeque<>();
+    private static ArrayDeque<TreeNode> buildTree(final String sequence) {
+        final ArrayDeque<TreeNode> stack = new ArrayDeque<>();
         TreeNode curElement;
 
         // строим дерево выражения
@@ -48,8 +52,8 @@ public class Expressions {
 
 
     // формируем из дерева последовательность для очереди
-    private static String buildQueueEquivalent(ArrayDeque<TreeNode> queue) {
-        StringBuilder result = new StringBuilder();
+    private static String buildQueueEquivalent(final ArrayDeque<TreeNode> queue) {
+        final StringBuilder result = new StringBuilder();
         TreeNode curElement;
 
         while (!queue.isEmpty()) {
