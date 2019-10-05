@@ -32,7 +32,7 @@ public class Problem15 {
         final int endI = 0;
         final int endJ = m - 1;
 
-        /* DYNAMIC BASE CASES FILLING START*/
+        /* BASE CASES FILLING START*/
 
         // set start point max sum equal to start point cost
         d[startI][startJ] = c[startI][startJ];
@@ -53,7 +53,7 @@ public class Problem15 {
             baseJ++;
         }
 
-        /* DYNAMIC BASE CASES FILLING END*/
+        /* BASE CASES FILLING END*/
 
         for (int j = 1; j < m; j++) {
             for (int i = n - 2; i >= 0; i--) {
