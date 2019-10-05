@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 /*
 * Задача: Скобачная последовательность
-* Решение: https://www.e-olymp.com/ru/submissions/5774599
+* Решение: https://www.e-olymp.com/ru/submissions/5784604
 * */
 
 public class Brackets {
