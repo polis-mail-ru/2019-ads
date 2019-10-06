@@ -1,25 +1,32 @@
 package ru.mail.polis.ads.part1;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public final class Task5 {
 
-    public static final int ARRAY_SIZE = 100;
+    private static final int ARRAY_SIZE = 100;
 
     public static void main(final String[] arg) {
-        Scanner scanner = new Scanner(System.in);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         int[] array = new int[ARRAY_SIZE];
 
         int sizeIndex = 0;
         int first = 0;
 
-        String command = scanner.next();
-        while (!command.equalsIgnoreCase("exit")) {
+        String[] command = new String[0];
+        try {
+            command = reader.readLine().split(" ");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        while (!command[0].equalsIgnoreCase("exit")) {
 
-            switch (command) {
+            switch (command[0]) {
                 case "push":
-                    array[(sizeIndex + first) % ARRAY_SIZE] = scanner.nextInt();
+                    array[(sizeIndex + first) % ARRAY_SIZE] = Integer.parseInt(command[1]);
                     ++sizeIndex;
                     System.out.println("ok");
                     break;
@@ -40,7 +47,11 @@ public final class Task5 {
                     System.out.println("ok");
                     break;
             }
-            command = scanner.next();
+            try {
+                command = reader.readLine().split(" ");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         System.out.println("bye");
