@@ -35,7 +35,7 @@ public final class FourthTask {
             Arrays.fill(new int[]{value}, 0);
         }
 
-        for(int i = 0; i < string.length(); i++) {
+        for (int i = 0; i < string.length(); i++) {
             if (string.charAt(i) == '(') {
                 arr[0]++;
             }

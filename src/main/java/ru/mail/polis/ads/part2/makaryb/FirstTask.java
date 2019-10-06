@@ -40,10 +40,10 @@ public final class FirstTask {
     }
 
     private static void setMaxCorns(final int w, final int h) {
-        for(int i = 1; i < w; i++) {
+        for (int i = 1; i < w; i++) {
             corns[i][0] = corns[i][0] + corns[i - 1][0];
         }
-        for(int j = 1; j < h; j++) {
+        for (int j = 1; j < h; j++) {
             corns[0][j] = corns[0][j] + corns[0][j-1];
         }
         for (int i = 1; i < w; i++) {
