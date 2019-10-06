@@ -1,54 +1,70 @@
 package ru.mail.polis.ads.part1.Kokobox7;
 
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
-
-public final class Task5 {
+public class Task5 {
     public static class MyQueue {
-        LinkedList q = new LinkedList();
+        LinkedList<Integer> q;
+        PrintWriter out;
 
-    }
-
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        MyQueue q = new MyQueue();
-
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
+        MyQueue(PrintWriter out) {
+            q = new LinkedList<>();
+            this.out = out;
         }
 
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
+        void push(int n) {
+            q.add(n);
+            out.println("ok");
         }
 
-        int nextInt() {
-            return Integer.parseInt(next());
+        void pop() {
+            out.println(q.pop());
         }
+
+        void front() {
+            out.println(q.getFirst());
+        }
+
+        void size() {
+            out.println(q.size());
+        }
+
+        void clear() {
+            q = new LinkedList<>();
+            out.println("ok");
+        }
+
     }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
+        try (PrintWriter out = new PrintWriter(System.out);
+             Scanner in = new Scanner(System.in)) {
+            String inputString;
+            MyQueue myQ = new MyQueue(out);
+            String[] splitedLine;
+
+            while (true) {
+                inputString = in.nextLine().trim();
+                if ("clear".equals(inputString)) {
+                    myQ.clear();
+                } else if ("front".equals(inputString)) {
+                    myQ.front();
+                } else if ("pop".equals(inputString)) {
+                    myQ.pop();
+                } else if ("size".equals(inputString)) {
+                    myQ.size();
+                } else if (inputString.startsWith("push")) {
+                    splitedLine = inputString.split(" ", 2);
+                    int x = Integer.parseInt(splitedLine[1]);
+                    myQ.push(x);
+                } else if ("exit".equals(inputString)) {
+                    out.println("bye");
+                    out.close();
+                    return;
+                }
+            }
         }
     }
 }
