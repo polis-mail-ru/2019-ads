@@ -2,6 +2,8 @@ package ru.mail.polis.ads.part2.jhoysbou;
 
 import java.util.Scanner;
 
+// Submission here https://www.e-olymp.com/ru/submissions/5799449
+
 public class SecondExercise {
     private static final Scanner scanner = new Scanner(System.in);
 
