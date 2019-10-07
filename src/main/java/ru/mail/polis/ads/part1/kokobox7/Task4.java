@@ -41,14 +41,15 @@ public class Task4 {
     }
 
     private static int lcs(int n, int m) {
-        if (n == 0 || m == 0)
+        if (n == 0 || m == 0) {
             return d[n][m] = 0;
+        }
         if (d[n][m] != -1) {
             return d[n][m];
-        } else if (firstSequence[n - 1] == secondSequence[m - 1]) {
-            return d[n][m] = 1 + lcs(n - 1, m - 1);
-        } else {
-            return d[n][m] = Math.max(lcs(n - 1, m), lcs(n, m - 1));
         }
+        if (firstSequence[n - 1] == secondSequence[m - 1]) {
+            return d[n][m] = 1 + lcs(n - 1, m - 1);
+        }
+        return d[n][m] = Math.max(lcs(n - 1, m), lcs(n, m - 1));
     }
 }

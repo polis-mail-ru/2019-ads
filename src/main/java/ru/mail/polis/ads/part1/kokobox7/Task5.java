@@ -12,33 +12,33 @@ import java.util.Scanner;
 public class Task5 {
 
     public static class MyQueue {
-        private LinkedList<Integer> q;
+        private LinkedList<Integer> queue;
         private PrintWriter out;
 
         MyQueue(PrintWriter out) {
-            q = new LinkedList<>();
+            queue = new LinkedList<>();
             this.out = out;
         }
 
         private void push(int n) {
-            q.add(n);
+            queue.add(n);
             out.println("ok");
         }
 
         private void pop() {
-            out.println(q.pop());
+            out.println(queue.pop());
         }
 
         private void front() {
-            out.println(q.getFirst());
+            out.println(queue.getFirst());
         }
 
         private void size() {
-            out.println(q.size());
+            out.println(queue.size());
         }
 
         private void clear() {
-            q = new LinkedList<>();
+            queue = new LinkedList<>();
             out.println("ok");
         }
 

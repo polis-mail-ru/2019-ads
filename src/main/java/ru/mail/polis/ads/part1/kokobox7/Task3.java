@@ -50,6 +50,7 @@ public class Task3 {
     }
 
     private static String pack(String string, String substring, int subLength, int left, int right) {
+        String outSubstring = substring;
         for (int i = 1; i <= subLength / 2; i++) {
             int count = subLength / i;
             if (subLength % i == 0) {
@@ -62,10 +63,11 @@ public class Task3 {
             } else count = 0;
             if (count > 1) {
                 String s = subLength / i + "(" + dp[left][left + i - 1] + ")";
-                if (s.length() < substring.length())
-                    substring = s;
+                if (s.length() < substring.length()) {
+                    outSubstring = s;
+                }
             }
         }
-        return substring;
+        return outSubstring;
     }
 }
