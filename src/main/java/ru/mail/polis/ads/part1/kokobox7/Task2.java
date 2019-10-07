@@ -33,10 +33,10 @@ public final class Task2 {
                         || (str.charAt(i) == '[' && str.charAt(j) == ']')) {
                     min = dp[i + 1][j - 1];
                 }
-                for (int k_split = i; k_split < j; k_split++) {
-                    if (dp[i][k_split] + dp[k_split + 1][j] < min) {
-                        min = dp[i][k_split] + dp[k_split + 1][j];
-                        splitMin = k_split;
+                for (int kSplit = i; kSplit < j; kSplit++) {
+                    if (dp[i][kSplit] + dp[kSplit + 1][j] < min) {
+                        min = dp[i][kSplit] + dp[kSplit + 1][j];
+                        splitMin = kSplit;
                     }
                 }
                 dp[i][j] = min;
@@ -75,9 +75,9 @@ public final class Task2 {
             System.out.print(str.charAt(j));
             return;
         }
-        int k_split = split[i][j];
-        restore(i, k_split, str, dp, split);
-        restore(k_split + 1, j, str, dp, split);
+        int kSplit = split[i][j];
+        restore(i, kSplit, str, dp, split);
+        restore(kSplit + 1, j, str, dp, split);
     }
 
     public static void main(final String[] arg) {
