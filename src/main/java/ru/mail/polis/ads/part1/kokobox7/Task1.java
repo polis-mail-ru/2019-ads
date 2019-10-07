@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.Kokobox7;
+package ru.mail.polis.ads.part1.kokobox7;
 
 import java.io.BufferedReader;
 import java.io.IOException;
