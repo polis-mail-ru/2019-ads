@@ -4,9 +4,16 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/*
+    Длина наибольшей общей подпоследовательности
+    e-olymp submission: https://www.e-olymp.com/ru/submissions/5793032
+    */
+
+
 public class Task4 {
     private static int[][] d;
-    private static int[] firstSequence, secondSequence;
+    private static int[] firstSequence;
+    private static int[] secondSequence;
 
     public static void main(String[] args) {
         try (PrintWriter out = new PrintWriter(System.out);

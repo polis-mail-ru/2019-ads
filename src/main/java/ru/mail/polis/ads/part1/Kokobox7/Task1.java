@@ -7,13 +7,17 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
+/*
+    Вывод двух первых символов строки через пробел
+    e-olymp submission: https://www.e-olymp.com/ru/submissions/5788395
+ */
+
 public final class Task1 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         String inNumber = in.next();
-        out.print(inNumber.charAt(0) + " " +inNumber.charAt(1));
+        out.print(inNumber.charAt(0) + " " + inNumber.charAt(1));
     }
-
 
     private static class FastScanner {
         private final BufferedReader reader;
@@ -23,7 +27,7 @@ public final class Task1 {
             reader = new BufferedReader(new InputStreamReader(in));
         }
 
-        String next() {
+        private String next() {
             while (tokenizer == null || !tokenizer.hasMoreTokens()) {
                 try {
                     tokenizer = new StringTokenizer(reader.readLine());
@@ -34,7 +38,7 @@ public final class Task1 {
             return tokenizer.nextToken();
         }
 
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(next());
         }
     }

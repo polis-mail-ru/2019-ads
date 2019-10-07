@@ -4,34 +4,40 @@ import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.Scanner;
 
+/*
+    Очередь
+    e-olymp submission: https://www.e-olymp.com/ru/submissions/5792068
+    */
+
 public class Task5 {
+
     public static class MyQueue {
-        LinkedList<Integer> q;
-        PrintWriter out;
+        private LinkedList<Integer> q;
+        private PrintWriter out;
 
         MyQueue(PrintWriter out) {
             q = new LinkedList<>();
             this.out = out;
         }
 
-        void push(int n) {
+        private void push(int n) {
             q.add(n);
             out.println("ok");
         }
 
-        void pop() {
+        private void pop() {
             out.println(q.pop());
         }
 
-        void front() {
+        private void front() {
             out.println(q.getFirst());
         }
 
-        void size() {
+        private void size() {
             out.println(q.size());
         }
 
-        void clear() {
+        private void clear() {
             q = new LinkedList<>();
             out.println("ok");
         }

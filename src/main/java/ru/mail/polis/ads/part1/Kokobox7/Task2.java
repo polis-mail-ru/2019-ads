@@ -1,14 +1,18 @@
 package ru.mail.polis.ads.part1.Kokobox7;
 
-import java.io.*;
+import java.io.PrintWriter;
 import java.util.Scanner;
-import java.util.StringTokenizer;
+
+/*
+    Скобочная последовательность
+    e-olymp submission: https://www.e-olymp.com/ru/submissions/5788824
+ */
 
 public final class Task2 {
 
     private static void solve(final Scanner in, final PrintWriter out) {
         String s = in.nextLine();
-        if (s.isEmpty()){
+        if (s.isEmpty()) {
             out.println();
             return;
         }
@@ -42,9 +46,9 @@ public final class Task2 {
         restore(0, n - 1, s, d, split);
     }
 
-    static void restore(int i, int j,
-                        String s,
-                        int[][] d, int[][] split) {
+    static private void restore(int i, int j,
+                                String s,
+                                int[][] d, int[][] split) {
         if (i == j) {
             switch (s.charAt(i)) {
                 case '(':
@@ -55,6 +59,8 @@ public final class Task2 {
                 case '[':
                     System.out.print("[]");
                     break;
+                default:
+                    throw new RuntimeException("Wrong symbol");
             }
             return;
         }
