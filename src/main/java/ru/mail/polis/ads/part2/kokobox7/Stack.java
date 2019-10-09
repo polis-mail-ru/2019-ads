@@ -100,5 +100,4 @@ public class Stack {
             solve(in, out);
         }
     }
-
 }
