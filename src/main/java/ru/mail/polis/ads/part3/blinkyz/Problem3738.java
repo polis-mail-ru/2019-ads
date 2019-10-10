@@ -1,9 +1,6 @@
 package ru.mail.polis.ads.part3.blinkyz;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.StringTokenizer;
 
 public class Problem3738 {
@@ -84,7 +81,7 @@ public class Problem3738 {
         }
     }
 
-    private static void solve() {
+    private static void solve() throws IOException {
         FastScanner scanner = new FastScanner(System.in);
         int n = scanner.nextInt();
         int[] a = new int[n];
@@ -95,13 +92,13 @@ public class Problem3738 {
         MergeSort mergeSort = new MergeSort(a);
         int[] sortedArr = mergeSort.getResult();
 
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(System.out));
         for (int e : sortedArr) {
-            System.out.print(e + " ");
+            bufferedWriter.write(e + " ");
         }
-
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         solve();
     }
 }
