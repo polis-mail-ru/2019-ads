@@ -96,6 +96,7 @@ public class Problem3738 {
         for (int e : sortedArr) {
             bufferedWriter.write(e + " ");
         }
+        bufferedWriter.flush();
     }
 
     public static void main(String[] args) throws IOException {
