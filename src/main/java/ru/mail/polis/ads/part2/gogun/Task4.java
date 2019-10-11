@@ -1,4 +1,4 @@
-package ru.mail.polis.ads;
+package ru.mail.polis.ads.part2.gogun;
 
 import java.util.*;
 
