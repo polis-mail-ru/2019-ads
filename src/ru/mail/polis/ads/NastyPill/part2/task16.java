@@ -10,8 +10,8 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class Main {
-    private Main() {
+public final class task16 {
+    private task16() {
         // Should not be instantiated https://www.e-olymp.com/ru/submissions/5804067
     }
 
