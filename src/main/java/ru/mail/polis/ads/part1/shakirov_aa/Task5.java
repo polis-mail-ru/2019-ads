@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class SimpleQueue {
+public class Task5 {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Queue<Integer> queue = new ArrayDeque<>();

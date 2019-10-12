@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part1.shakirov_aa;
 
 import java.util.Scanner;
 
-public class SimpleTask {
+public class Task1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 

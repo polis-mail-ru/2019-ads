@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part1.shakirov_aa;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class BracketSequence {
+public class Task2 {
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
         String s = sc.nextLine();

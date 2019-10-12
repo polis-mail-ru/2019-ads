@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class NOP {
+public class Task4 {
     public static void main(String[] args) {
         FastScanner fs = new FastScanner(System.in);
 
