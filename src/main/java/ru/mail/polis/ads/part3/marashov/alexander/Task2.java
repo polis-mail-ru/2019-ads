@@ -1,7 +1,5 @@
 package ru.mail.polis.ads.part3.marashov.alexander;
 
-import ru.mail.polis.ads.FastScanner;
-
 import java.io.PrintWriter;
 
 public class Task2 {
