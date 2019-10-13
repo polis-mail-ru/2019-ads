@@ -19,7 +19,7 @@ public final class ThirdTask {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int result = 0;
-        int n = in.nextInt();
+        final int n = in.nextInt();
         Integer[] array = new Integer[n+1];
 
         for (int i = 1; i < n+1; i++) {

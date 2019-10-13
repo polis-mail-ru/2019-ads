@@ -1,37 +1,45 @@
 package ru.mail.polis.ads.part3.makaryb;
 
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 /**
  * Made by БорискинМА
  * 13.10.19
  * gr. Java-10, Технополис
  * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
- * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5847834
+ * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5850412
  */
-public final class SecondTask {
+public final class FifthTask {
+    private FifthTask() {}
 
-    private SecondTask() {}
+    static class E implements Comparable<E> {
+        final int primary, secondary, cursor;
+        E(final int p, final int s, final int index) {
+            this.primary = p; this.secondary = s; this.cursor = index;
+        }
+
+        @Override
+        public int compareTo(E o) {
+            int c = this.primary - o.primary;
+            return c == 0 ? this.cursor - o.cursor : c;
+        }
+    }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         final int n = in.nextInt();
+        E[] array = new E[n];
 
-        Integer[] array = new Integer[n];
-        for (int i = 0; i < n; i++) {
-            final int value = in.nextInt();
-            array[i] = value;
+        for(int i = 0; i < n; i++) {
+            array[i] = new E(in.nextInt(), in.nextInt(), i);
         }
 
-        Arrays.sort(array, (o1, o2) -> {
-            if (o1 % 10 == o2 % 10) return o1 - o2;
-            else return o1 % 10 - o2 % 10;
-        });
+        Arrays.sort(array);
 
-        for (Integer integer : array) {
-            out.print(integer+" ");
+        for(E pair : array) {
+            out.println(pair.primary + " " + pair.secondary);
         }
-        out.println();
     }
 
     private static class FastScanner {
@@ -65,3 +73,4 @@ public final class SecondTask {
         }
     }
 }
+

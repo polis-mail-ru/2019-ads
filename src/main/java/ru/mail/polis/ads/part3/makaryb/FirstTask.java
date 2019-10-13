@@ -18,7 +18,7 @@ public final class FirstTask {
     private FirstTask() {}
 
     private static void solve(final FastScanner in) {
-        int n = in.nextInt();
+        final int n = in.nextInt();
         int[] correct = new int[n];
 
         for (int i = 0; i < n; i++) {
