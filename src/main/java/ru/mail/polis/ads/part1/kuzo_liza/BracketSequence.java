@@ -27,7 +27,7 @@ public class BracketSequence {
                 int splitMin = -1;
                 if (s.charAt(i) =='('&&s.charAt(j) ==')' ||
                         s.charAt(i)=='['&&s.charAt(j) ==']'){
-                    min = d[i + 1 ][j - 1];
+                    min = d[i + 1][j - 1];
                 }
 
                 for (int k = i; k < j; k++){
