@@ -40,6 +40,8 @@ public final class FifthTask {
         for(E pair : array) {
             out.println(pair.primary + " " + pair.secondary);
         }
+
+        out.flush();
     }
 
     private static class FastScanner {

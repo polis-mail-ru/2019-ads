@@ -38,6 +38,8 @@ public final class ThirdTask {
         }
 
         out.println(result);
+
+        out.flush();
     }
 
     private static class FastScanner {

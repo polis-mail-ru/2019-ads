@@ -32,6 +32,8 @@ public final class SecondTask {
             out.print(integer+" ");
         }
         out.println();
+
+        out.flush();
     }
 
     private static class FastScanner {
