@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 /**
@@ -16,7 +19,33 @@ public final class SolveTemplate {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        List<Integer> list = new ArrayList<>();
+        String command = in.next();
+        while (!command.contains("exit")) {
+            switch (command) {
+                case ("push"):
+                    Integer number = Integer.parseInt(in.next());
+                    list.add(number);
+                    System.out.println("ok");
+                    break;
+                case ("pop"):
+                    System.out.println(list.get(0));
+                    list.remove(0);
+                    break;
+                case ("front"):
+                    System.out.println(list.get(0));
+                    break;
+                case ("size"):
+                    System.out.println(list.size());
+                    break;
+                case ("clear"):
+                    list.clear();
+                    System.out.println("ok");
+                    break;
+            }
+            command = in.next();
+        }
+        System.out.println("bye");
     }
 
     private static class FastScanner {
