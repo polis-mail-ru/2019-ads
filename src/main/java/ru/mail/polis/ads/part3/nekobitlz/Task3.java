@@ -18,6 +18,7 @@ public class Task3 {
 
     private static int bubbleSort(Integer[] digits) {
         int count = 0;
+
         for (int i = 0; i < digits.length; i++) {
             for (int j = digits.length - 1; j > i; j--) {
                 if (digits[j - 1] > digits[j]) {
@@ -28,6 +29,7 @@ public class Task3 {
                 }
             }
         }
+
         return count;
     }
 

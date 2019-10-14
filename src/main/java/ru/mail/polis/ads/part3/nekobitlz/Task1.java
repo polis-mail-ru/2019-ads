@@ -16,8 +16,7 @@ public class Task1 {
         Arrays.sort(digits);
 
         for (int value : digits) {
-            out.print(value);
-            out.print(' ');
+            out.print(value + " ");
         }
     }
 
