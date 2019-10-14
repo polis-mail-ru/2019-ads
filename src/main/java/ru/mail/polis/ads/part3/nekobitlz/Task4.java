@@ -1,49 +1,25 @@
 package ru.mail.polis.ads.part3.nekobitlz;
 
 import java.io.*;
-import java.util.Scanner;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.StringTokenizer;
-
-import static java.lang.Math.max;
 
 public class Task4 {
 
-    private static void solve(final FastScanner at, final PrintWriter out) {
-        Scanner in = new Scanner(System.in);
-        int n = Integer.parseInt(in.nextLine());
-        int max = Integer.MIN_VALUE;
-        String[] lines = in.nextLine().trim().replaceAll("[\\s]{2,}", " ").split(" ");
-        int[] digits = new int[lines.length];
+    private static void solve(final FastScanner in, final PrintWriter out) {
+        int n = in.nextInt();
+        String[] lines = in.next().trim().replaceAll("[\\s]{2,}", " ").split(" ");
+        BigInteger[] digits = new BigInteger[lines.length];
 
         for (int i = 0; i < lines.length; i++) {
-            digits[i] = Integer.parseInt(lines[i]);
-            max = max(digits[i], max);
+            String line = lines[i];
+            digits[i] = new BigInteger(line);
         }
 
-        int[] sortedArray = countingSort(digits, max);
+        Arrays.sort(digits);
 
-        out.print(sortedArray[sortedArray.length - n]);
-    }
-
-    private static int[] countingSort(int[] elements, int limit) {
-        int[] count = new int[limit + 1];
-
-        for (int element: elements) {
-            count[element]++;
-        }
-
-        for (int j = 1; j <= limit; j++) {
-            count[j] += count[j - 1];
-        }
-
-        int[] result = new int[elements.length];
-
-        for (int j = elements.length - 1; j >= 0; j--) {
-            result[count[elements[j]] - 1] = elements[j];
-            count[elements[j]]--;
-        }
-
-        return result;
+        out.print(digits[digits.length - n]);
     }
 
     private static class FastScanner {
@@ -57,7 +33,7 @@ public class Task4 {
         String next() {
             while (tokenizer == null || !tokenizer.hasMoreTokens()) {
                 try {
-                    tokenizer = new StringTokenizer(reader.readLine());
+                    tokenizer = new StringTokenizer(reader.readLine(), "\n");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
