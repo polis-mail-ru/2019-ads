@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 /**
  * @author v.ivlev
- * https://www.e-olymp.com/ru/submissions/5858020
+ * https://www.e-olymp.com/ru/submissions/5858072
  */
 public class TaskThree {
 
@@ -37,9 +37,10 @@ public class TaskThree {
         while (!arrayDeque.isEmpty()) {
             Component component = arrayDeque.pollFirst();
             stringBuilder.insert(0, component.getOperator());
-            if (component.getRightComponent() != null) {
+            Component rightComponent = component.getRightComponent();
+            if (rightComponent != null) {
                 arrayDeque.addLast(component.getLeftComponent());
-                arrayDeque.addLast(component.getRightComponent());
+                arrayDeque.addLast(rightComponent);
             }
         }
         return stringBuilder.toString();
