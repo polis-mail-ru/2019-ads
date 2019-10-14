@@ -1,13 +1,12 @@
 package ru.mail.polis.ads.part3.jhoysbou;
 
-import com.sun.jdi.event.StepEvent;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+// Submission here https://www.e-olymp.com/ru/submissions/5854982
 
 public class FifthExercise {
 
@@ -37,15 +36,15 @@ public class FifthExercise {
 
     private static class Robot {
         int mainNumber;
-        int addionalNumber;
+        int additionalNumber;
 
         Robot(int mainNumber, int additionalNumber) {
             this.mainNumber = mainNumber;
-            this.addionalNumber = additionalNumber;
+            this.additionalNumber = additionalNumber;
         }
 
         public String toString() {
-            return mainNumber + " " + addionalNumber;
+            return mainNumber + " " + additionalNumber;
         }
     }
 
@@ -79,15 +78,7 @@ public class FifthExercise {
         Robot[] right = new Robot[length-pivot];
 
         System.arraycopy(robotsArray, 0, left, 0, pivot);
-
-//        for (int i = 0; i < pivot; i++) {
-//            left[i] = robotsArray[i];
-//        }
-
         System.arraycopy(robotsArray, pivot, right, 0, length - pivot);
-//        for (int i = pivot; i < length; i++) {
-//            right[i - pivot] = robotsArray[i];
-//        }
 
         left = mergeSort(left);
         right = mergeSort(right);
@@ -96,10 +87,12 @@ public class FifthExercise {
     }
 
     private static Robot[] merge(Robot[] left, Robot[] right) {
-        Robot[] sorted = new Robot[left.length + right.length];
+        int rLength = right.length;
+        int lLength = left.length;
+        Robot[] sorted = new Robot[lLength + rLength];
         int i = 0, j = 0, k = 0;
 
-        while (i < left.length && j < right.length) {
+        while (i < lLength && j < rLength) {
             if (left[i].mainNumber <= right[j].mainNumber) {
                 sorted[k++] = left[i++];
             } else {
@@ -107,11 +100,11 @@ public class FifthExercise {
             }
         }
 
-        while (i < left.length) {
+        while (i < lLength) {
             sorted[k++] = left[i++];
         }
 
-        while (j < right.length) {
+        while (j < rLength) {
             sorted[k++] = right[j++];
         }
 
