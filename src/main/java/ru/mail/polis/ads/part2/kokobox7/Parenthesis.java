@@ -3,7 +3,6 @@ package ru.mail.polis.ads.part2.kokobox7;
 import java.io.*;
 import java.util.LinkedList;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class Parenthesis {
 
