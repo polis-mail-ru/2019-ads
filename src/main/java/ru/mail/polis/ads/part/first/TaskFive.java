@@ -17,7 +17,7 @@ public class TaskFive {
     private static void solve(FastScanner in, final PrintWriter out) {
         ArrayDeque<Integer> arrayDeque = new ArrayDeque<>();
         String command = in.next();
-        while(!command.contains("exit")){
+        while (!command.contains("exit")) {
             switch (command) {
                 case "push":
                     arrayDeque.addLast(Integer.parseInt(in.next()));
