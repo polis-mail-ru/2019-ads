@@ -2,15 +2,65 @@ package ru.mail.polis.ads.part2.maksimshengeliia;
 
 
 import java.io.*;
+import java.util.LinkedList;
 import java.util.StringTokenizer;
 
+/*
+ *  https://www.e-olymp.com/ru/submissions/5846400
+ * */
 public class Task5 {
     private Task5() {
         // Should not be instantiated
     }
 
+    private static LinkedList<Integer> queue = new LinkedList<>();
+
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        String s;
+        loop: while ((s = in.next()) != null) {
+            try {
+                switch (s) {
+                    case "push": {
+                        int argument = in.nextInt();
+                        queue.push(argument);
+                        System.out.println("ok");
+                        break;
+                    }
+                    case "pop": {
+                        if (queue.isEmpty())
+                            System.out.println("error");
+                        else
+                            System.out.println(queue.pop());
+                        break;
+                    }
+                    case "back": {
+                        if (queue.isEmpty())
+                            System.out.println("error");
+                        else
+                            System.out.println(queue.peek());
+                        break;
+                    }
+                    case "size": {
+                        System.out.println(queue.size());
+                        break;
+                    }
+                    case "clear": {
+                        queue.clear();
+                        System.out.println("ok");
+                        break;
+                    }
+                    case "exit": {
+                        System.out.println("bye");
+                        break loop;
+                    }
+                    default: {
+                        throw new Exception("Invalid command");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private static class FastScanner {
