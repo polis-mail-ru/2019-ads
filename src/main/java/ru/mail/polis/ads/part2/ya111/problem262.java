@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.ya111;
+package ru.mail.polis.ads.part2.ya111;
 
 import java.util.Scanner;
 //https://www.e-olymp.com/ru/submissions/5833486
