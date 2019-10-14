@@ -6,7 +6,7 @@ public final class problem1090 {
     private problem1090(){
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Scanner sc = new Scanner(System.in);
         String str = sc.next();
         String[][] shortstr = new String[str.length()][str.length()];
@@ -46,5 +46,5 @@ public final class problem1090 {
 
 
     }
-    }
 }
+
