@@ -1,7 +1,5 @@
 package ru.mail.polis.ads.NastyPill.part3;
 
-import javafx.util.Pair;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +13,7 @@ import java.util.*;
 public final class task4037 {
     private task4037() {
         // Should not be instantiated https://www.e-olymp.com/ru/submissions/5847798
-    }
+}
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
@@ -25,12 +23,12 @@ public final class task4037 {
         }
         list.sort(task4037::compare);
         for (int i = 0; i < n; i++) {
-            out.println(list.get(i).getKey() + " " + list.get(i).getValue());
+            out.println(list.get(i).getFirst() + " " + list.get(i).getSecond());
         }
     }
 
     public static int compare(Pair<Integer, Integer> p1, Pair<Integer, Integer> p2) {
-        return Integer.compare(p1.getKey(), p2.getKey());
+        return Integer.compare(p1.getFirst(), p2.getFirst());
     }
 
     private static class FastScanner {
