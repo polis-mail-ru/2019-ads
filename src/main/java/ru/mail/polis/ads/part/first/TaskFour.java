@@ -38,8 +38,12 @@ public class TaskFour {
             return 0;
         }
         if (a[i] == b[j]) {
-            if (i == 0 || j == 0) return maxSub(i - 1, j - 1, a, b, map) + 1;
-            if (map[i - 1][j - 1] == -1) map[i - 1][j - 1] = maxSub(i - 1, j - 1, a, b, map);
+            if (i == 0 || j == 0) {
+                return maxSub(i - 1, j - 1, a, b, map) + 1;
+            }
+            if (map[i - 1][j - 1] == -1) {
+                map[i - 1][j - 1] = maxSub(i - 1, j - 1, a, b, map);
+            }
             return map[i - 1][j - 1] + 1;
         }
         if (i == 0 || j == 0) {

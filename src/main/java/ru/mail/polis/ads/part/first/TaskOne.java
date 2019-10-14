@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-/**@author v.ivlev
+/**
+ * @author v.ivlev
  * https://www.e-olymp.com/ru/submissions/5817606
  */
 public class TaskOne {
