@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part1.vegtamr-ab;
+package ru.mail.polis.ads.part1.vegtamrab;
 
 import java.io.BufferedReader;
 import java.io.IOException;
