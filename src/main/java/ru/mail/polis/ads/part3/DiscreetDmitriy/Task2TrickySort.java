@@ -4,22 +4,28 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Task1SimpleSort {
-    private Task1SimpleSort() {
+public class Task2TrickySort {
+    private Task2TrickySort() {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        int n = in.nextInt();
-        int[] numbers = new int[n];
+        final int n = in.nextInt();
+        Integer[] numbers = new Integer[n];
+
         for (int i = 0; i < n; i++)
             numbers[i] = in.nextInt();
 
-        Arrays.sort(numbers);
+        Arrays.sort(numbers, Task2TrickySort::compare);
 
-        for (int number : numbers)
+        for (Integer number : numbers)
             out.print(number + " ");
+    }
 
-        out.close();
+    private static int compare(int curr, int next) {
+        if (curr % 10 == next % 10)
+            return curr - next;
+        else
+            return curr % 10 - next % 10;
     }
 
     private static class FastScanner {
@@ -53,4 +59,3 @@ public class Task1SimpleSort {
         }
     }
 }
-
