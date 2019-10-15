@@ -5,7 +5,7 @@ public final class problem6124 {
     private problem6124(){
     }
 
-    public static void main(final String[] argc) throws IOException {
+    public static void main(String[] argc) throws IOException {
         LinkedList<String> myArrayDeque = new LinkedList<>();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
