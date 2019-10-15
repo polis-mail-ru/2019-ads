@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 /**
  * created by kirill.kungurov on 15.09.2019
- * https://www.e-olymp.com/ru/submissions/5863454
+ * https://www.e-olymp.com/ru/submissions/5864328
  */
 public final class SolveOfProblem15 {
     private static void solve(final Scanner in, final PrintWriter out) {
@@ -24,17 +24,31 @@ public final class SolveOfProblem15 {
             }
         }
         for (int i = m - 1; i >= 0; i--) {
-            for (int j = 1; j <= n; j++) {
-                if (arr[i][j-1]>=arr[i + 1][j]){
-                    arr[i][j] = arr[i][j-1] + field[i][j - 1];
-                    path[i][j] = path[i][j-1] + "R";
-                } else {
-                    arr[i][j] = arr[i+1][j] + field[i][j-1];
-                    path[i][j] = path[i+1][j] + "F";
+            for (int j = 0; j < n; j++) {
+                if (!(i==m-1 && j==0)){
+                    if (i==m-1){
+                        arr[i][j] = arr[i][j-1];
+                        path[i][j] = path[i][j-1] + "R";
+                    } else{
+                        if (j==0){
+                            arr[i][j] = arr[i+1][j];
+                            path[i][j] = path[i+1][j] + "F";
+                        }else{
+                            if (arr[i][j-1]>=arr[i + 1][j]){
+                                arr[i][j] = arr[i][j-1];
+                                path[i][j] = path[i][j-1] + "R";
+                            } else {
+                                arr[i][j] = arr[i+1][j];
+                                path[i][j] = path[i+1][j] + "F";
+                            }
+
+                        }
+                    }
                 }
+                arr[i][j]+=field[i][j];
             }
         }
-        out.println(path[0][n].substring(1));
+        out.println(path[0][n-1]);
     }
 
     public static void main(final String[] arg) {
