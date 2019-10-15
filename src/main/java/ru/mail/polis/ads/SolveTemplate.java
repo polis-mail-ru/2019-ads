@@ -1,10 +1,7 @@
 package ru.mail.polis.ads;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 /**
@@ -49,4 +46,12 @@ public final class SolveTemplate {
             solve(in, out);
         }
     }
+/*
+    public static void main(String[] args) {
+        final Scanner in = new Scanner(System.in);
+        try (PrintWriter out = new PrintWriter(System.out)) {
+            solve(in, out);
+        }
+    }
+*/
 }
