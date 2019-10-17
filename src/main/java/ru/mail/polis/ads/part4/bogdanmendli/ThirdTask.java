@@ -41,7 +41,7 @@ public class ThirdTask {
                     rightHeap[++rightIndex] = mid;
                     swimRightHeap(rightIndex);
                 }
-                long result = (long)(rightHeap[1] + leftHeap[1]) / 2;
+                long result = (rightHeap[1] + leftHeap[1]) / 2;
                 out.println(result);
             } else {
                 if (current < leftHeap[1]) {
