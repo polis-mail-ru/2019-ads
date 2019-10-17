@@ -52,6 +52,7 @@ public class Problem3737 {
 
             if (a[i] < a[i / 2]) {
                 isHeap = false;
+                break;
             }
         }
 
