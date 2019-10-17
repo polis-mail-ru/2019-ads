@@ -3,7 +3,11 @@ package ru.mail.polis.ads.part3.Kungurov;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public final class SolveOfProblem4037 {
+/**
+ * created by kirill kungurov on 16.10.19
+ * https://www.e-olymp.com/ru/submissions/5874017
+ */
+public class SolveOfProblem4037 {
     private SolveOfProblem4037() {
         // Should not be instantiated
     }
