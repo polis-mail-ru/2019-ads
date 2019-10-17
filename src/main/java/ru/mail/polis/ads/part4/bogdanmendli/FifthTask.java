@@ -6,14 +6,13 @@ import java.io.InputStreamReader;
 
 public class FifthTask {
 
-    private static int n;
     private static long maxWeight;
     private static long[] wagonsWeight;
 
     private static void solve() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String[] input = in.readLine().split(" ");
-        n = Integer.parseInt(input[0]);
+        int n = Integer.parseInt(input[0]);
         maxWeight = Long.parseLong(input[1]);
         wagonsWeight = new long[n];
         input = in.readLine().split(" ");
