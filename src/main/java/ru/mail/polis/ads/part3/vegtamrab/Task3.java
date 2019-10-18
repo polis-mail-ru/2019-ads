@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class Task2 {
+public final class Task3 {
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
         Integer[] array = new Integer[n];
