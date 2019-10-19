@@ -1,15 +1,28 @@
 package ru.mail.polis.ads.part3.maksimshengeliia;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
+/*
+*   https://www.e-olymp.com/ru/submissions/5895871
+* */
 public class Task1 {
     private Task1() {
         // Should not be instantiated
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int n = in.nextInt();
+        int[] array = new int[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = in.nextInt();
+        }
+        Arrays.sort(array);
+
+        for (int i = 0; i < n; i++) {
+            System.out.print(array[i] + " ");;
+        }
     }
 
     private static class FastScanner {
