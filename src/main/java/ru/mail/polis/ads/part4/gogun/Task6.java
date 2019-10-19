@@ -10,7 +10,7 @@ public class Task6 {
         private final BufferedReader reader;
         private StringTokenizer tokenizer;
 
-        FastScanner(final InputStreamReader in) {
+        FastScanner(final BufferedInputStream in) {
             reader = new BufferedReader(new InputStreamReader(System.in));
         }
 
@@ -70,7 +70,7 @@ public class Task6 {
     }
 
     public static void main(String[] args) {
-        FastScanner in = new FastScanner(new InputStreamReader(System.in));
+        FastScanner in = new FastScanner(new BufferedInputStream(System.in));
         try (PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out))) {
             solve(in, out);
         }
