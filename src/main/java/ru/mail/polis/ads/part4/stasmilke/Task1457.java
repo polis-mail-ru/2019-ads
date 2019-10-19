@@ -22,7 +22,7 @@ public class Task1457 {
         if (left + 1 >= right) {
             return true;
         }
-        int mid = (left + right) / 2;
+        int mid =  left + (right - left) / 2;
         return isCorrect(array, left, mid, m) &&
                 isCorrect(array, mid, right, m) &&
                 isCorrectSplit(array, left, mid, right, m);

@@ -22,7 +22,7 @@ public class Task4261 {
         if (left + 1 >= right) {
             return 0;
         }
-        int mid = (left + right) / 2;
+        int mid =  left + (right - left) / 2;
         return countInv(array, left, mid) + countInv(array, mid, right) + countSplitInv(array, left, mid, right);
     }
 

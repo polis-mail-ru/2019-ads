@@ -13,14 +13,12 @@ public class Task4074 {
         heapMin.insert(Integer.MAX_VALUE);
         int median = -1;
         int newElement;
-        long writer;
         while (true) {
             try {
                 newElement = Integer.parseInt(in.readLine());
             } catch (Exception ex) {
                 break;
             }
-            writer = 0;
             if (median == -1) {
                 if (newElement < heapMax.peek()) {
                     median = heapMax.extract();
@@ -41,11 +39,8 @@ public class Task4074 {
                     heapMin.insert(newElement);
                     median = -1;
                 }
-                writer += heapMax.peek();
-                writer += heapMin.peek();
-                writer /= 2;
             }
-            out.println(median == -1 ? writer : median);
+            out.println(median == -1 ? heapMax.peek() + (heapMin.peek() - heapMax.peek()) / 2 : median);
         }
     }
 
