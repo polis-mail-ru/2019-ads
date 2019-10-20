@@ -44,6 +44,8 @@ public final class FirstTask {
         else {
             out.println("YES");
         }
+
+        out.flush();
     }
 
     private static class FastScanner {

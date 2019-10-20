@@ -28,6 +28,8 @@ public final class SecondTask {
                 out.println(pQueue.poll());
             }
         }
+
+        out.flush();
     }
 
     private static class FastScanner {
