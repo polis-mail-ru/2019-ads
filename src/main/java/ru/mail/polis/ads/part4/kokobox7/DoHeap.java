@@ -7,7 +7,7 @@ public class DoHeap {
 
     private static class Heap {
         private int[] array;
-        //points where new element should be added
+        //points to where new element should be added
         private int pointer;
 
         Heap(int size) {
@@ -23,8 +23,8 @@ public class DoHeap {
 
         int extract() {
             swap(--pointer, 1);
-            sinkFirst();
-            swim(1);
+            int indx = sink();
+            swim(indx);
             return array[pointer];
         }
 
@@ -41,22 +41,23 @@ public class DoHeap {
             array[index1] = tmp;
         }
 
-        private void sinkFirst() {
+        //sinks first element
+        private int sink() {
             int index = 1;
-            int direction = index * 2;
-            while (direction < pointer - 1) {
-                if (array[direction] < array[direction + 1]) {
-                    direction++;
+            int where = index * 2;
+            while (where < pointer - 1) {
+                if (array[where] < array[where + 1]) {
+                    where++;
                 }
-                swap(index, direction);
-                index = direction;
-                direction *= 2;
+                swap(index, where);
+                index = where;
+                where *= 2;
             }
-            if (direction == pointer - 1) {
-                swap(index, direction);
-                index = direction;
+            if (where == pointer - 1) {
+                swap(index, where);
+                index = where;
             }
-            //return index;
+            return index;
         }
     }
 
