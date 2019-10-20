@@ -1,13 +1,12 @@
-package ru.mail.polis.ads.part3;
+package ru.mail.polis.ads.part3.kokobox7;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class TrickySort {
 
-     static class TrickyComparator implements java.util.Comparator<Integer> {
+    static class TrickyComparator implements java.util.Comparator<Integer> {
         @Override
         public int compare(Integer o1, Integer o2) {
             return 0;

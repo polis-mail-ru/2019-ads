@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part3;
+package ru.mail.polis.ads.part3.kokobox7;
 
 import java.io.*;
 import java.util.Arrays;

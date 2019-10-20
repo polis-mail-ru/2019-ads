@@ -1,22 +1,30 @@
-package ru.mail.polis.ads;
+package ru.mail.polis.ads.part3.kokobox7;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.StringTokenizer;
 
-/**
- * Problem solution template.
- */
-public final class SolveTemplate {
-    private SolveTemplate() {
-        // Should not be instantiated
-    }
+public class BubbleSort {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int n = in.nextInt();
+        int[] array = new int[n];
+        for (int i = 0; i < n; i++) {
+            array[i] = in.nextInt();
+        }
+
+        int counter = 0;
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array.length - i - 1; j++) {
+                if (array[j] > array[j + 1]) {
+                    int temp = array[j];
+                    array[j] = array[j + 1];
+                    array[j + 1] = temp;
+                    ++counter;
+                }
+            }
+        }
+
+        out.println(counter);
     }
 
     private static class FastScanner {
@@ -37,6 +45,7 @@ public final class SolveTemplate {
             }
             return tokenizer.nextToken();
         }
+
         int nextInt() {
             return Integer.parseInt(next());
         }
