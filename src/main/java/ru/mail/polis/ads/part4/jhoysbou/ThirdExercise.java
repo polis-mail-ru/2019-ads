@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5907068
+// Submission here https://www.e-olymp.com/ru/submissions/5907291
 
 public class ThirdExercise {
 
@@ -18,8 +18,9 @@ public class ThirdExercise {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
         PriorityQueue<Integer> leftHeap = new PriorityQueue<>(new MyComparator());
         PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
 
@@ -37,7 +38,7 @@ public class ThirdExercise {
 
             if (isEmpty) {
                 median = nextNumber;
-                System.out.println(median);
+                out.println(median);
             }
 
             if (median != Integer.MAX_VALUE && !isEmpty) {
@@ -49,7 +50,7 @@ public class ThirdExercise {
                     leftHeap.add(nextNumber);
                     rightHeap.add(median);
                 }
-                System.out.println((leftHeap.peek() + rightHeap.peek()) / 2);
+                out.println((leftHeap.peek() + rightHeap.peek()) / 2);
                 median = Integer.MAX_VALUE;
             }
             else if (!isEmpty) {
@@ -62,7 +63,7 @@ public class ThirdExercise {
                     leftHeap.add(nextNumber);
                     median = leftHeap.poll();
                 }
-                System.out.println(median);
+                out.println(median);
             }
 
             try {
@@ -72,6 +73,9 @@ public class ThirdExercise {
             }
             isEmpty = false;
         }
+        out.flush();
+        out.close();
+        reader.close();
     }
 
 }
