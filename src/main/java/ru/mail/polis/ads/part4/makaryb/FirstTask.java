@@ -18,6 +18,7 @@ public final class FirstTask {
 
     private static int max = 100010;
     private static long[] a = new long[max];
+    @SuppressWarnings("FieldCanBeLocal")
     private static int i = 0;
 
     private FirstTask() {}

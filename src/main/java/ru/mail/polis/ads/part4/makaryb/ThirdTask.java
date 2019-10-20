@@ -11,9 +11,12 @@ import java.io.*;
  */
 public final class ThirdTask {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static int max = 1000000;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static MaxHeap pqMax;
+    @SuppressWarnings("FieldCanBeLocal")
     private static MinHeap pqMin;
 
     private static int cursor = 0;
@@ -85,6 +88,7 @@ public final class ThirdTask {
     // Modified by БорискинМА 20.10.19
     private static class MaxHeap {
         private long[] Heap;
+        @SuppressWarnings({"FieldCanBeLocal", "unused"})
         private int size;
 
         MaxHeap(int maxsize) {
@@ -106,6 +110,7 @@ public final class ThirdTask {
             }
         }
 
+        @SuppressWarnings("SameParameterValue")
         private void sink(int k, int cursor) {
             while (2*k <= cursor) {
                 int j = 2*k;
@@ -128,6 +133,7 @@ public final class ThirdTask {
     // Modified by БорискинМА 20.10.19
     private static class MinHeap {
         private long[] Heap;
+        @SuppressWarnings({"FieldCanBeLocal", "unused"})
         private int size;
 
         MinHeap(int maxsize) {
@@ -149,6 +155,7 @@ public final class ThirdTask {
             }
         }
 
+        @SuppressWarnings("SameParameterValue")
         private void sink(int k, int cursor) {
             while (2*k <= cursor) {
                 int j = 2*k;
