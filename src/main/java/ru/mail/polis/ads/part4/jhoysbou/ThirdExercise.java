@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5899595
+// Submission here https://www.e-olymp.com/ru/submissions/5907068
 
 public class ThirdExercise {
 
