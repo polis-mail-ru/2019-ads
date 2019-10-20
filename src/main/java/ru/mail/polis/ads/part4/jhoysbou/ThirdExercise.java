@@ -9,30 +9,6 @@ import java.util.StringTokenizer;
 
 public class ThirdExercise {
 
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-    }
-
     public static class MyComparator implements Comparator<Integer> {
 
         @Override
@@ -43,15 +19,19 @@ public class ThirdExercise {
     }
 
     public static void main(String[] args) {
-        FastScanner scanner = new FastScanner(System.in);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PriorityQueue<Integer> leftHeap = new PriorityQueue<>(new MyComparator());
         PriorityQueue<Integer> rightHeap = new PriorityQueue<>();
 
 
-        Integer nextNumber = scanner.nextInt();
+        Integer nextNumber = null;
+        try {
+            nextNumber = Integer.parseInt(reader.readLine());
+        } catch (Exception e) {
+            // its okay
+        }
         int median = Integer.MAX_VALUE;
         boolean isEmpty = true;
-
 
         while (nextNumber != null) {
 
@@ -84,7 +64,12 @@ public class ThirdExercise {
                 }
                 System.out.println(median);
             }
-            nextNumber = scanner.nextInt();
+
+            try {
+                nextNumber = Integer.parseInt(reader.readLine());
+            } catch (Exception e) {
+                nextNumber = null;
+            }
             isEmpty = false;
         }
     }
