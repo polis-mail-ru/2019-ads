@@ -12,9 +12,7 @@ public class KStat {
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
-            int k = 0;
-
-            k = Integer.parseInt(in.readLine());
+            int k = Integer.parseInt(in.readLine());
 
             String input =  in.readLine();
             String[] nums = input.split(" ");
