@@ -2,11 +2,10 @@ package ru.mail.polis.ads.part3.maksimshengeliia;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /*
-*   https://www.e-olymp.com/ru/submissions/5897770
+*   https://www.e-olymp.com/ru/submissions/5908050
 * */
 public class Task4 {
     private Task4() {
@@ -22,9 +21,45 @@ public class Task4 {
         for (int i = 0; i < length; i++) {
             array[i] = new BigInteger(strings[i]);
         }
-        Arrays.sort(array);
-        out.println(array[length - n]);
+        BigInteger j = kPorStat(array, n - 1);
+        out.println(j);
 
+    }
+
+    private static int partition(BigInteger[] array, int l, int r) {
+        BigInteger p = array[l];
+        int j = l;
+        for (int i = l + 1; i < r; ++i) {
+            if (array[i].compareTo(p) > 0) {
+                j++;
+                swap(array, i, j);
+            }
+        }
+        swap(array, l, j);
+        return j;
+    }
+
+    private static void swap(BigInteger[] array, int i, int j) {
+        BigInteger temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    private static BigInteger kPorStat(BigInteger[] array, int k) {
+        int l = 0;
+        int r = array.length;
+        while (true) {
+            int mid = partition(array, l, r);
+            if (mid == k) {
+                return array[mid];
+            }
+            else if (k < mid) {
+                r = mid;
+            }
+            else {
+                l = mid + 1;
+            }
+        }
     }
 
     private static class FastScanner {
