@@ -81,6 +81,8 @@ public final class ThirdTask {
     }
 
     // Java program to implement Max Heap
+    // https://www.geeksforgeeks.org/max-heap-in-java/
+    // Modified by БорискинМА 20.10.19
     private static class MaxHeap {
         private long[] Heap;
         private int size;
@@ -98,17 +100,17 @@ public final class ThirdTask {
         }
 
         private void swim(int k) {
-            while (k > 1 && Heap[k] < Heap[k / 2]) {
-                swap(k, k / 2);
+            while (k > 1 && Heap[k] < Heap[k/2]) {
+                swap(k, k/2);
                 k /= 2;
             }
         }
 
         private void sink(int k, int cursor) {
-            while (2 * k <= cursor) {
-                int j = 2 * k;
+            while (2*k <= cursor) {
+                int j = 2*k;
 
-                if (j < cursor && Heap[j] > Heap[j + 1]) {
+                if (j < cursor && Heap[j] > Heap[j+1]) {
                     j++;
                 }
 
@@ -122,6 +124,8 @@ public final class ThirdTask {
     }
 
     // Java implementation of Min Heap
+    // https://www.geeksforgeeks.org/min-heap-in-java/
+    // Modified by БорискинМА 20.10.19
     private static class MinHeap {
         private long[] Heap;
         private int size;
@@ -139,16 +143,16 @@ public final class ThirdTask {
         }
 
         private void swim(int k) {
-            while (k > 1 && Heap[k] > Heap[k / 2]) {
-                swap(k, k / 2);
+            while (k > 1 && Heap[k] > Heap[k/2]) {
+                swap(k, k/2);
                 k /= 2;
             }
         }
 
         private void sink(int k, int cursor) {
-            while (2 * k <= cursor) {
-                int j = 2 * k;
-                if (j < cursor && Heap[j] < Heap[j + 1]) {
+            while (2*k <= cursor) {
+                int j = 2*k;
+                if (j < cursor && Heap[j] < Heap[j+1]) {
                     j++;
                 }
                 if (Heap[k] >= Heap[j]) {
