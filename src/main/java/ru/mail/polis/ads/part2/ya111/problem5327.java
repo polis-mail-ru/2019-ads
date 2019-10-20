@@ -5,7 +5,7 @@ public final class problem5327 {
     private problem5327(){
     }
 
-    public static void main(final String[] argc) {
+    public static void main(String[] argc) {
         Scanner sc = new Scanner(System.in);
         String string = sc.nextLine();
         Stack<Integer> stack = new Stack<>();
@@ -26,4 +26,4 @@ public final class problem5327 {
         else
             System.out.println("NO");
     }
-} 
+}
