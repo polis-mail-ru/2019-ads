@@ -1,19 +1,24 @@
-package part1;
+package part3;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+//https://www.e-olymp.com/ru/submissions/5864182
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
-//https://www.e-olymp.com/ru/submissions/5739761
-
-public final class Task1 {
-
+public class Task1 {
     private static void solve(final FastScanner in, final PrintWriter out) {
-        int num = in.nextInt();
-        System.out.println((num / 10) + " " + (num % 10));
+        int n = in.nextInt();
+        ArrayList<Integer> array = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            array.add(in.nextInt());
+        }
+        Collections.sort(array);
+        for (Integer num : array) {
+            out.print(num + " ");
+        }
+        out.println();
     }
 
     private static class FastScanner {
@@ -38,6 +43,8 @@ public final class Task1 {
         int nextInt() {
             return Integer.parseInt(next());
         }
+
+        long nextLong(){ return Long.parseLong(next());}
     }
 
     public static void main(final String[] arg) {

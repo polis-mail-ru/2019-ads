@@ -1,34 +1,37 @@
-package part2;
+package part3;
+
+// https://www.e-olymp.com/ru/submissions/5864265
 
 import java.io.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.StringTokenizer;
 
-//https://www.e-olymp.com/ru/submissions/5785939
-
-public class Task4 {
-
+public class Task2 {
     private static void solve(final FastScanner in, final PrintWriter out) {
-        String braces = in.next();
-        Deque<Character> stack = new ArrayDeque<>();
-        for (int i = 0; i < braces.length(); i++) {
-            char c = braces.charAt(i);
-            if (c == '(') stack.push(c);
-            else if (c == ')') {
-                if(stack.isEmpty()) {
-                    out.print("NO");
-                    return;
+        int n = in.nextInt();
+        int[] array = new int[100];
+        for (int i = 0; i < n; i++) {
+            array[i] = in.nextInt();
+        }
+        for (int i = 0; i < n; i++){
+            for (int j = i; j < n; j++) {
+                if (array[i] % 10 > array[j] % 10){
+                    int tmp = array[i];
+                    array[i] = array[j];
+                    array[j] = tmp;
                 }
-                else if(stack.peek() == '(')
-                    stack.pop();
-                else{
-                    out.print("NO");
-                    return;
+                else if (array[i] % 10 == array[j] % 10){
+                    if (array[i] > array[j]){
+                        int tmp = array[i];
+                        array[i] = array[j];
+                        array[j] = tmp;
+                    }
                 }
             }
         }
-        out.print(stack.isEmpty() ? "YES" : "NO");
+        for (int i = 0; i < n; i++) {
+            out.print(array[i] + " ");
+        }
+        out.println();
     }
 
     private static class FastScanner {
@@ -53,6 +56,8 @@ public class Task4 {
         int nextInt() {
             return Integer.parseInt(next());
         }
+
+        long nextLong(){ return Long.parseLong(next());}
     }
 
     public static void main(final String[] arg) {
@@ -61,5 +66,4 @@ public class Task4 {
             solve(in, out);
         }
     }
-
 }

@@ -1,44 +1,34 @@
-package part2;
+package part3;
+
+// https://www.e-olymp.com/ru/submissions/5864384
 
 import java.io.*;
 import java.util.StringTokenizer;
-
-// https://www.e-olymp.com/ru/submissions/5855849
 
 public class Task3 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
+        if (n == 1){
+            out.println(0);
+            return;
+        }
+        long[] array = new long[1000];
         for (int i = 0; i < n; i++) {
-            String expr = in.next();
-            char[] syms = expr.toCharArray();
-            StringBuilder[] sb = new StringBuilder[syms.length];
-            for (int j = 0; j < sb.length; j++) {
-                sb[j] = new StringBuilder("");
+            array[i] = in.nextLong();
+        }
+        int counter = 0;
+        for(int i = 0 ; i < n ; i++){
+            for(int j = 0 ; j < n - 1 ; j++){
+                if(array[j] > array[j+1]){
+                    long temp = array[j];
+                    array[j] = array[j+1];
+                    array[j+1]=temp;
+                    counter++;
+                }
             }
-            Index index = new Index(syms.length - 1);
-            getLevels(syms, index, 0, sb);
-            for (int j = syms.length - 1; j >= 0; j--)
-                out.print(sb[j].toString());
-            out.println();
         }
-    }
-
-    private static void getLevels(char[] expr, Index index, int depth, StringBuilder[] result) {
-        result[depth].append(expr[index.index]);
-        index.index--;
-        if (Character.isUpperCase(expr[index.index + 1])) {
-            getLevels(expr, index, depth + 1, result);
-            getLevels(expr, index, depth + 1, result);
-        }
-    }
-
-    private static class Index{
-        int index;
-
-        Index(int index) {
-            this.index = index;
-        }
+        out.println(counter);
     }
 
     private static class FastScanner {
@@ -63,6 +53,8 @@ public class Task3 {
         int nextInt() {
             return Integer.parseInt(next());
         }
+
+        long nextLong(){ return Long.parseLong(next());}
     }
 
     public static void main(final String[] arg) {
@@ -71,5 +63,4 @@ public class Task3 {
             solve(in, out);
         }
     }
-
 }
