@@ -1,15 +1,13 @@
 package ru.mail.polis.ads.part4.shakirov_aa;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Task3 {
+    static int size1 = 0, size2 = 0;
+
     public static void main(String[] args) throws IOException {
-        List<Integer> minHeap = new ArrayList<>();
-        minHeap.add(-1);
-        List<Integer> maxHeap = new ArrayList<>();
-        maxHeap.add(-1);
+        int[] minHeap = new int[1000001];
+        int[] maxHeap = new int[1000001];
 
         BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
         String s = bf.readLine();
@@ -24,7 +22,7 @@ public class Task3 {
 
         s = bf.readLine();
         boolean isMedianPushed = true;
-        int size1, size2, buff;
+        int buff;
         while (s != null && !s.equals("")) {
             buff = Integer.parseInt(s);
             if (buff < median) {
@@ -39,13 +37,12 @@ public class Task3 {
                 insertMin(minHeap, buff);
             }
 
-            size1 = minHeap.size();
-            size2 = maxHeap.size();
+
             if (size1 != size2) {
-                median = getMedian(minHeap, maxHeap, size1, size2);
+                median = getMedian(minHeap, maxHeap);
                 isMedianPushed = true;
             } else {
-                median = (minHeap.get(1) + maxHeap.get(1)) / 2;
+                median = (minHeap[1] + maxHeap[1]) / 2;
                 isMedianPushed = false;
             }
             out.println(median);
@@ -56,94 +53,98 @@ public class Task3 {
         out.close();
     }
 
-    static int getMedian(List<Integer> listMin, List<Integer> listMax, int size1, int size2) {
+    static int getMedian(int[] listMin, int[] listMax) {
         int median;
         if (size1 > size2) {
-            median = extractMin(listMin, size1);
+            median = extractMin(listMin);
         } else {
-            median = extractMax(listMax, size2);
+            median = extractMax(listMax);
         }
 
         return median;
     }
 
-    static int extractMax(List<Integer> list, int size) {
-        int max = list.get(1);
-        swap(list, 1, size - 1);
-        list.remove(size - 1);
-        sinkMax(list, 1, size - 1);
+    static int extractMax(int[] arr) {
+        int max = arr[1];
+        swap(arr, 1, size2);
+        arr[size2] = 0;
+        size2--;
+        sinkMax(arr, 1);
         return max;
     }
 
-    static int extractMin(List<Integer> list, int size) {
-        int max = list.get(1);
-        swap(list, 1, size - 1);
-        list.remove(size - 1);
-        sinkMin(list, 1, size - 1);
+    static int extractMin(int[] arr) {
+        int max = arr[1];
+        swap(arr, 1, size1);
+        arr[size1] = 0;
+        size1--;
+        sinkMin(arr, 1);
         return max;
     }
 
-    static void sinkMax(List<Integer> list, int k, int size) {
-        int n = size - 1;
-        while (2 * k <= n) {
+    static void sinkMax(int[] arr, int k) {
+        while (2 * k <= size2) {
             int j = 2 * k;
-            if (j < n && list.get(j) < list.get(j+1)) {
+            if (j < size2 && arr[j] < arr[j+1]) {
                 j++;
             }
 
-            if (list.get(k) >= list.get(j)) {
+            if (arr[k] >= arr[j]) {
                 break;
             }
 
-            swap(list, k, j);
+            swap(arr, k, j);
             k = j;
         }
     }
 
-    static void sinkMin(List<Integer> list, int k, int size) {
-        int n = size - 1;
-        while (2 * k <= n) {
+    static void sinkMin(int[] arr, int k) {
+        while (2 * k <= size1) {
             int j = 2 * k;
-            if (j < n && list.get(j) > list.get(j+1)) {
+            if (j < size1 && arr[j] > arr[j+1]) {
                 j++;
             }
 
-            if (list.get(k) <= list.get(j)) {
+            if (arr[k] <= arr[j]) {
                 break;
             }
 
-            swap(list, k, j);
+            swap(arr, k, j);
             k = j;
         }
     }
 
-    static void insertMax(List<Integer> list, int x) {
-        list.add(x);
-        swimMax(list, list.size() - 1);
+    static void insertMax(int[] arr, int x) {
+        ++size2;
+        arr[size2] = x;
+        swimMax(arr);
     }
 
-    static void insertMin(List<Integer> list, int x) {
-        list.add(x);
-        swimMin(list, list.size() - 1);
+    static void insertMin(int[] arr, int x) {
+        ++size1;
+        arr[size1] = x;
+        swimMin(arr);
     }
 
-    static void swimMax(List<Integer> list, int k) {
-        while (k > 1 && list.get(k) > list.get(k / 2)) {
-            swap(list, k, k / 2);
+    static void swimMax(int[] arr) {
+        int k = size2;
+        while (k > 1 && arr[k] > arr[k/2]) {
+            swap(arr, k, k / 2);
             k = k / 2;
         }
     }
 
-    static void swimMin(List<Integer> list, int k) {
-        while (k > 1 && list.get(k) < list.get(k / 2)) {
-            swap(list, k, k / 2);
+    static void swimMin(int[] arr) {
+        int k = size1;
+        while (k > 1 && arr[k] < arr[k/2]) {
+            swap(arr, k, k / 2);
             k = k / 2;
         }
     }
 
-    static void swap(List<Integer> list, int a, int b) {
-        int buff = list.get(a);
-        list.set(a, list.get(b));
-        list.set(b, buff);
+    static void swap(int[] arr, int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
     }
 }
