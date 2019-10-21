@@ -1,11 +1,10 @@
 package ru.mail.polis.ads.part3.maksimshengeliia;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /*
-*   https://www.e-olymp.com/ru/submissions/5895871
+*   https://www.e-olymp.com/ru/submissions/5909888
 * */
 public class Task1 {
     private Task1() {
@@ -18,11 +17,51 @@ public class Task1 {
         for (int i = 0; i < n; i++) {
             array[i] = in.nextInt();
         }
-        Arrays.sort(array);
-
+        mergeSort(array);
         for (int i = 0; i < n; i++) {
             System.out.print(array[i] + " ");;
         }
+    }
+
+    private static void mergeSort(int[] list)
+    {
+        if (list.length <= 1) {
+            return;
+        }
+
+        int[] first = new int[list.length / 2];
+        int[] second = new int[list.length - first.length];
+        System.arraycopy(list, 0, first, 0, first.length);
+        System.arraycopy(list, first.length, second, 0, second.length);
+
+        mergeSort(first);
+        mergeSort(second);
+
+        merge(first, second, list);
+    }
+
+    private static void merge(int[] first, int[] second, int[] result)
+    {
+        int iFirst = 0;
+        int iSecond = 0;
+        int iMerged = 0;
+
+        while (iFirst < first.length && iSecond < second.length)
+        {
+            if (first[iFirst] < second[iSecond])
+            {
+                result[iMerged] = first[iFirst];
+                iFirst++;
+            }
+            else
+            {
+                result[iMerged] = second[iSecond];
+                iSecond++;
+            }
+            iMerged++;
+        }
+        System.arraycopy(first, iFirst, result, iMerged, first.length - iFirst);
+        System.arraycopy(second, iSecond, result, iMerged, second.length - iSecond);
     }
 
     private static class FastScanner {
