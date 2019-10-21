@@ -16,6 +16,9 @@ class DZ2_ThirdTask {
                 counter++;
             } else {
                 counter--;
+                if (counter < 0){
+                    break;
+                }
             }
         }
         if (counter == 0){
