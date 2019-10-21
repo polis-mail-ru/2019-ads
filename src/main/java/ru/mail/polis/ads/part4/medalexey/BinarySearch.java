@@ -8,6 +8,10 @@ import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
 
+/**
+ *  Название задачи: Бинарный поиск  https://www.e-olymp.com/ru/problems/9016
+ *  Тестирование: https://www.e-olymp.com/ru/submissions/5885415
+ */
 public class BinarySearch {
 
     private static int[] array;
