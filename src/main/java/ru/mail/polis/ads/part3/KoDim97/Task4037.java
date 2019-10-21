@@ -23,7 +23,7 @@ public final class Task4037 {
 
         Pair<Integer, Integer>[] L = new Pair[n1];
         Pair<Integer, Integer>[] R = new Pair[n2];
-        
+
         for (i = 0; i < n1; i++)
             L[i] = arr[l + i];
         for (j = 0; j < n2; j++)
