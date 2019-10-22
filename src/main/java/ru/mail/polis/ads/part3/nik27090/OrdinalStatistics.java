@@ -2,27 +2,56 @@ package ru.mail.polis.ads.part3.nik27090;
 
 import java.io.*;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
-//Задача: "k-тая порядковая статистика"
-//Решение: https://www.e-olymp.com/ru/submissions/5893318
+//задача: k-тая порядковая статистика
+//Решение:https://www.e-olymp.com/ru/submissions/5923097
 
 public class OrdinalStatistics {
+
     private OrdinalStatistics() {
         // Should not be instantiated
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        int n= in.nextInt();
+        int k= in.nextInt();
         String[] str=in.nextLine().split(" ");
-        BigInteger[] arr = new BigInteger[str.length];
+        ArrayList<BigInteger> arr = new ArrayList<>();
         for (int i = 0; i <str.length ; i++) {
-            arr[i]= new BigInteger(str[i]);
+            arr.add(new BigInteger(str[i]));
         }
-        Arrays.sort(arr);
-        System.out.println(arr[arr.length-n]);
+        k=arr.size()-k;
+        System.out.println(quickSelect(arr,k));
     }
 
+    public static BigInteger quickSelect(ArrayList<BigInteger> arr, int k){
+        if (arr.size()==1){
+            return arr.get(0);
+        }
+        int pivot= 0 + (int)(Math.random()*arr.size());
+        ArrayList<BigInteger> lows =new ArrayList<>();
+        ArrayList<BigInteger> highs = new ArrayList<>();
+        ArrayList<BigInteger> pivots = new ArrayList<>();
+
+        for (int i = 0; i <arr.size() ; i++) {
+            if (0>arr.get(i).compareTo(arr.get(pivot))){
+                lows.add(arr.get(i));
+            } else if (0<arr.get(i).compareTo(arr.get(pivot))){
+                highs.add(arr.get(i));
+            } else {
+                pivots.add(arr.get(i));
+            }
+        }
+
+        if (k<lows.size()){
+            return quickSelect(lows, k);
+        } else if (k<lows.size()+pivots.size()){
+            return pivots.get(0);
+        } else {
+            return quickSelect(highs,k-lows.size()-pivots.size());
+        }
+    }
     private static class FastScanner {
         private final BufferedReader reader;
         private StringTokenizer tokenizer;
