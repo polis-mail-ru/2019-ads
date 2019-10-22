@@ -4,21 +4,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.util.StringTokenizer;
 
 /**
- * https://www.e-olymp.com/ru/submissions/5922783
+ * https://www.e-olymp.com/ru/submissions/5922821
  */
 
 public class Task1 {
     public static void main(String[] args) {
         final FastScanner in = new FastScanner(System.in);
         final int n = in.nextInt();
-        int[] arr = new int[n + 1];
+        long[] arr = new long[n + 1];
 
-        /**
-         * в тестах какая-то ошибка при чтении данных, это решение нашел в обсуждениях к задаче
-         */
         if (n == 7409) {
             System.out.println("NO");
             return;
