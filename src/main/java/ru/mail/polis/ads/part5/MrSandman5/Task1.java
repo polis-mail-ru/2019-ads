@@ -1,37 +1,27 @@
-package part3;
+package part5;
 
-// https://www.e-olymp.com/ru/submissions/5864265
+//https://www.e-olymp.com/ru/submissions/5924002
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Task2 {
+public class Task1 {
+
     private static void solve(final FastScanner in, final PrintWriter out) {
-        int n = in.nextInt();
-        int[] array = new int[100];
-        for (int i = 0; i < n; i++) {
-            array[i] = in.nextInt();
-        }
-        for (int i = 0; i < n; i++){
-            for (int j = i; j < n; j++) {
-                if (array[i] % 10 > array[j] % 10){
-                    int tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-                }
-                else if (array[i] % 10 == array[j] % 10){
-                    if (array[i] > array[j]){
-                        int tmp = array[i];
-                        array[i] = array[j];
-                        array[j] = tmp;
-                    }
-                }
-            }
-        }
-        for (int i = 0; i < n; i++) {
-            out.print(array[i] + " ");
-        }
-        out.println();
+        double c = in.nextDouble();
+        double l = 0, r = c;
+        double x, y;
+        do {
+            x = (r + l) / 2;
+            y = function(x);
+            if (y > c) r = x;
+            else l = x;
+        } while(Math.abs(y - c) >= 1e-6);
+        out.println(String.format("%.6f", x));
+    }
+
+    private static double function(double x){
+        return x*x + Math.sqrt(x);
     }
 
     private static class FastScanner {
@@ -57,7 +47,9 @@ public class Task2 {
             return Integer.parseInt(next());
         }
 
-        long nextLong(){ return Long.parseLong(next());}
+        double nextDouble(){
+            return Double.parseDouble(next());
+        }
     }
 
     public static void main(final String[] arg) {

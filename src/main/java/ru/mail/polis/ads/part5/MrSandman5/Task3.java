@@ -1,6 +1,6 @@
-package part3;
+package part5;
 
-// https://www.e-olymp.com/ru/submissions/5864384
+//https://www.e-olymp.com/ru/submissions/5924849
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -9,26 +9,22 @@ public class Task3 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
-        if (n == 1){
-            out.println(0);
-            return;
-        }
-        long[] array = new long[1000];
+        int[] array = new int[1001];
         for (int i = 0; i < n; i++) {
-            array[i] = in.nextLong();
+            array[i] = in.nextInt();
         }
-        int counter = 0;
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < n - 1 ; j++){
-                if(array[j] > array[j+1]){
-                    long temp = array[j];
-                    array[j] = array[j+1];
-                    array[j+1]=temp;
-                    counter++;
-                }
+        int[] dp = new int [n];
+        dp[0] = 1;
+        int ans = 1;
+        for (int i = 1; i < n; i++) {
+            int max = 0;
+            for (int j = 0; j < i; j++) {
+                if (array[j] != 0 && array[i] % array[j] == 0 &&  dp[j] > max) max = dp[j];
             }
+            dp[i] = max + 1;
+            if (dp[i] > ans) ans = dp[i];
         }
-        out.println(counter);
+        out.println(ans);
     }
 
     private static class FastScanner {
@@ -54,7 +50,6 @@ public class Task3 {
             return Integer.parseInt(next());
         }
 
-        long nextLong(){ return Long.parseLong(next());}
     }
 
     public static void main(final String[] arg) {
@@ -64,3 +59,4 @@ public class Task3 {
         }
     }
 }
+
