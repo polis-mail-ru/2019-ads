@@ -1,60 +1,53 @@
 package part3;
 
+//https://www.e-olymp.com/ru/submissions/5923782
+
 import java.io.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Task4 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int k = in.nextInt();
-        if (k < 1) {
-            out.println(0);
-            return;
-        }
         int n = 0;
-        BigInteger[] array = new BigInteger[100001];
+        ArrayList<BigInteger> array = new ArrayList<>(100001);
         String tmp = in.next();
-        array[n] = BigInteger.valueOf(Long.parseLong(tmp));
+        array.add(new BigInteger(tmp));
         while (in.tokenizer.hasMoreTokens()){
-            n++;
-            tmp = in.tokenizer.nextToken();
-            array[n] = BigInteger.valueOf(Long.parseLong(tmp));
+            array.add(new BigInteger(in.tokenizer.nextToken()));
         }
-        if (k > n) {
-            out.println(0);
-            return;
-        }
-        BigInteger[] new_array = new BigInteger[n];
-        System.arraycopy(array, 0, new_array, 0, n);
-        int left = 0, right = n - 1;
-        while (true){
-            int mid = partition(new_array, left, right);
-
-            if (mid == k) {
-                out.println(new_array[n - mid + 1]);
-                return;
-            }
-            else if (k < mid) right = mid;
-            else left = mid + 1;
-        }
+        k = array.size() - k;
+        out.println(quickSelect(array, k).toString());
     }
 
-    private static int partition(BigInteger[] array, int left, int right){
-        BigInteger x = array[left];
-        int i = left;
-        int j = right;
-        while (i <= j){
-            while (array[i].compareTo(x) < 0) i++;
-            while (array[j].compareTo(x) > 0) j--;
-            if (i >= j) break;
-            BigInteger tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
-            i++;
-            j--;
+    private static BigInteger quickSelect(ArrayList<BigInteger> arr, int k){
+        if (arr.size()==1){
+            return arr.get(0);
         }
-        return j;
+        int pivot= (int) (Math.random() * arr.size());
+        ArrayList<BigInteger> lows = new ArrayList<>();
+        ArrayList<BigInteger> highs = new ArrayList<>();
+        ArrayList<BigInteger> pivots = new ArrayList<>();
+
+        for (BigInteger num : arr) {
+            if (0 > num.compareTo(arr.get(pivot))) {
+                lows.add(num);
+            } else if (0 < num.compareTo(arr.get(pivot))) {
+                highs.add(num);
+            } else {
+                pivots.add(num);
+            }
+        }
+
+        if (k < lows.size()){
+            return quickSelect(lows, k);
+        } else if (k < lows.size() + pivots.size()){
+            return pivots.get(0);
+        } else {
+            return quickSelect(highs,k - lows.size() - pivots.size());
+        }
     }
 
     private static class FastScanner {
@@ -79,8 +72,6 @@ public class Task4 {
         int nextInt() {
             return Integer.parseInt(next());
         }
-
-        long nextLong(){ return Long.parseLong(next());}
     }
 
     public static void main(final String[] arg) {
