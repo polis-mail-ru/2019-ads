@@ -32,8 +32,7 @@ public class SolveOfProblem991 {
                 }
             }
         }
-
-        System.out.println(d[d.length - 1][d[0].length - 1] ? "YES" : "NO");
+        out.println(d[d.length - 1][d[0].length - 1] ? "YES" : "NO");
     }
 
 
