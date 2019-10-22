@@ -1,15 +1,15 @@
 package main.java.ru.mail.polis.ads.part3.Eretic431;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.util.StringTokenizer;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * https://www.e-olymp.com/ru/submissions/5907473
+ * https://www.e-olymp.com/ru/submissions/5922584
  */
 
 public class Task4 {
@@ -23,45 +23,55 @@ public class Task4 {
             arr[i] = new BigInteger(lines[i]);
         }
 
-        quickSort(arr, 0, arr.length - 1);
+        BigInteger answer = quickSort(arr, k - 1);
 
-        System.out.println(arr[k - 1]);
+        System.out.println(answer);
     }
 
-    public static void quickSort(BigInteger[] array, int low, int high) {
-        if (array.length == 0)
-            return;
+    private static BigInteger quickSort(BigInteger[] array, int k) {
+        int left = 0;
+        int right = array.length - 1;
+        while (true) {
+            int middle = partition(array, left, right);
 
-        if (low >= high)
-            return;
-
-        int middle = low + (high - low) / 2;
-        BigInteger opora = array[middle];
-
-        int i = low, j = high;
-        while (i <= j) {
-            while (array[i].compareTo(opora) > 0) {
-                i++;
+            if (k == middle) {
+                return array[middle];
             }
 
-            while (array[j].compareTo(opora) < 0) {
-                j--;
+            if (k < middle) {
+                right = middle;
             }
 
-            if (i <= j) {
-                BigInteger temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-                i++;
-                j--;
+            if (k > middle) {
+                left = middle + 1;
             }
         }
+    }
 
-        if (low < j)
-            quickSort(array, low, j);
+    private static int partition(BigInteger[] mas, int l, int r)
+    {
+        BigInteger tmp;
+        if (l != r)
+        {
+            int tmpPos = ThreadLocalRandom.current().nextInt(l, r);
+            tmp = mas[tmpPos];
+            mas[tmpPos] = mas[r];
+            mas[r] = tmp;
+        }
 
-        if (high > i)
-            quickSort(array, i, high);
+        BigInteger x = mas[r];
+        int i = l - 1;
+        for (int j = l; j <= r; j++)
+        {
+            if (mas[j].compareTo(x) >= 0)
+            {
+                ++i;
+                tmp = mas[i];
+                mas[i] = mas[j];
+                mas[j] = tmp;
+            }
+        }
+        return i;
     }
 
     private static class FastScanner {
