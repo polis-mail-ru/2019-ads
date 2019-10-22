@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 public final class problem4037 {
+    
 
 
     public static void mergeSort(Point[] a, int n) {

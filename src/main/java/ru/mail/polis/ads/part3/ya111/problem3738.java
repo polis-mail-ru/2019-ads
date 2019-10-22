@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 
 public final class problem3738 {
 
+
     private static class FastScanner {
         private final BufferedReader reader;
         private StringTokenizer tokenizer;
