@@ -3,10 +3,34 @@ package ru.mail.polis.ads.part5.Kungurov;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class SolveOfProblem396 {
+/**
+ * created by kirill kungurov on 22.10.2019
+ * https://www.e-olymp.com/ru/submissions/5924948
+ */
+public class SolveOfProblem264 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int n = in.nextInt();
+        int[] a = new int[n];
+        int[] d = new int[n];
+        d[0] = 1;
+        int ans = 1;
+        for (int i = 0; i < n; i++) {
+            a[i] = in.nextInt();
+        }
+        for (int i = 1; i < n; i++) {
+            int max = 0;
+            for (int j = 0; j < i; j++) {
+                if (a[j] != 0 && a[i] % a[j] == 0 && d[j] > max) {
+                    max = d[j];
+                }
+                d[i] = max + 1;
+                if (d[i] > ans) {
+                    ans = d[i];
+                }
+            }
+        }
+        out.println(ans);
     }
 
     private static class FastScanner {
