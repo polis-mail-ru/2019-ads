@@ -1,23 +1,56 @@
 package ru.mail.polis.ads.part3.bardaev;
 
+import java.io.*;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Task4037 {
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        int n = scan.nextInt();
+    private static class FastScanner {
+        private final BufferedReader reader;
+        private StringTokenizer tokenizer;
+
+        FastScanner(final InputStream in) {
+            reader = new BufferedReader(new InputStreamReader(in));
+        }
+
+        String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return tokenizer.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+    }
+
+    public static void main(final String[] arg) {
+        final FastScanner in = new FastScanner(System.in);
+        try (PrintWriter out = new PrintWriter(System.out)) {
+            solve(in, out);
+        }
+    }
+    public static void solve(FastScanner in, PrintWriter out) {
+//        Scanner scan = new Scanner(System.in);
+//        int n = scan.nextInt();
+        int n = in.nextInt();
         Bot[] bot = new Bot[n];
 
         for (int i = 0; i < n; i++) {
-            bot[i] = new Bot(scan.nextInt(), scan.nextInt());
+            bot[i] = new Bot(in.nextInt(), in.nextInt());
         }
 
         sortArray(0, bot.length, bot);
 
         for (int i = 0; i < bot.length; i++) {
-            System.out.println(bot[i].getNums());
+            out.println(bot[i].getNums());
         }
+        out.flush();
     }
 
     public static void sortArray(int start, int end, Bot[] arr) {
