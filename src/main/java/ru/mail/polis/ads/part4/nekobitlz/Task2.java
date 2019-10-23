@@ -1,6 +1,7 @@
 package ru.mail.polis.ads.part4.nekobitlz;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -8,7 +9,7 @@ public class Task2 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         final int n = in.nextInt();
-        PriorityQueue<Integer> digits = new PriorityQueue<>(n, (a, b) -> b - a);
+        PriorityQueue<Integer> digits = new PriorityQueue<>(Collections.reverseOrder());
         int i = 0;
 
         while (i < n) {
