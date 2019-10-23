@@ -1,52 +1,35 @@
 package ru.mail.polis.ads.part3.bardaev;
 
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.util.Arrays;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.StringTokenizer;
 
-/**
- * Problem solution template.
- */
-public final class Task4827 {
-    private Task4827() {
-        // Should not be instantiated
-    }
+public class Task4827 {
+    private Task4827() {}
+    static BigInteger[] arr;
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
+    private static void solve() throws IOException {
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(System.out);
+        int k = Integer.parseInt(in.readLine());
+        String s = in.readLine();
+        String[] StrArr = s.split(" ");
+        arr = new BigInteger[StrArr.length];
+        for (int i = 0; i < arr.length; i++) arr[i] = new BigInteger(StrArr[i]);
+        Arrays.sort(arr);
+        out.println(arr[arr.length - k]);
+        out.flush();
     }
 
     public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
+        try {
+            solve();
+        } catch (IOException e) {
+
         }
     }
+
 }
