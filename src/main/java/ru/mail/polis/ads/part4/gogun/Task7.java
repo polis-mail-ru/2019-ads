@@ -30,26 +30,27 @@ public class Task7 {
         }
     }
 
-    private static int findStall(int k) {
-        int left = 0;
-        int right = array[array.length - 1] - array[0];
-        int mid;
-        while (left <= right) {
+    private static long findStall(int k) {
+        long left = 0;
+        long right = array[array.length - 1] - array[0];
+        long mid;
+        while (left != right) {
             mid = (left + right) / 2;
-            int g = 1;
-            int j = 1;
+            int g = 0;
+            int j = 0;
             for (int i = 1; i < array.length; ++i) {
-                if (array[i] - array[j] >= mid) {
+                if (array[i] - array[j] > mid) {
+                    ++g;
                     j = i;
-                    g++;
                 }
-                if (g >= k)
-                    left = mid + 1;
-                else
-                    right = mid;
+            }
+            if (g < k - 1) {
+                right = mid;
+            } else {
+                left = mid + 1;
             }
         }
-        return left - 1;
+        return right;
     }
 
     private static void solve(FastScanner input, PrintWriter output) {
@@ -60,7 +61,7 @@ public class Task7 {
 
         array = new int[n];
 
-        for (int i = 0; i < n; ++i) {
+        for (int i = 0; i < n; i++) {
             array[i] = input.nextInt();
         }
 
