@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  * 20.10.19
  * gr. Java-10, Технополис
  * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
- * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5907077
+ * e-olymp 100%: https://www.e-olymp.com/ru/submissions/5940796
  */
 public final class SeventhTask {
 
@@ -36,8 +36,6 @@ public final class SeventhTask {
             }
         }
 
-        qSortImplementation(0, n-1);
-
         while (l < r) {
             int m = (l + r + 1) >> 1;
             int counter = 1;
@@ -52,51 +50,14 @@ public final class SeventhTask {
 
             if (counter > k-1) {
                 l = m;
-                if (counter > k-1) {
-                    res = m;
-                }
+                res = m;
             }
             else {
-                r = m -1;
+                r = m - 1;
             }
         }
 
         out.println(res);
-    }
-
-    private static void swap(int w1, int w2) {
-        int temp = w1;
-        //noinspection UnusedAssignment
-        w1 = w2;
-        //noinspection UnusedAssignment
-        w2 = temp;
-    }
-
-    private static void qSortImplementation(int l, int r) {
-        int i = l;
-        int j = r;
-        int key = array[(i+j) >> 1];
-        while (i < j + 1) {
-            while (array[i] < key) {
-                i++;
-            }
-            while (array[j] > key) {
-                j--;
-            }
-
-            if (i < j + 1) {
-                swap(array[i], array[j]);
-                i++;
-                j--;
-            }
-        }
-
-        if (i < r) {
-            qSortImplementation(i ,r);
-        }
-        if (j > l) {
-            qSortImplementation(l, j);
-        }
     }
 
 
