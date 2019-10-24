@@ -3,7 +3,7 @@ package ru.mail.polis.ads.part4.shakirov_aa;
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Task5 {
+public class Task6 {
     public static void main(String[] args) {
         FastScanner in = new FastScanner(System.in);
         PrintWriter out = new PrintWriter(System.out);
