@@ -7,6 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
+/**
+ *  submission - https://www.e-olymp.com/ru/submissions/5899987
+ */
 public class Problem6 {
 
     private static int[] arr;

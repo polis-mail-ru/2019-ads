@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ *  submission - https://www.e-olymp.com/ru/submissions/5882111
+ */
 public class Problem1 {
 
     private static long[] arr;

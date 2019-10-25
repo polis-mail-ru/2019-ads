@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ *  submission - https://www.e-olymp.com/ru/submissions/5899627
+ */
 class Problem3 {
 
     private static class Heap {

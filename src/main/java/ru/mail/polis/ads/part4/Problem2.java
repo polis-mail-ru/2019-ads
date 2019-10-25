@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+/**
+ *  submission - https://www.e-olymp.com/ru/submissions/5883062
+ */
 public class Problem2 {
 
     private static class Heap {
