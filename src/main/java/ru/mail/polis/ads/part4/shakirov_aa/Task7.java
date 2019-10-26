@@ -12,14 +12,41 @@ public class Task7 {
         int n = in.nextInt();
         int k = in.nextInt();
         int[] array = new int[n];
+        int r = Integer.MIN_VALUE;
         for (int i = 0; i < n; i++) {
             array[i] = in.nextInt();
+            if (array[i] > r) {
+                r = array[i];
+            }
         }
 
-        int low = array[0], high = array[n - 1];
-        while (low != high) {
+        int l = 0, ans = 0;
 
+        while (l < r) {
+            int m = (l + r + 1) >> 1;
+
+            int count = 1;
+            int curr = array[0];
+            for (int i = 1; i < n; i++) {
+                if (array[i] - curr < m) {
+                    continue;
+                } else {
+                    curr = array[i];
+                    count++;
+                }
+            }
+
+            if (count >= k) {
+                l = m;
+                if (count >= k) {
+                    ans = m;
+                }
+            } else {
+                r = m - 1;
+            }
         }
+
+        System.out.println(ans);
     }
 
     private static class FastScanner {
