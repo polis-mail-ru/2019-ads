@@ -13,13 +13,12 @@ public class ThirdExercise {
         public int compare(Integer firstNumber, Integer secondNumber) {
             return firstNumber > secondNumber ? -1 : firstNumber < secondNumber ? 1 : 0;
         }
-
     }
 
     public static void main(String[] args) throws IOException {
         final int maxSize = 500001;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out = new PrintWriter(System.out);
+        PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
         Heap leftHeap = new Heap(maxSize);
         Heap rightHeap = new Heap(maxSize, new MyComparator());
 
@@ -79,7 +78,6 @@ public class ThirdExercise {
     private static class Heap {
         private int[] Heap;
         private int size;
-        private int capacity;
         private Comparator<Integer> c = new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
@@ -88,7 +86,6 @@ public class ThirdExercise {
         };
 
         Heap(int capacity) {
-            this.capacity = capacity;
             this.size = 0;
             Heap = new int[capacity + 1];
             Arrays.fill(Heap, Integer.MAX_VALUE);
@@ -97,7 +94,6 @@ public class ThirdExercise {
 
         Heap(int capacity, Comparator<Integer> c) {
             this.c = c;
-            this.capacity = capacity;
             this.size = 0;
             Heap = new int[capacity + 1];
         }
@@ -153,11 +149,12 @@ public class ThirdExercise {
             Heap[++size] = element;
 
             int current = size;
-            while (c.compare(Heap[current], Heap[parent(current)]) == 1) {
+            while (current != 0 && c.compare(Heap[current], Heap[parent(current)]) == 1) {
                 swap(current, parent(current));
                 current = parent(current);
             }
         }
+
         int peek() {
             return Heap[1];
         }
