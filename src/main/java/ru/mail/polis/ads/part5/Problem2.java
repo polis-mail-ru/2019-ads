@@ -2,6 +2,9 @@ package ru.mail.polis.ads.part5;
 
 import java.util.Scanner;
 
+/**
+ * submission - https://www.e-olymp.com/ru/submissions/5924529
+ */
 public class Problem2 {
 
     private static void solve() {

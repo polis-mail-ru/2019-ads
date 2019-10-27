@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * submission - https://www.e-olymp.com/ru/submissions/5946684
+ */
 public class Problem4 {
 
     private static void solve() throws IOException {

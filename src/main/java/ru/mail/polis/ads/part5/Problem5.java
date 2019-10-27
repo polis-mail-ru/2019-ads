@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
+/**
+ * submission - https://www.e-olymp.com/ru/submissions/5960358
+ */
 public class Problem5 {
 
     private static BufferedWriter writer;
