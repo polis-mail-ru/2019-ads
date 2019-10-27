@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5907291
+// Submission here https://www.e-olymp.com/ru/submissions/5964946
 
 public class ThirdExercise {
 
