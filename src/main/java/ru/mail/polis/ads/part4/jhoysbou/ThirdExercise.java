@@ -17,11 +17,11 @@ public class ThirdExercise {
     }
 
     public static void main(String[] args) throws IOException {
-        final int maxSize = 1000000000;
+        final int maxSize = 500001;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(System.out);
-        Heap leftHeap = new Heap(maxSize/2 + 2);
-        Heap rightHeap = new Heap(maxSize/2 + 2, new MyComparator());
+        Heap leftHeap = new Heap(maxSize);
+        Heap rightHeap = new Heap(maxSize, new MyComparator());
 
         Integer nextNumber = null;
         try {
