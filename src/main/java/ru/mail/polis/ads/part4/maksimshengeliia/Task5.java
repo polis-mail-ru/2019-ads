@@ -7,17 +7,34 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-/**
- * Problem solution template.
- */
-public final class Task5 {
+/*
+*   https://www.e-olymp.com/ru/submissions/5970193
+* */
+public class Task5 {
     private Task5() {
         // Should not be instantiated
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int length = in.nextInt();
+        int mass = in.nextInt();
+        int[] array = new int[length];
+        for (int i = 0; i < length; i++) {
+            array[i] = in.nextInt();
+        }
+
+        int max = 0;
+
+        for (int i = 0; i < length; i++) {
+            if (array[i] < max && array[i] + max > mass) {
+                out.println("No");
+                return;
+            } else if (array[i] > max) max = array[i];
+        }
+        out.println("Yes");
     }
+
+
 
     private static class FastScanner {
         private final BufferedReader reader;

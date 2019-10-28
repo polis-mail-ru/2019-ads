@@ -7,16 +7,51 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
 
-/**
- * Problem solution template.
- */
-public final class Task6 {
+/*
+*   https://www.e-olymp.com/ru/submissions/5969737
+* */
+public class Task6 {
     private Task6() {
         // Should not be instantiated
     }
 
+    static int[] array;
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int length = in.nextInt();
+        int queries = in.nextInt();
+
+        array = new int[length];
+
+        for (int i = 0; i < length; i++) {
+            array[i] = in.nextInt();
+        }
+
+        for (int i = 0; i < queries; i++) {
+            int q = in.nextInt();
+            out.println(binarySearch(q) ? "YES" : "NO");
+        }
+    }
+
+
+
+    private static boolean binarySearch(int item) {
+        int low = 0;
+        int high = array.length - 1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            int guess = array[mid];
+            if (guess == item) {
+                return true;
+            }
+            if (guess > item) {
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return false;
     }
 
     private static class FastScanner {

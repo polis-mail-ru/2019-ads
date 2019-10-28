@@ -3,9 +3,9 @@ package ru.mail.polis.ads.part4.maksimshengeliia;
 import java.io.*;
 import java.util.StringTokenizer;
 
-/**
- * Problem solution template.
- */
+/*
+* https://www.e-olymp.com/ru/submissions/5967344
+* */
 public class Task2 {
     private Task2() {
         // Should not be instantiated
@@ -56,6 +56,7 @@ public class Task2 {
             while (array[index] > array[parentIndex]) {
                 swap(index, parentIndex);
                 index = parentIndex;
+                parentIndex = (index - 1) / 2;
             }
         }
 
