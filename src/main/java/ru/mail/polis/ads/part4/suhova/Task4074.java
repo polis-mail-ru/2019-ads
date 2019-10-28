@@ -1,14 +1,10 @@
 package ru.mail.polis.ads.part4.suhova;
 
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class Task4074 {
     /*
-    Task 3: Пока на 70%, но до дедлайна постараюсь найти, в чём бага
+    Task 3: https://www.e-olymp.com/ru/submissions/5968561
      */
 
     private static long[] maxHeap;
@@ -17,22 +13,21 @@ public class Task4074 {
     private static int sizeMin;
 
     private static void solve() throws IOException {
-        maxHeap = new long[500000];
-        minHeap = new long[500000];
+        maxHeap = new long[500001];
+        minHeap = new long[500001];
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        PrintWriter out = new PrintWriter(System.out);
-        long mid = Long.parseLong(in.readLine());
-        out.println(mid);
-        boolean f = true;
+        PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
+        long mid = 0;
+        boolean f = false;
         String s;
         while ((s = in.readLine()) != null) {
             long x = Long.parseLong(s);
             if (!f) {
                 f = true;
-                if (x < maxHeap[0]) {
+                if (x < maxHeap[1]) {
                     insertInMax(x);
                     mid = extractFromMax();
-                } else if (x > minHeap[0]) {
+                } else if (x > minHeap[1]) {
                     insertInMin(x);
                     mid = extractFromMin();
                 } else mid = x;
@@ -45,7 +40,7 @@ public class Task4074 {
                     insertInMin(x);
                     insertInMax(mid);
                 }
-                mid = (maxHeap[0] + minHeap[0]) / 2;
+                mid = (maxHeap[1] + minHeap[1]) / 2;
             }
             out.println(mid);
         }
@@ -54,10 +49,10 @@ public class Task4074 {
     }
 
     private static void insertInMax(long x) {
-        maxHeap[sizeMax++] = x;
-        int k = sizeMax - 1;
-        while (k > 0 && maxHeap[k] > maxHeap[(k - 1) / 2]) {
-            int par = (k - 1) / 2;
+        maxHeap[++sizeMax] = x;
+        int k = sizeMax;
+        while (k > 1 && maxHeap[k] > maxHeap[k / 2]) {
+            int par = k / 2;
             long temp = maxHeap[k];
             maxHeap[k] = maxHeap[par];
             maxHeap[par] = temp;
@@ -66,11 +61,11 @@ public class Task4074 {
     }
 
     private static long extractFromMax() {
-        long res = maxHeap[0];
-        maxHeap[0] = maxHeap[--sizeMax];
-        int k = 0;
-        while (2 * k + 1 < sizeMax) {
-            int child = 2 * k + 1;
+        long res = maxHeap[1];
+        maxHeap[1] = maxHeap[sizeMax--];
+        int k = 1;
+        while (2 * k <= sizeMax) {
+            int child = 2 * k;
             if (child < sizeMax && maxHeap[child] < maxHeap[child + 1]) child++;
             if (maxHeap[k] >= maxHeap[child]) break;
             long temp = maxHeap[k];
@@ -82,10 +77,10 @@ public class Task4074 {
     }
 
     private static void insertInMin(long x) {
-        minHeap[sizeMin++] = x;
-        int k = sizeMin - 1;
-        while (k > 0 && minHeap[k] < minHeap[(k - 1) / 2]) {
-            int par = (k - 1) / 2;
+        minHeap[++sizeMin] = x;
+        int k = sizeMin;
+        while (k > 1 && minHeap[k] < minHeap[k / 2]) {
+            int par = k / 2;
             long temp = minHeap[k];
             minHeap[k] = minHeap[par];
             minHeap[par] = temp;
@@ -94,13 +89,13 @@ public class Task4074 {
     }
 
     private static long extractFromMin() {
-        long res = minHeap[0];
-        minHeap[0] = minHeap[--sizeMin];
-        int k = 0;
-        while (2 * k + 1 < sizeMin) {
-            int child = 2 * k + 1;
+        long res = minHeap[1];
+        minHeap[1] = minHeap[sizeMin--];
+        int k = 1;
+        while (2 * k <= sizeMin) {
+            int child = 2 * k;
             if (child < sizeMin && minHeap[child] > minHeap[child + 1]) child++;
-            if (minHeap[k] >= minHeap[child]) break;
+            if (minHeap[k] <= minHeap[child]) break;
             long temp = minHeap[k];
             minHeap[k] = minHeap[child];
             minHeap[child] = temp;
