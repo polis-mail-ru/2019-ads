@@ -1,34 +1,33 @@
 package ru.mail.polis.ads.part4.art241111;
 
-
 import java.io.*;
 import java.util.StringTokenizer;
 
+import static java.lang.Math.max;
+
 /**
- Link is https://www.e-olymp.com/ru/submissions/5874070
+ * Link is https://www.e-olymp.com/ru/submissions/5965871
  */
-public class HeapIsIt {
 
-        private static void solve(FastScanner in, final PrintWriter out) {
-            long sizeArray = in.nextLong();
-            long[] heap = new long[(int) (sizeArray + 1)];
+public class StationSorting {
 
-            for (int i = 1; i <= sizeArray; i++) {
-                heap[i] = in.nextLong();
+    private static void solve(final FastScanner in, final PrintWriter out) {
+            int n = in.nextInt();
+            int m = in.nextInt();
+
+            int max = Integer.MIN_VALUE;
+            int i = n;
+
+            while (i-- != 0) {
+                int weight = in.nextInt();
+
+                if ((weight < max) && (weight + max > m)) {
+                    System.out.println("No");
+                    System.exit(0);
+                }
+                max = max(weight, max);
             }
-
-            boolean isHeap = true;
-
-            for (int i = 1; i <= sizeArray-1; i++) {
-               if (((2*i) <= sizeArray) && ((2*i + 1) <= sizeArray)){
-                   if ((heap[i] > heap[2*i]) || (heap[i] > heap[2*i + 1])){
-                       isHeap = false;
-                   }
-               }
-            }
-
-            if (isHeap) out.print("YES");
-            else out.print("NO");
+            System.out.println("Yes");
         }
 
         private static class FastScanner {
@@ -50,8 +49,8 @@ public class HeapIsIt {
                 return tokenizer.nextToken();
             }
 
-            long nextLong() {
-                return Long.parseLong(next().trim());
+            int nextInt() {
+                return Integer.parseInt(next());
             }
         }
 
