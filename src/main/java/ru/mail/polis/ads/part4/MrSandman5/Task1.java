@@ -1,37 +1,25 @@
-package part3;
+package part4;
 
-// https://www.e-olymp.com/ru/submissions/5864265
+//https://www.e-olymp.com/ru/submissions/5955992
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Task2 {
+public class Task1 {
+
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
-        int[] array = new int[100];
-        for (int i = 0; i < n; i++) {
-            array[i] = in.nextInt();
+        long[] array = new long[100002];
+        for (int i = 1; i <= n; i++) {
+            array[i] = in.nextLong();
         }
-        for (int i = 0; i < n; i++){
-            for (int j = i; j < n; j++) {
-                if (array[i] % 10 > array[j] % 10){
-                    int tmp = array[i];
-                    array[i] = array[j];
-                    array[j] = tmp;
-                }
-                else if (array[i] % 10 == array[j] % 10){
-                    if (array[i] > array[j]){
-                        int tmp = array[i];
-                        array[i] = array[j];
-                        array[j] = tmp;
-                    }
-                }
-            }
+        int i;
+        for (i = 1; i <= n / 2; i++)
+        {
+            if (2 * i <= n && array[i] > array[2 * i]) break;
+            if (2 * i + 1 <= n && array[i] > array[2 * i + 1]) break;
         }
-        for (int i = 0; i < n; i++) {
-            out.print(array[i] + " ");
-        }
-        out.println();
+        out.println(i <= n / 2  ? "NO" : "YES");
     }
 
     private static class FastScanner {
@@ -57,7 +45,9 @@ public class Task2 {
             return Integer.parseInt(next());
         }
 
-        long nextLong(){ return Long.parseLong(next());}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
     }
 
     public static void main(final String[] arg) {

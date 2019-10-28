@@ -1,34 +1,35 @@
-package part3;
+package part4;
 
-// https://www.e-olymp.com/ru/submissions/5864384
+//https://www.e-olymp.com/ru/submissions/5964420
 
 import java.io.*;
 import java.util.StringTokenizer;
 
-public class Task3 {
+public class Task5 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
-        if (n == 1){
-            out.println(0);
-            return;
-        }
-        long[] array = new long[1000];
+        long m = in.nextLong();
+        long[] array = new long[100001];
         for (int i = 0; i < n; i++) {
             array[i] = in.nextLong();
         }
-        int counter = 0;
-        for(int i = 0 ; i < n ; i++){
-            for(int j = 0 ; j < n - 1 ; j++){
-                if(array[j] > array[j+1]){
-                    long temp = array[j];
-                    array[j] = array[j+1];
-                    array[j+1]=temp;
-                    counter++;
+        for (int i = 1; i < n; i++)
+        {
+            int j = i;
+            long k = array[i];
+            while (j > 0 && array[j - 1] > array[j])
+            {
+                if (m < array[j - 1] + k)
+                {
+                    out.println("No");
+                    return;
                 }
+                array[j] = array[--j];
             }
+            array[j] = k;
         }
-        out.println(counter);
+        out.println("Yes");
     }
 
     private static class FastScanner {
@@ -54,7 +55,9 @@ public class Task3 {
             return Integer.parseInt(next());
         }
 
-        long nextLong(){ return Long.parseLong(next());}
+        long nextLong() {
+            return Long.parseLong(next());
+        }
     }
 
     public static void main(final String[] arg) {
@@ -64,3 +67,4 @@ public class Task3 {
         }
     }
 }
+
