@@ -14,27 +14,32 @@ public final class Task6 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
+        int q = in.nextInt();
         long[] array = new long[n + 1];
-        for (int i = 1; i <= n; ++i) {
+
+        for (int i = 0; i < n; ++i) {
             array[i] = in.nextLong();
         }
 
-        boolean isHeap = true;
+        for (int i = 0; i < q; ++i) {
+            out.println(contains(array, 0, array.length - 1, in.nextLong()) ? "YES" : "NO");
+        } 
+    }
 
-        for (int i = 1; i <= n; i++) {
-            if (i * 2 <= n) {
-                if (array[i] > array[i * 2]) {
-                    isHeap = false;
-                }
-            }
-            if (i * 2 + 1 <= n) {
-                if (array[i] > array[i * 2 + 1]) {
-                    isHeap = false;
-                }
-            }
+    private static boolean contains(long[] array, int begin, int end, long x) {
+        if (begin >= end) {
+            return x == array[begin];
         }
 
-        out.println(isHeap ? "YES" : "NO");
+        int mid = begin + (end - begin) / 2;
+
+        if (x == array[mid]) {
+            return true;
+        } else if (x < array[mid]) {
+            return contains(array, begin, mid - 1, x);
+        } else {
+            return contains(array, mid + 1, end, x);
+        }
     }
 
     private static class FastScanner {
