@@ -3,10 +3,44 @@ package ru.mail.polis.ads.part.fourth;
 import java.io.*;
 import java.util.StringTokenizer;
 
+/**
+ * @author v.ivlev
+ * https://www.e-olymp.com/ru/submissions/5971268
+ */
 public class TaskSix {
 
     private static void solve(FastScanner in, PrintWriter out) {
+        int[] array = new int[in.nextInt()];
+        int n = in.nextInt();
+        for (int i = 0; i < array.length; i++) {
+            array[i] = in.nextInt();
+        }
+        for (int i = 0; i < n; i++) {
+            int x = in.nextInt();
+            if (binarySearch(array, array.length, x)) {
+                out.println("YES");
+            } else {
+                out.println("NO");
+            }
+        }
+    }
 
+    private static boolean binarySearch(int[] array, int i, int key) {
+        int low = 0;
+        int high = i - 1;
+        while (low <= high) {
+            int mid = low + high >>> 1;
+            int midValue = array[mid];
+            if (midValue < key) {
+                low = mid + 1;
+            } else {
+                if (midValue <= key) {
+                    return true;
+                }
+                high = mid - 1;
+            }
+        }
+        return false;
     }
 
     public static void main(final String[] arg) {
