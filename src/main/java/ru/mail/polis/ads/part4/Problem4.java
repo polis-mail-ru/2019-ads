@@ -20,37 +20,40 @@ public class Problem4 {
                 arr[i] = Integer.parseInt(tokens[i]);
             }
 
-            mergeSort(0, n);
+            System.out.println(countInversions(0, n - 1));
         }
     }
 
-    private static void mergeSort(int left, int right) {
-        if (left - right == 1) {
-            return;
+    private static int countInversions(int left, int right) {
+        if (left >= right) {
+            return 0;
         }
+        int invCount = 0;
         int mid = (left + right) / 2;
-        mergeSort(left, mid);
-        mergeSort(mid, right);
+        invCount += countInversions(left, mid);
+        invCount += countInversions(mid + 1, right);
 
-        int[] temp = new int[right - left];
+        int[] temp = new int[right - left + 1];
         int left1 = left;
-        int right1 = mid;
+        int right1 = mid + 1;
         int i = 0;
-        while (left1 < mid && right1 < right) {
+        while (left1 <= mid && right1 <= right) {
             if (arr[left1] < arr[right1]) {
                 temp[i++] = arr[left1++];
             } else {
                 temp[i++] = arr[right1++];
+                invCount += mid - left1 + 1;
             }
         }
-        while (left1 < mid) {
+        while (left1 <= mid) {
             temp[i++] = arr[left1++];
         }
-        while (right1 < right) {
+        while (right1 <= right) {
             temp[i++] = arr[right1++];
         }
 
         System.arraycopy(temp, 0, arr, left, temp.length);
+        return invCount;
     }
 
     public static void main(String[] args) {
