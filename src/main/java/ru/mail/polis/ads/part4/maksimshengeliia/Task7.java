@@ -1,52 +1,51 @@
 package ru.mail.polis.ads.part4.maksimshengeliia;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
-/**
- * Problem solution template.
- */
-public final class Task7 {
-    private Task7() {
-        // Should not be instantiated
-    }
+/*
+*   https://www.e-olymp.com/ru/submissions/5972582
+* */
+public class Task7 {
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
+    private static long[] array;
+    private static int k;
+    private static int n;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        k = sc.nextInt();
+        array = new long[n];
+        long max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            array[i] = sc.nextLong();
+            if (array[i] > max) max = array[i];
+            if (array[i] < min) min = array[i];
         }
+        System.out.println(maxDistance(max, min));
+    }
 
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private static long maxDistance(long max, long min) {
+        long left = 0;
+        long right = max - min + 1;
+        long middle;
+        while (right - left != 1) {
+            middle = (left + right) / 2;
+            if (isCorrect(middle)) left = middle;
+            else right = middle;
+        }
+        return left;
+    }
+
+    private static boolean isCorrect(long x) {
+        int cows = 1;
+        long lastCow = array[0];
+        for (int i = 0; i < n; i++) {
+            long c = array[i];
+            if (c - lastCow >= x) {
+                cows += 1;
+                lastCow = c;
             }
-            return tokenizer.nextToken();
         }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-    }
-
-    public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+        return cows >= k;
     }
 }
