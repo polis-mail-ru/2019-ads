@@ -2,7 +2,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class Main {
+public class problem4261 {
     private static class FastScanner {
         private final BufferedReader reader;
         private StringTokenizer tokenizer;
