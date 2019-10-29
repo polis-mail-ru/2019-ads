@@ -1,6 +1,6 @@
 package part4;
 
-//https://www.e-olymp.com/ru/submissions/5966394
+//https://www.e-olymp.com/ru/submissions/5978256
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -14,31 +14,27 @@ public class Task6{
             out.println("NO");
             return;
         }
-        long[] array = new long[100001];
+        long[] array = new long[1000001];
         for (int i = 0; i < n; i++) {
             array[i] = in.nextLong();
         }
-        while (q > 0){
+        for (int i = 0; i < q; i++) {
             long seek = in.nextLong();
             if (n == 1){
-                if (seek == array[0]) out.println("NO");
-                else out.println("YES");
+                if (seek == array[0]) out.println("YES");
+                else out.println("NO");
             }
             else out.println(findNum(array, n, seek) ? "YES" : "NO");
-            q--;
         }
     }
 
     private static boolean findNum(long[] array, int n, long num){
-        int left = 0, right = n - 1, prevLeft, prevRight;
+        int left = 0, right = n - 1;
         while (left <= right){
             int mid = (left + right) / 2;
-            prevLeft = left;
-            prevRight = right;
             if (array[mid] > num) right = mid - 1;
             else if (array[mid] < num) left = mid + 1;
-            else if (array[mid] == num) return true;
-            if (prevLeft == left && prevRight == right) break;
+            else return true;
         }
         return false;
     }

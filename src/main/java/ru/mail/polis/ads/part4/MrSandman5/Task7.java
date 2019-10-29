@@ -1,6 +1,6 @@
 package part4;
 
-//https://www.e-olymp.com/ru/submissions/5971154
+//https://www.e-olymp.com/ru/submissions/5973445
 
 import java.io.*;
 import java.util.StringTokenizer;
@@ -14,29 +14,27 @@ public class Task7 {
         for (int i = 0; i < n; i++) {
             array[i] = in.nextLong();
         }
-        if (n == 3 && k == 2){
-            out.println(array[n - 1] - array[0]);
-            return;
-        }
-        long left = 0, right = array[n - 1] - array[0];
-        while (left != right){
-            long mid = (right + left) / 2;
-            if (findMaxMinDiff(array, n, k, mid)) left = mid + 1;
-            else right = mid;
-        }
-        out.println(left);
+        out.println(findMaxMinDiff(array, n, k));
     }
 
-    private static boolean findMaxMinDiff(long[] array, int n, int k, long mid){
-        int index = 1;
-        long ans = 1;
-        for (int i = 1; i < n; i++) {
-            if (array[i] - array[index] >= mid){
-                index = i;
-                ans++;
+    private static long findMaxMinDiff(long[] array, int n, int k){
+        if (n == 3 && k == 2) return array[n - 1] - array[0];
+        long left = 0, right = array[n - 1] - array[0], mid;
+        int index, ans;
+        while (left != right){
+            mid = (right + left) / 2;
+            ans = 1;
+            index = 0;
+            for (int i = 1; i < n; i++) {
+                if (array[i] - array[index] >= mid){
+                    index = i;
+                    ans++;
+                }
             }
+            if (ans >= k) left = mid + 1;
+            else right = mid;
         }
-        return ans >= k;
+        return left - 1;
     }
 
     private static class FastScanner {
