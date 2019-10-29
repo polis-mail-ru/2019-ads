@@ -1,10 +1,8 @@
 package ru.mail.polis.ads.part4.jhoysbou;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Comparator;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5979221
+// Submission here https://www.e-olymp.com/ru/submissions/5980571
 
 public class ThirdExercise {
 
@@ -16,36 +14,35 @@ public class ThirdExercise {
         maxHeap leftHeap = new maxHeap(maxSize);
         minHeap rightHeap = new minHeap(maxSize);
 
-        Integer nextNumber = null;
+        Integer nextNumber;
         try {
             nextNumber = Integer.parseInt(reader.readLine());
         } catch (Exception e) {
-            // its okay
+            return;
         }
-        int median = Integer.MAX_VALUE;
-        boolean isEmpty = true;
+        int median = 0;
+        int counter = 1;
 
-        while (true) {
+        while (nextNumber != null) {
 
-            if (isEmpty) {
+            if (counter == 1) {
                 median = nextNumber;
-                out.println(median);
             }
-
-            if (median != Integer.MAX_VALUE && !isEmpty) {
+            else if (counter % 2 == 0)  {
                 if (nextNumber >= median) {
                     rightHeap.insert(nextNumber);
                     leftHeap.insert(median);
                 }
+
                 else if (nextNumber < median) {
                     leftHeap.insert(nextNumber);
                     rightHeap.insert(median);
                 }
-                out.println((leftHeap.peek() + rightHeap.peek()) / 2);
-                median = Integer.MAX_VALUE;
+
+                median = (leftHeap.peek() + rightHeap.peek()) / 2;
+
             }
-            else if (!isEmpty) {
-                median = (rightHeap.peek() + leftHeap.peek()) / 2;
+            else {
                 if (nextNumber >= median) {
                     rightHeap.insert(nextNumber);
                     median = rightHeap.poll();
@@ -54,16 +51,16 @@ public class ThirdExercise {
                     leftHeap.insert(nextNumber);
                     median = leftHeap.poll();
                 }
-                out.println(median);
-            }
 
+            }
+            out.println(median);
             try {
                 nextNumber = Integer.parseInt(reader.readLine());
+                counter++;
             } catch (Exception e) {
                 break;
             }
 
-            isEmpty = false;
         }
         out.close();
         reader.close();
@@ -90,7 +87,7 @@ public class ThirdExercise {
 
         private boolean isLeaf(int pos)
         {
-            if (pos > (size / 2) && pos <= size) {
+            if (pos * 2 > size) {
                 return true;
             }
             return false;
@@ -157,7 +154,6 @@ public class ThirdExercise {
         minHeap(int capacity) {
             this.size = 0;
             Heap = new int[capacity + 1];
-
         }
 
 
