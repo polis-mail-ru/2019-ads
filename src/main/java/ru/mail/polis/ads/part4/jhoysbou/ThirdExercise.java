@@ -19,6 +19,7 @@ public class ThirdExercise {
         final int maxSize = 500001;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out));
+
         Heap leftHeap = new Heap(maxSize);
         Heap rightHeap = new Heap(maxSize, new MyComparator());
 
@@ -31,7 +32,7 @@ public class ThirdExercise {
         int median = Integer.MAX_VALUE;
         boolean isEmpty = true;
 
-        while (nextNumber != null) {
+        while (true) {
 
             if (isEmpty) {
                 median = nextNumber;
@@ -66,11 +67,11 @@ public class ThirdExercise {
             try {
                 nextNumber = Integer.parseInt(reader.readLine());
             } catch (Exception e) {
-                nextNumber = null;
+                break;
             }
+
             isEmpty = false;
         }
-        out.flush();
         out.close();
         reader.close();
     }
@@ -78,12 +79,7 @@ public class ThirdExercise {
     private static class Heap {
         private int[] Heap;
         private int size;
-        private Comparator<Integer> c = new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o1 > o2 ? 1 : o1 < o2 ? -1 : 0;
-            }
-        };
+        private Comparator<Integer> c = (o1, o2) -> o1 > o2 ? 1 : o1 < o2 ? -1 : 0;
 
         Heap(int capacity) {
             this.size = 0;
