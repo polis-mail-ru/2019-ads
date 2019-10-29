@@ -1,25 +1,26 @@
 package ru.mail.polis.ads.part4.nekobitlz;
 
 import java.io.*;
-import java.util.*;
 
 public class Task3 {
 
-    private static Queue<Integer> maxHeap;
-    private static Queue<Integer> minHeap;
+    private static Heap maxHeap;
+    private static Heap minHeap;
 
-    private static void solve(final BufferedReader in, final PrintWriter out) throws IOException {
-        minHeap = new PriorityQueue<>();
-        maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+    private static void solve(final BufferedReader in, final PrintWriter out) {
+        minHeap = Heap.createMinHeap();
+        maxHeap = Heap.createMaxHeap();
 
-        String line = in.readLine();
+        int n;
 
-        while (line != null) {
-            int n = Integer.parseInt(line);
+        while (true) {
+            try {
+                n = Integer.parseInt(in.readLine());
+            } catch (Exception e) {
+                break;
+            }
             addNum(n);
-
             out.println(findMedian());
-            line = in.readLine();
         }
 
         out.close();
@@ -45,11 +46,131 @@ public class Task3 {
         }
     }
 
+    private static class Heap {
+
+        private int[] heap;
+        private int size;
+        private boolean isMinHeap;
+
+        static Heap createMinHeap() {
+            Heap heap = new Heap(1000001);
+            heap.isMinHeap = true;
+
+            return heap;
+        }
+
+        static Heap createMaxHeap() {
+            Heap heap = new Heap(1500001);
+            heap.isMinHeap = false;
+
+            return heap;
+        }
+
+        private Heap(int max) {
+            heap = new int[max];
+            size = 0;
+        }
+
+        void add(int x) {
+            size++;
+            heap[size - 1] = x;
+            swim(size - 1);
+        }
+
+        int remove() {
+            int max = heap[0];
+
+            heap[0] = heap[size - 1];
+            size--;
+            sink();
+
+            return max;
+        }
+
+        int peek() {
+            return heap[0];
+        }
+
+        int size() {
+            return size;
+        }
+
+        boolean isEmpty() {
+            return size == 0;
+        }
+
+        private void swim(int i) {
+            if (isMinHeap) swimMin(i); else swimMax(i);
+        }
+
+        private void swimMin(int i) {
+            while (heap[i] < heap[(i - 1) / 2]) {
+                swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
+            }
+        }
+
+        private void swimMax(int i) {
+            while (heap[i] > heap[(i - 1) / 2]) {
+                swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
+            }
+        }
+
+        private void sink() {
+            if (isMinHeap) sinkMin(); else sinkMax();
+        }
+
+        private void sinkMin() {
+            int i = 0;
+            int j;
+            int left;
+            int right;
+
+            while (2 * i + 1 < size) {
+                left = 2 * i + 1;
+                right = 2 * i + 2;
+                j = left;
+
+                if (right <= size && heap[right] < heap[left]) j = right;
+                if (heap[i] <= heap[j]) break;
+
+                swap(i, j);
+                i = j;
+            }
+        }
+
+        private void sinkMax() {
+            int i = 0;
+            int j;
+            int left;
+            int right;
+
+            while (2 * i + 1 < size) {
+                left = 2 * i + 1;
+                right = 2 * i + 2;
+                j = left;
+
+                if (right <= size && heap[right] > heap[left]) j = right;
+                if (heap[i] >= heap[j]) break;
+
+                swap(i, j);
+                i = j;
+            }
+        }
+
+        private void swap(int first, int second) {
+            int t = heap[first];
+            heap[first] = heap[second];
+            heap[second] = t;
+        }
+    }
+
     public static void main(final String[] arg) {
 
         try {
-            final BufferedReader in = new BufferedReader(new FileReader("input.txt"));
-            PrintWriter out = new PrintWriter(new BufferedOutputStream(new FileOutputStream("output.txt")));
+            final BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            final PrintWriter out = new PrintWriter(System.out);
             solve(in, out);
         } catch (Exception e) {
             e.printStackTrace();
