@@ -1,4 +1,4 @@
-package ru.mail.polis.ads;
+package ru.mail.polis.ads.part4.KoDim97;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,13 +10,27 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class SolveTemplate {
-    private SolveTemplate() {
+public final class Task4261 {
+    private Task4261() {
         // Should not be instantiated
     }
+    static int CountSplitInv(int[] arr, int i, int j, int mid){
 
+    }
+    static int CountInverse(int[] arr, int i, int j){
+        if (j - i <= 1){
+            return 0;
+        }
+        int mid = (i + j) /2;
+        return CountInverse(arr, i, mid) + CountInverse(arr, mid + 1, j) + CountSplitInv(arr, i, j, mid);
+    }
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int n = in.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = in.nextInt();
+        }
+
     }
 
     private static class FastScanner {

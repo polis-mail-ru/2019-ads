@@ -1,4 +1,4 @@
-package ru.mail.polis.ads;
+package ru.mail.polis.ads.part4.KoDim97;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,13 +10,29 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class SolveTemplate {
-    private SolveTemplate() {
+
+public final class Task1457 {
+    private Task1457() {
         // Should not be instantiated
     }
-
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+        int n = in.nextInt();
+        int M = in.nextInt();
+        int MAX = in.nextInt();
+        int cur;
+        for (int i = 0; i < n - 1; i++) {
+            cur = in.nextInt();
+            if(cur < MAX){
+                if ((cur + MAX) > M){
+                    out.print("No");
+                    return;
+                }
+            }
+            else {
+                MAX = cur;
+            }
+        }
+        out.print("Yes");
     }
 
     private static class FastScanner {
