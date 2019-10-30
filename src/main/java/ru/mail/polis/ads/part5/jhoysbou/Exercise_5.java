@@ -1,9 +1,10 @@
 package ru.mail.polis.ads.part5.jhoysbou;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.util.Scanner;
+
+// Submission here https://www.e-olymp.com/ru/submissions/5978085
 
 public class Exercise_5 {
 
