@@ -70,8 +70,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
-    public void remove(Key key) {
-        remove(root, key);
+    public Value remove(Key key) {
+        return remove(root, key).value;
     }
 
     private Node remove(Node x, Key key) {
