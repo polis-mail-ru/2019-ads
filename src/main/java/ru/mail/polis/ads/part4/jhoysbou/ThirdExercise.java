@@ -2,7 +2,7 @@ package ru.mail.polis.ads.part4.jhoysbou;
 
 import java.io.*;
 
-// Submission here https://www.e-olymp.com/ru/submissions/5980571
+// Submission here https://www.e-olymp.com/ru/submissions/5983971
 
 public class ThirdExercise {
 
@@ -76,23 +76,6 @@ public class ThirdExercise {
 
         }
 
-
-        int leftChild(int parent) {
-            return 2*parent;
-        }
-
-        int rightChild(int parent) {
-            return 2*parent + 1;
-        }
-
-        private boolean isLeaf(int pos)
-        {
-            if (pos * 2 > size) {
-                return true;
-            }
-            return false;
-        }
-
         private void swap(int fpos, int spos)
         {
             int tmp;
@@ -102,35 +85,30 @@ public class ThirdExercise {
         }
 
         void heapify(int pos) {
-            if (isLeaf(pos))
+            if (pos * 2 > size)
                 return;
 
-            if (Heap[pos] < Heap[leftChild(pos)]  ||
-                    Heap[pos] < Heap[rightChild(pos)]) {
+            if (Heap[pos] < Heap[pos * 2]  ||
+                    Heap[pos] < Heap[pos * 2 + 1]) {
 
-                if (Heap[leftChild(pos)] > Heap[rightChild(pos)]) {
-                    swap(pos, leftChild(pos));
-                    heapify(leftChild(pos));
+                if (Heap[pos * 2] > Heap[pos * 2 + 1]) {
+                    swap(pos, pos * 2);
+                    heapify(pos * 2);
                 }
                 else {
-                    swap(pos, rightChild(pos));
-                    heapify(rightChild(pos));
+                    swap(pos, pos * 2 + 1);
+                    heapify(pos * 2 + 1);
                 }
             }
-        }
-
-        private int parent(int pos)
-        {
-            return pos / 2;
         }
 
         void insert(int element) {
             Heap[++size] = element;
 
             int current = size;
-            while (current > 1 && Heap[current] > Heap[parent(current)]) {
-                swap(current, parent(current));
-                current = parent(current);
+            while (current > 1 && Heap[current] > Heap[current / 2]) {
+                swap(current, current / 2);
+                current = current / 2;
             }
         }
 
@@ -156,23 +134,6 @@ public class ThirdExercise {
             Heap = new int[capacity + 1];
         }
 
-
-        int leftChild(int parent) {
-            return 2*parent;
-        }
-
-        int rightChild(int parent) {
-            return 2*parent + 1;
-        }
-
-        private boolean isLeaf(int pos)
-        {
-            if (pos > (size / 2) && pos <= size) {
-                return true;
-            }
-            return false;
-        }
-
         private void swap(int fpos, int spos)
         {
             int tmp;
@@ -182,35 +143,30 @@ public class ThirdExercise {
         }
 
         void heapify(int pos) {
-            if (isLeaf(pos))
+            if (pos * 2 > size)
                 return;
 
-            if (Heap[pos] > Heap[leftChild(pos)]  ||
-                    Heap[pos] > Heap[rightChild(pos)]) {
+            if (Heap[pos] > Heap[pos * 2]  ||
+                    Heap[pos] > Heap[pos * 2 + 1]) {
 
-                if (Heap[leftChild(pos)] < Heap[rightChild(pos)]) {
-                    swap(pos, leftChild(pos));
-                    heapify(leftChild(pos));
+                if (Heap[pos * 2] < Heap[pos * 2 + 1]) {
+                    swap(pos, pos * 2);
+                    heapify(pos * 2);
                 }
                 else {
-                    swap(pos, rightChild(pos));
-                    heapify(rightChild(pos));
+                    swap(pos, pos * 2 + 1);
+                    heapify(pos * 2 + 1);
                 }
             }
-        }
-
-        private int parent(int pos)
-        {
-            return pos / 2;
         }
 
         void insert(int element) {
             Heap[++size] = element;
 
             int current = size;
-            while (current > 1 && Heap[current] < Heap[parent(current)]) {
-                swap(current, parent(current));
-                current = parent(current);
+            while (current > 1 && Heap[current] < Heap[current / 2]) {
+                swap(current, current / 2);
+                current = current / 2;
             }
         }
 
