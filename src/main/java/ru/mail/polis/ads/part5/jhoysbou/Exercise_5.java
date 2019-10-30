@@ -66,7 +66,6 @@ public class Exercise_5 {
         for (int i = 0; i < array.length; i++) {
             out.print(array[i] + " ");
         }
-
         out.println();
     }
 
