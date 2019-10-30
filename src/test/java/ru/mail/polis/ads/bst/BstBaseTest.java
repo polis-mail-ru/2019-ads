@@ -57,5 +57,44 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
-    
+
+    @Test
+    void floor() {
+        Bst<String, String> bst = newBst();
+        bst.put("foo1", "bee");
+        bst.put("foo6", "bee");
+        bst.put("foo3", "bee");
+        bst.put("foo7", "bee");
+        bst.put("foo2", "bee");
+        bst.put("foo4", "bee");
+        bst.put("foo9", "bee");
+
+        assertEquals("foo4", bst.floor("foo5"));
+        assertEquals("foo7", bst.floor("foo7"));
+        assertEquals("foo9", bst.floor("foo999"));
+        assertEquals("foo2", bst.floor("foo2"));
+        assertEquals("foo1", bst.floor("foo1"));
+        assertEquals("foo7", bst.floor("foo8"));
+        assertEquals(null, bst.floor("foo"));
+    }
+
+    @Test
+    void ceil() {
+        Bst<String, String> bst = newBst();
+        bst.put("foo1", "bee");
+        bst.put("foo6", "bee");
+        bst.put("foo3", "bee");
+        bst.put("foo7", "bee");
+        bst.put("foo2", "bee");
+        bst.put("foo4", "bee");
+        bst.put("foo9", "bee");
+
+        assertEquals("foo6", bst.ceil("foo5"));
+        assertEquals("foo7", bst.ceil("foo7"));
+        assertEquals(null, bst.ceil("foo999"));
+        assertEquals("foo2", bst.ceil("foo2"));
+        assertEquals("foo1", bst.ceil("foo1"));
+        assertEquals("foo9", bst.ceil("foo8"));
+        assertEquals("foo1", bst.ceil("foo"));
+    }
 }
