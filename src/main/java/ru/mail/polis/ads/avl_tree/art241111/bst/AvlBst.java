@@ -15,11 +15,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Value value;
         Node left;
         Node right;
-        int height = 1;
+        int height;
 
-        Node(Key key, Value value) {
+        Node(Key key, Value value, int height) {
             this.key = key;
             this.value = value;
+            this.height = height;
         }
 
         @Override
@@ -90,20 +91,16 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Override
     public Value get(Key key) {
         // Tree emptiness check
-        if (rootNode == null) return null;
-
-        // Search value
-        Node node = get(rootNode,key);
-        return node == null ? null : node.value;
+        return get(rootNode, key);
     }
 
-    private Node get(Node node, Key key) {
-        while(node.key != null){
-            if(node.key == key) return node;
-            else if (key.compareTo(node.key) > 0) node = node.right;
-            else node = node.left;
-        }
-        return null;
+    private Value get(Node node, Key key) {
+        if (node == null) return null;
+
+        if (key.compareTo(node.key) < 0) return get(node.left, key);
+        if (key.compareTo(node.key) > 0) return get(node.right, key);
+
+        return node.value;
     }
     // End of block "get value"
 
@@ -112,16 +109,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     public void put(Key key, Value value) {
         // Finding the right place
         rootNode = put(rootNode,key, value);
-
     }
 
     private Node put(Node node, Key key, Value value) {
-        if(node == null){ return new Node(key, value);}
-        else if (node.key.compareTo(key) > 0) node.left = put(node.left,key,value);
-        else if (node.key.compareTo(key) < 0) node.right = put(node.right,key,value);
+        if (node == null) return new Node(key, value, 1);
+
+        if (key.compareTo(node.key) < 0) node.left = put(node.left, key, value);
+        else if (key.compareTo(node.key) > 0) node.right = put(node.right, key, value);
         else node.value = value;
 
-        // Balance node
         fixHeight(node);
         node = balance(node);
         return node;
@@ -130,44 +126,42 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     // End of block "put value"
     @Override
     public Value remove(Key key) {
-        // Tree emptiness check
-        if (rootNode == null) return null;
-        Value value = get(key);
-        rootNode = delete(rootNode, key);
-        fixHeight(rootNode);
-        return value;
-        //return delete == null ? null : delete.value;
+        return remove(rootNode, key).value;
     }
 
-    private Node delete(Node x, Key key) {
-        if (x == null) return null;
-        if (key.compareTo(x.key) < 0) x.left = delete(x.left, key);
-        else if (key.compareTo(x.key) > 0) x.right = delete(x.right, key);
-        else x = innerDelete(x);
+    private Node remove(Node node, Key key) {
+        if (node == null) return null;
 
-        return x;
+        if (key.compareTo(node.key) < 0) node.left = remove(node.left, key);
+        else if (key.compareTo(node.key) > 0) node.right = remove(node.right, key);
+        else node = innerDelete(node);
+
+        fixHeight(node);
+        balance(node);
+
+        return node;
     }
 
     private Node innerDelete(Node node) {
-        Node q = node.left;
-        Node r = node.right;
+        if (node.right == null) return node.left;
+        if (node.left == null) return node.right;
 
-        if( node.right == null ) return node.left;
+        Node t = node;
 
-        node = min(r);
-        node.right = deleteMin(r);
-        node.left = q;
+        node = min(t.right);
+        node.right = deleteMin(t.right);
+        node.left = t.left;
 
-        return balance(node);
+        return node;
 
     }
 
-    private Node deleteMin(Node x) {
-        if (x.left == null) {
-            return x.right;
+    private Node deleteMin(Node node) {
+        if (node.left == null) {
+            return node.right;
         }
-        x.left = deleteMin(x.left);
-        return balance(x);
+        node.left = deleteMin(node.left);
+        return node;
     }
 
 
@@ -180,10 +174,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
     @Override
     public Key min() {
-        // Tree emptiness check
-        if (rootNode == null) return null;
-
         // Search min key
+        if(rootNode == null) return null;
+
         return min(rootNode).key;
     }
 
