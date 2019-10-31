@@ -37,13 +37,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node rootNode;
 
     // Height block
-        private int height(Node x) {
-            return x == null ? 0 : x.height;
-        }
+    private int height(Node x) {
+        return x == null ? 0 : x.height;
+    }
 
-        private void fixHeight(Node x) {
-            x.height = 1 + Math.max(height(x.left), height(x.right));
-        }
+    private void fixHeight(Node x) {
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+    }
     // End height block
 
     // Balance block
@@ -59,31 +59,31 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return x;
     }
 
-        private int factor(Node x) {
-            return height(x.left) - height(x.right);
-        }
+    private int factor(Node x) {
+        return height(x.left) - height(x.right);
+    }
 
-        private Node rotateRight(Node x) {
-            Node left = x.left;
-            x.left = left.right;
-            left.right = x;
+    private Node rotateRight(Node x) {
+        Node left = x.left;
+        x.left = left.right;
+        left.right = x;
 
-            fixHeight(x);
-            fixHeight(left);
+        fixHeight(x);
+        fixHeight(left);
 
-            return left;
-        }
+        return left;
+    }
 
-        private Node rotateLeft(Node x) {
-            Node right = x.right;
-            x.right = right.left;
-            right.left = x;
+    private Node rotateLeft(Node x) {
+        Node right = x.right;
+        x.right = right.left;
+        right.left = x;
 
-            fixHeight(x);
-            fixHeight(right);
+        fixHeight(x);
+        fixHeight(right);
 
-            return right;
-        }
+        return right;
+    }
     // End balance block
 
     // Get value
@@ -97,14 +97,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return node == null ? null : node.value;
     }
 
-        private Node get(Node node, Key key) {
-            while(node.key != null){
-                if(node.key == key) return node;
-                else if (key.compareTo(node.key) > 0) node = node.right;
-                else node = node.left;
-            }
-            return null;
+    private Node get(Node node, Key key) {
+        while(node.key != null){
+            if(node.key == key) return node;
+            else if (key.compareTo(node.key) > 0) node = node.right;
+            else node = node.left;
         }
+        return null;
+    }
     // End of block "get value"
 
     // Put value
@@ -139,45 +139,45 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         //return delete == null ? null : delete.value;
     }
 
-        private Node delete(Node x, Key key) {
-            if (x == null) return null;
-            if (key.compareTo(x.key) < 0) x.left = delete(x.left, key);
-            else if (key.compareTo(x.key) > 0) x.right = delete(x.right, key);
-            else x = innerDelete(x);
+    private Node delete(Node x, Key key) {
+        if (x == null) return null;
+        if (key.compareTo(x.key) < 0) x.left = delete(x.left, key);
+        else if (key.compareTo(x.key) > 0) x.right = delete(x.right, key);
+        else x = innerDelete(x);
 
-            return x;
+        return x;
+    }
+
+    private Node innerDelete(Node node) {
+        Node q = node.left;
+        Node r = node.right;
+
+        if( node.right == null ) return node.left;
+
+        node = min(r);
+        node.right = deleteMin(r);
+        node.left = q;
+
+        return balance(node);
+
+    }
+
+    private Node deleteMin(Node x) {
+        if (x.left == null) {
+            return x.right;
         }
-
-        private Node innerDelete(Node node) {
-            Node q = node.left;
-            Node r = node.right;
-
-            if( node.right == null ) return node.left;
-
-            node = min(r);
-            node.right = deleteMin(r);
-            node.left = q;
-
-            return balance(node);
-
-        }
-
-        private Node deleteMin(Node x) {
-            if (x.left == null) {
-                return x.right;
-            }
-            x.left = deleteMin(x.left);
-            return balance(x);
-        }
+        x.left = deleteMin(x.left);
+        return balance(x);
+    }
 
 
     // Search min
-        private Node min(Node node) {
-            while(node.left != null){
-                node = node.left;
-            }
-            return node;
+    private Node min(Node node) {
+        while(node.left != null){
+            node = node.left;
         }
+        return node;
+    }
     @Override
     public Key min() {
         // Tree emptiness check
@@ -198,12 +198,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     // End search min
 
     // Search max
-        private Node max(Node node) {
-            while(node.right != null){
-                node = node.right;
-            }
-            return node;
+    private Node max(Node node) {
+        while(node.right != null){
+            node = node.right;
         }
+        return node;
+    }
 
     @Override
     public Key max() {
@@ -260,10 +260,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         while(node != null){
             if (key.compareTo(node.key) == 0) return node.key;
             else if (key.compareTo(node.key) > 0) {
-               node = node.right;
+                node = node.right;
             } else if (key.compareTo(node.key) < 0) {
                 if ((node.left == null) ||
-                    (node.left.key.compareTo(key) < 0)){
+                        (node.left.key.compareTo(key) < 0)){
                     min = node.key;
                 }
                 node = node.left;
@@ -285,8 +285,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        if (rootNode == null) return 0;
-        else return rootNode.height;
+        return height(rootNode);
     }
 
     @Override
