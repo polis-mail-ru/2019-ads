@@ -139,32 +139,32 @@ public class AvlBstTest {
 
         assertEquals(avlBst.remove("testStringKey4"), "testStringValue4");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey4"));
+        assertFalse(avlBst.containsKey("testStringKey4"));
 
         assertEquals(avlBst.remove("testStringKey1"), "testStringValue1");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey1"));
+        assertFalse(avlBst.containsKey("testStringKey1"));
 
         assertNull(avlBst.remove("testStringKey1"), "testStringValue1");
         assertEquals(avlBst.size(), size);
         assertFalse(avlBst.empty());
-        assertFalse(avlBst.contains("testStringKey1"));
+        assertFalse(avlBst.containsKey("testStringKey1"));
 
         assertEquals(avlBst.remove("testStringKey3"), "testStringValue3");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey3"));
+        assertFalse(avlBst.containsKey("testStringKey3"));
 
         assertEquals(avlBst.remove("testStringKey0"), "testStringValue0");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey0"));
+        assertFalse(avlBst.containsKey("testStringKey0"));
 
         assertEquals(avlBst.remove("testStringKey2"), "testStringValue2");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey2"));
+        assertFalse(avlBst.containsKey("testStringKey2"));
 
         assertEquals(avlBst.remove("testStringKey5"), "testStringValue5");
         assertEquals(avlBst.size(), --size);
-        assertFalse(avlBst.contains("testStringKey5"));
+        assertFalse(avlBst.containsKey("testStringKey5"));
 
         assertTrue(avlBst.empty());
     }
@@ -263,24 +263,34 @@ public class AvlBstTest {
 
     @Test
     void testWorkingContains() {
-        assertFalse(avlBst.contains("testStringKey"));
-        assertFalse(avlBst.contains("testStringKey1"));
+        assertFalse(avlBst.containsKey("testStringKey"));
+        assertFalse(avlBst.containsKey("testStringKey1"));
+        assertFalse(avlBst.containsValue("testStringValue"));
+        assertFalse(avlBst.containsValue("testStringValue1"));
 
         avlBst.put("testStringKey", "testStringValue");
-        assertTrue(avlBst.contains("testStringKey"));
-        assertFalse(avlBst.contains("testStringKey1"));
+        assertTrue(avlBst.containsKey("testStringKey"));
+        assertFalse(avlBst.containsKey("testStringKey1"));
+        assertTrue(avlBst.containsValue("testStringValue"));
+        assertFalse(avlBst.containsValue("testStringValue1"));
 
         avlBst.put("testStringKey1", "testStringValue1");
-        assertTrue(avlBst.contains("testStringKey1"));
-        assertTrue(avlBst.contains("testStringKey"));
+        assertTrue(avlBst.containsKey("testStringKey1"));
+        assertTrue(avlBst.containsKey("testStringKey"));
+        assertTrue(avlBst.containsValue("testStringValue"));
+        assertTrue(avlBst.containsValue("testStringValue1"));
 
         avlBst.remove("testStringKey");
-        assertTrue(avlBst.contains("testStringKey1"));
-        assertFalse(avlBst.contains("testStringKey"));
+        assertTrue(avlBst.containsKey("testStringKey1"));
+        assertFalse(avlBst.containsKey("testStringKey"));
+        assertTrue(avlBst.containsValue("testStringValue1"));
+        assertFalse(avlBst.containsValue("testStringValue"));
 
         avlBst.remove("testStringKey1");
-        assertFalse(avlBst.contains("testStringKey"));
-        assertFalse(avlBst.contains("testStringKey1"));
+        assertFalse(avlBst.containsKey("testStringKey"));
+        assertFalse(avlBst.containsKey("testStringKey1"));
+        assertFalse(avlBst.containsValue("testStringValue"));
+        assertFalse(avlBst.containsValue("testStringValue1"));
     }
 
     @Test

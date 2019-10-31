@@ -161,11 +161,19 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
-    public boolean contains(@NotNull Key key) {
+    public boolean containsKey(@NotNull Key key) {
         if (root == null) {
             return false;
         }
         return searchValue(key, root) != null;
+    }
+
+    @Override
+    public boolean containsValue(@NotNull Value value) {
+        if (root == null) {
+            return false;
+        }
+        return searchValue(value, root);
     }
 
     @Override
@@ -300,6 +308,19 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return currentNode.value;
     }
 
+    private boolean searchValue(@NotNull Value value, @NotNull Node currentNode) {
+        if (value.equals(currentNode.value)) {
+            return true;
+        }
+        if (currentNode.left != null) {
+            return searchValue(value, currentNode.left);
+        }
+        if (currentNode.right != null) {
+            return searchValue(value, currentNode.right);
+        }
+        return false;
+    }
+
     private @NotNull Node searchMinNode(@NotNull Node node) {
         if (node.left != null) {
             return searchMinNode(node.left);
@@ -330,7 +351,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         node.height = Math.max(height(node.left), height(node.right)) + 1;
     }
 
-    private Node rotateRight(@NotNull Node node) {
+    private @NotNull Node rotateRight(@NotNull Node node) {
         Node leftNode = node.left;
         node.left = leftNode.right;
         leftNode.right = node;
@@ -339,7 +360,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return leftNode;
     }
 
-    private Node rotateLeft(@NotNull Node node) {
+    private @NotNull Node rotateLeft(@NotNull Node node) {
         Node rightNode = node.right;
         node.right = rightNode.left;
         rightNode.left = node;

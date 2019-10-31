@@ -29,7 +29,9 @@ public interface Bst<Key extends Comparable<Key>, Value> {
 
     int height();
 
-    boolean contains(@NotNull Key key);
+    boolean containsKey(@NotNull Key key);
+
+    boolean containsValue(@NotNull Value key);
 
     boolean empty();
 
