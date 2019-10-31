@@ -1,37 +1,52 @@
 package ru.mail.polis.ads.avl_tree.art241111.bst;
 
+/**
+ * AVL implementation of binary search tree.
+ *
+ * Create by Artem Gerasimov
+ * Date 30.10.2019
+ * GIT: art241111
+ */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
-    private Node root;
 
-    @Override
-    public Value get(Key key) {
-        return get(root, key);
+    private class Node {
+        Key key;
+        Value value;
+        Node left;
+        Node right;
+        int height = 1;
+
+        Node(Key key, Value value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return '\n' + "Node{" +
+                    "key=" + key +
+                    ", value=" + value +
+                    ", left=" + left +
+                    ", right=" + right+
+                    ", height=" + height +
+                    '}';
+        }
     }
 
-    private Value get(Node x, Key key) {
-        if (x == null) return null;
-        if (key.compareTo(x.key) < 0) return get(x.left, key);
-        if (key.compareTo(x.key) > 0) return get(x.right, key);
-        return x.value;
+    private Node rootNode;
+
+    // Height block
+    private int height(Node x) {
+        return x == null ? 0 : x.height;
     }
 
-    @Override
-    public void put(Key key, Value value) {
-        root = put(root, key, value);
+    private void fixHeight(Node x) {
+        x.height = 1 + Math.max(height(x.left), height(x.right));
     }
+    // End height block
 
-    private Node put(Node x, Key key, Value value) {
-        if (x == null) return new Node(key, value, 1);
-        if (key.compareTo(x.key) < 0) x.left = put(x.left, key, value);
-        else if (key.compareTo(x.key) > 0) x.right = put(x.right, key, value);
-        else x.value = value;
-
-        fixHeight(x);
-        x = balance(x);
-        return x;
-    }
-
+    // Balance block
     private Node balance(Node x) {
         if (factor(x) == 2) {
             if (factor(x.left) < 0) x.left = rotateLeft(x.left);
@@ -52,8 +67,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node left = x.left;
         x.left = left.right;
         left.right = x;
+
         fixHeight(x);
         fixHeight(left);
+
         return left;
     }
 
@@ -61,39 +78,88 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node right = x.right;
         x.right = right.left;
         right.left = x;
+
         fixHeight(x);
         fixHeight(right);
+
         return right;
     }
+    // End balance block
 
+    // Get value
+    @Override
+    public Value get(Key key) {
+        // Tree emptiness check
+        if (rootNode == null) return null;
+
+        // Search value
+        Node node = get(rootNode,key);
+        return node == null ? null : node.value;
+    }
+
+    private Node get(Node node, Key key) {
+        while(node.key != null){
+            if(node.key == key) return node;
+            else if (key.compareTo(node.key) > 0) node = node.right;
+            else node = node.left;
+        }
+        return null;
+    }
+    // End of block "get value"
+
+    // Put value
+    @Override
+    public void put(Key key, Value value) {
+        // Finding the right place
+        rootNode = put(rootNode,key, value);
+
+    }
+
+    private Node put(Node node, Key key, Value value) {
+        if(node == null){ return new Node(key, value);}
+        else if (node.key.compareTo(key) > 0) node.left = put(node.left,key,value);
+        else if (node.key.compareTo(key) < 0) node.right = put(node.right,key,value);
+        else node.value = value;
+
+        // Balance node
+        fixHeight(node);
+        node = balance(node);
+        return node;
+    }
+
+    // End of block "put value"
     @Override
     public Value remove(Key key) {
-        return remove(root, key).value;
+        // Tree emptiness check
+        if (rootNode == null) return null;
+        Value value = get(key);
+        rootNode = delete(rootNode, key);
+        fixHeight(rootNode);
+        return value;
+        //return delete == null ? null : delete.value;
     }
 
-    private Node remove(Node x, Key key) {
+    private Node delete(Node x, Key key) {
         if (x == null) return null;
-        if (key.compareTo(x.key) < 0) x.left = remove(x.left, key);
-        else if (key.compareTo(x.key) > 0) x.right = remove(x.right, key);
+        if (key.compareTo(x.key) < 0) x.left = delete(x.left, key);
+        else if (key.compareTo(x.key) > 0) x.right = delete(x.right, key);
         else x = innerDelete(x);
-        fixHeight(x);
-        balance(x);
+
         return x;
     }
 
-    private Node innerDelete(Node x) {
-        if (x.right == null) return x.left;
-        if (x.left == null) return x.right;
-        Node t = x;
-        x = minNode(t.right);
-        x.right = deleteMin(t.right);
-        x.left = t.left;
-        return x;
-    }
+    private Node innerDelete(Node node) {
+        Node q = node.left;
+        Node r = node.right;
 
-    private Node minNode(Node x) {
-        if (x.left == null) return x;
-        return minNode(x.left);
+        if( node.right == null ) return node.left;
+
+        node = min(r);
+        node.right = deleteMin(r);
+        node.left = q;
+
+        return balance(node);
+
     }
 
     private Node deleteMin(Node x) {
@@ -101,106 +167,129 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return x.right;
         }
         x.left = deleteMin(x.left);
-        return x;
+        return balance(x);
     }
 
+
+    // Search min
+    private Node min(Node node) {
+        while(node.left != null){
+            node = node.left;
+        }
+        return node;
+    }
+    @Override
     public Key min() {
-        return min(root);
-    }
+        // Tree emptiness check
+        if (rootNode == null) return null;
 
-    private Key min(Node x) {
-        if (x == null) return null;
-        if (x.left == null) return x.key;
-        return min(x.left);
+        // Search min key
+        return min(rootNode).key;
     }
 
     @Override
     public Value minValue() {
-        return get(min());
+        // Tree emptiness check
+        if (rootNode == null) return null;
+
+        // Search value in min key
+        return min(rootNode).value;
+    }
+    // End search min
+
+    // Search max
+    private Node max(Node node) {
+        while(node.right != null){
+            node = node.right;
+        }
+        return node;
     }
 
     @Override
     public Key max() {
-        return max(root);
-    }
+        // Tree emptiness check
+        if (rootNode == null) return null;
 
-    private Key max(Node x) {
-        if (x == null) return null;
-        if (x.right == null) return x.key;
-        return max(x.right);
+        // Search min key
+        return max(rootNode).key;
     }
 
     @Override
     public Value maxValue() {
-        return get(max());
+        // Tree emptiness check
+        if (rootNode == null) return null;
+
+        // Search min key
+        return max(rootNode).value;
     }
+    // End search max
 
     @Override
     public Key floor(Key key) {
-        return floor(root, key, null);
-    }
+        // Tree emptiness check
+        if (rootNode == null) return null;
 
-    private Key floor(Node x, Key key, Key max) {
-        if (x == null) return max;
-        if (key.compareTo(x.key) < 0) {
-            max = floor(x.left, key, max);
-        } else if (key.compareTo(x.key) > 0) {
-            if (max == null || max.compareTo(x.key) < 0) max = x.key;
-            max = floor(x.right, key, max);
-        } else max = x.key;
-        return max;
+        // Search value
+        Node node = rootNode;
+        Key min = null;
+        while(node != null){
+            if (key.compareTo(node.key) == 0) return node.key;
+            else if (key.compareTo(node.key) > 0) {
+                if ((node.right == null) ||
+                        (node.right.key.compareTo(key) > 0)){
+                    min = node.key;
+                }
+                node = node.right;
+            } else if (key.compareTo(node.key) < 0) {
+                node = node.left;
+            }
+        }
+        return min;
     }
 
     @Override
+    // min max
     public Key ceil(Key key) {
-        return ceil(root, key, null);
-    }
+        // Tree emptiness check
+        if (rootNode == null) return null;
 
-    private Key ceil(Node x, Key key, Key min) {
-        if (x == null) return min;
-        if (key.compareTo(x.key) > 0) {
-            min = ceil(x.right, key, min);
-        } else if (key.compareTo(x.key) < 0) {
-            if (min == null || min.compareTo(x.key) > 0) min = x.key;
-            min = ceil(x.left, key, min);
-        } else min = x.key;
+        // Search value
+        Node node = rootNode;
+        Key min = null;
+
+        while(node != null){
+            if (key.compareTo(node.key) == 0) return node.key;
+            else if (key.compareTo(node.key) > 0) {
+                node = node.right;
+            } else if (key.compareTo(node.key) < 0) {
+                if ((node.left == null) ||
+                        (node.left.key.compareTo(key) < 0)){
+                    min = node.key;
+                }
+                node = node.left;
+            }
+        }
         return min;
     }
 
     @Override
     public int size() {
-        return size(root);
+        return size(rootNode);
     }
 
-    private int size(Node x) {
-        if (x == null) return 0;
-        return size(x.left) + size(x.right) + 1;
+    private int size(Node node) {
+        if (node == null) return 0;
+        return 1 + size(node.left) + size(node.right);
     }
+
 
     @Override
     public int height() {
-        return height(root);
+       return height(rootNode);
     }
 
-    private int height(Node x) {
-        return x == null ? 0 : x.height;
-    }
-
-    private void fixHeight(Node x) {
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-    }
-
-    private class Node {
-        Key key;
-        Value value;
-        Node left;
-        Node right;
-        int height;
-
-        Node(Key key, Value value, int height) {
-            this.key = key;
-            this.value = value;
-            this.height = height;
-        }
+    @Override
+    public String toString() {
+        return rootNode.toString();
     }
 }
