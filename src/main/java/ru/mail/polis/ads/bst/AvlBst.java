@@ -5,7 +5,7 @@ package ru.mail.polis.ads.bst;
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
-    
+
     private class Node {
         Key key;
         Value value;
@@ -19,12 +19,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             this.height = height;
         }
     }
+
     private Node root;
 
     @Override
     public Value get(Key key) {
         if (key == null) {
-            throw new NullPointerException();
+            return null;
         }
 
         return get(key, root);
@@ -35,7 +36,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return null; // не найдено
         } else if (key.compareTo(x.key) < 0) {
             return get(key, x.left); // идём влево, если меньше, чем x.key
-        } else if(key.compareTo(x.key) > 0) {
+        } else if (key.compareTo(x.key) > 0) {
             return get(key, x.right); // идём вправо, если больше, чем x.key
         } else {
             return x.value; // если key == x.key, то возвращаем x.value
@@ -44,6 +45,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(Key key, Value value) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+
         root = put(root, key, value);
     }
 
@@ -111,37 +116,145 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             throw new NullPointerException();
         }
 
-        //...
+        remove(key, root);
+    }
+
+    private void remove(Key key, Node x) {
+        if (x == null) {
+            throw new NullPointerException();
+        }
+
+        if (key.compareTo(x.key) > 0 && x.right != null) {
+            remove(key, x.right);
+        } else if (key.compareTo(x.key) < 0 && x.left != null) {
+            remove(key, x.left);
+        } else {
+            x = removeFound(x);
+        }
+    }
+
+    private Node removeFound(Node x) {
+        if (x.left == null) {
+            return x.right;
+        }
+
+        if (x.right == null) {
+            return x.left;
+        }
+
+        Node temp = x;
+        x = minNode(x);
+        x.left = temp.left;
+        x.right = temp.right;
+
+        fixHeight(x);
+        balance(x);
+
+        return x;
+    }
+
+    private Node minNode(Node x) {
+        if (x == null) {
+            throw new NullPointerException();
+        }
+
+        if (x.left == null) {
+            Node minNode = x;
+            x = null;
+            return minNode;
+        }
+
+        return minNode(x);
     }
 
     @Override
     public Key min() {
-        throw new UnsupportedOperationException("Implement me");
+        return min(root);
+    }
+
+    private Key min(Node x) {
+        if (x == null) {
+            return null;
+        }
+
+        if (x.left == null) {
+            return x.key;
+        }
+
+        return min(x.left);
     }
 
     @Override
     public Value minValue() {
-        throw new UnsupportedOperationException("Implement me");
+        return get(min());
     }
 
     @Override
     public Key max() {
-        throw new UnsupportedOperationException("Implement me");
+        return max(root);
+    }
+
+    private Key max(Node x) {
+        if (x == null) {
+            return null;
+        }
+
+        if (x.right == null) {
+            return x.key;
+        }
+
+        return max(x.right);
     }
 
     @Override
     public Value maxValue() {
-        throw new UnsupportedOperationException("Implement me");
+        return get(max());
     }
 
     @Override
     public Key floor(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (key == null) {
+            throw new NullPointerException();
+        }
+
+        return floor(key, root);
+    }
+
+    private Key floor(Key key, Node x) {
+        if (x == null) {
+            return null;
+        }
+
+        if (key.compareTo(x.key) > 0 && x.right != null) {
+            return floor(key, x.right);
+        } else if (key.compareTo(x.key) < 0 && x.left != null) {
+            return floor(key, x.left);
+        }
+
+        return x.key;
     }
 
     @Override
     public Key ceil(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (key == null) {
+            throw new NullPointerException();
+        }
+
+        return ceil(key, root);
+    }
+
+    private Key ceil(Key key, Node x) {
+        if (x == null) {
+            return null;
+        }
+
+        if (key.compareTo(x.key) > 0 && x.left != null) {
+            return floor(key, x.left);
+        } else if (key.compareTo(x.key) < 0 && x.right != null) {
+            return floor(key, x.right);
+        }
+
+        return x.key;
     }
 
     @Override
