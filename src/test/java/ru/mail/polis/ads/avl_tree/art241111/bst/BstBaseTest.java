@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.bst;
+package ru.mail.polis.ads.avl_tree.art241111.bst;
 
 import org.junit.jupiter.api.Test;
 
