@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.art241111.bst;
+package ru.mail.polis.ads.bst;
 
 /**
  * AVL implementation of binary search tree.
