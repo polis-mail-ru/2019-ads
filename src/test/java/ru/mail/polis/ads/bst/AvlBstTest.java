@@ -139,25 +139,32 @@ public class AvlBstTest {
 
         assertEquals(avlBst.remove("testStringKey4"), "testStringValue4");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey4"));
 
         assertEquals(avlBst.remove("testStringKey1"), "testStringValue1");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey1"));
 
         assertNull(avlBst.remove("testStringKey1"), "testStringValue1");
         assertEquals(avlBst.size(), size);
         assertFalse(avlBst.empty());
+        assertFalse(avlBst.contains("testStringKey1"));
 
         assertEquals(avlBst.remove("testStringKey3"), "testStringValue3");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey3"));
 
         assertEquals(avlBst.remove("testStringKey0"), "testStringValue0");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey0"));
 
         assertEquals(avlBst.remove("testStringKey2"), "testStringValue2");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey2"));
 
         assertEquals(avlBst.remove("testStringKey5"), "testStringValue5");
         assertEquals(avlBst.size(), --size);
+        assertFalse(avlBst.contains("testStringKey5"));
 
         assertTrue(avlBst.empty());
     }
@@ -290,6 +297,304 @@ public class AvlBstTest {
         assertFalse(avlBst.empty());
 
         avlBst.remove("testStringKey1");
+        assertTrue(avlBst.empty());
+    }
+
+    @Test
+    void testWorkingCeil() {
+        avlBst.put("1", "testStringValue3");
+        avlBst.put("3", "testStringValue4");
+        avlBst.put("5", "testStringValue2");
+        avlBst.put("7", "testStringValue5");
+        avlBst.put("8", "testStringValue1");
+        avlBst.put("9", "testStringValue0");
+        avlBst.put("2", "testStringValue0");
+
+        assertEquals(avlBst.min(), "1");
+        assertEquals(avlBst.max(), "9");
+        assertEquals(avlBst.ceil("5"), "5");
+        assertEquals(avlBst.ceil("2"), "2");
+        assertEquals(avlBst.ceil("8"), "8");
+        assertEquals(avlBst.ceil("0"), "1");
+        assertEquals(avlBst.ceil("9"), "9");
+        assertNull(avlBst.ceil("99"));
+    }
+
+    @Test
+    void testWorkingFloor() {
+        avlBst.put("1", "testStringValue3");
+        avlBst.put("3", "testStringValue4");
+        avlBst.put("5", "testStringValue2");
+        avlBst.put("7", "testStringValue5");
+        avlBst.put("8", "testStringValue1");
+        avlBst.put("9", "testStringValue0");
+        avlBst.put("2", "testStringValue0");
+
+        assertEquals(avlBst.min(), "1");
+        assertEquals(avlBst.max(), "9");
+        assertEquals(avlBst.floor("5"), "5");
+        assertEquals(avlBst.floor("4"), "3");
+        assertEquals(avlBst.floor("8"), "8");
+        assertEquals(avlBst.floor("1"), "1");
+        assertEquals(avlBst.floor("99"), "9");
+        assertNull(avlBst.floor(""));
+    }
+
+    @Test
+    void testWorkingReplaceValues() {
+        assertNull(avlBst.get("1"));
+
+        avlBst.put("1", "testStringValue3");
+        assertEquals(avlBst.get("1"), "testStringValue3");
+
+        avlBst.put("1", "testStringValue4");
+        assertEquals(avlBst.get("1"), "testStringValue4");
+
+        avlBst.put("1", "testStringValue2");
+        assertEquals(avlBst.get("1"), "testStringValue2");
+
+        avlBst.put("7", "testStringValue5");
+        assertEquals(avlBst.get("7"), "testStringValue5");
+        assertEquals(avlBst.get("1"), "testStringValue2");
+    }
+
+    @Test
+    void testWorkingHeight() {
+        assertEquals(avlBst.height(), 0);
+
+        avlBst.put("1", "testStringValue3");
+        assertEquals(avlBst.height(), 1);
+
+        avlBst.put("8", "testStringValue4");
+        assertEquals(avlBst.height(), 2);
+
+        avlBst.put("5", "testStringValue2");
+        assertEquals(avlBst.height(), 2);
+
+        avlBst.put("5", "same key");
+        assertEquals(avlBst.height(), 2);
+
+        avlBst.put("6", "testStringValue5");
+        assertEquals(avlBst.height(), 3);
+
+        avlBst.put("2", "testStringValue1");
+        assertEquals(avlBst.height(), 3);
+
+        avlBst.put("9", "testStringValue0");
+        assertEquals(avlBst.height(), 3);
+
+        avlBst.put("4", "testStringValue0");
+        assertEquals(avlBst.height(), 3);
+
+        avlBst.put("0", "testStringValue0");
+        assertEquals(avlBst.height(), 4);
+    }
+
+    @Test
+    void testWorkingBalance() {
+
+        /*
+        avl bst visualisation :
+        root ---> null
+        height = 0
+         */
+        assertTrue(avlBst.empty());
+        int size = 0;
+        assertEquals(avlBst.height(), 0);
+        assertEquals(avlBst.size(), size);
+
+        /*
+        avl bst visualisation :
+        root ---> 1
+        height = 1
+         */
+        avlBst.put("1", "testStringValue3");
+        assertEquals(avlBst.height(), 1);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root ---> 1
+                   \
+                    5
+        height = 2
+         */
+        avlBst.put("5", "testStringValue4");
+        assertEquals(avlBst.height(), 2);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root ---> 5
+                 / \
+                1   9
+        height = 2
+         */
+        avlBst.put("9", "testStringValue2");
+        assertEquals(avlBst.height(), 2);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root ---> 5
+                 / \
+                1   9
+                     \
+                     13
+        height = 3
+         */
+        avlBst.put("13", "testStringValue5");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root ---> 5
+                 / \
+                1  11
+                  /  \
+                 9   13
+        height = 3
+         */
+        avlBst.put("11", "testStringValue1");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root --->   9
+                   / \
+                  5  11
+                /   /  \
+               1   10  13
+        height = 3
+         */
+        avlBst.put("10", "testStringValue0");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root --->   9
+                   / \
+                 1   11
+                /\   / \
+               0 5  10 13
+        height = 3
+         */
+        avlBst.put("0", "testStringValue0");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root --->   9
+                   / \
+                 1   11
+                /\   / \
+               0 5  10 13
+                       /
+                      12
+        height = 4
+         */
+        avlBst.put("12", "testStringValue0");
+        assertEquals(avlBst.height(), 4);
+        assertEquals(avlBst.size(), ++size);
+
+        /*
+        avl bst visualisation :
+        root --->   9
+                   / \
+                 5   11
+                /    / \
+               0    10 13
+                       /
+                      12
+        height = 4
+         */
+        avlBst.remove("1");
+        assertEquals(avlBst.height(), 4);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 11
+                 /  \
+                9   13
+               /\   /
+              0 10 12
+        height = 3
+         */
+        avlBst.remove("5");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 11
+                 /  \
+                9   13
+                \   /
+                10 12
+        height = 3
+         */
+        avlBst.remove("0");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 11
+                 /  \
+                9   12
+                \
+                10
+        height = 3
+         */
+        avlBst.remove("13");
+        assertEquals(avlBst.height(), 3);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 10
+                 /  \
+                9   11
+        height = 2
+         */
+        avlBst.remove("12");
+        assertEquals(avlBst.height(), 2);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 11
+                 /
+                9
+        height = 2
+         */
+        avlBst.remove("10");
+        assertEquals(avlBst.height(), 2);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> 9
+        height = 1
+         */
+        avlBst.remove("11");
+        assertEquals(avlBst.height(), 1);
+        assertEquals(avlBst.size(), --size);
+
+        /*
+        avl bst visualisation :
+        root ---> null
+        height = 0
+         */
+        avlBst.remove("9");
+        assertEquals(avlBst.height(), 0);
+        assertEquals(avlBst.size(), --size);
+
         assertTrue(avlBst.empty());
     }
 

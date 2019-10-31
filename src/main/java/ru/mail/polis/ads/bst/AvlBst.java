@@ -19,13 +19,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         @Nullable Node right;
         int height;
 
-        public Node(@NotNull Key key, @NotNull Value value) {
+        Node(@NotNull Key key, @NotNull Value value) {
             this.key = key;
             this.value = value;
             this.height = 1;
         }
 
-        public Node(@NotNull Key key, @NotNull Value value, int height) {
+        Node(@NotNull Key key, @NotNull Value value, int height) {
             this.key = key;
             this.value = value;
             this.height = height;
@@ -43,6 +43,16 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         @Override
         public int hashCode() {
             return Objects.hash(key, value);
+        }
+    }
+
+    private class Pair {
+        @Nullable Node node;
+        @Nullable Value value;
+
+        Pair(@Nullable Node node, @Nullable Value value) {
+            this.node = node;
+            this.value = value;
         }
     }
 
@@ -80,11 +90,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public @Nullable Value remove(@NotNull Key key) {
-        root = searchElementWhichNeedRemove(key, root);
-        if (deletedValue != null) {
+        Pair pair = searchElementWhichNeedRemove(key, new Pair(root, null));
+        root = pair.node;
+        if (pair.value != null) {
             size--;
         }
-        return deletedValue;
+        return pair.value;
     }
 
     @Override
@@ -125,12 +136,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public @Nullable Key floor(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (root == null) {
+            return null;
+        }
+        return searchMinKeyForFloor(key, root);
     }
 
     @Override
     public @Nullable Key ceil(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (root == null) {
+            return null;
+        }
+        return searchMinKeyForCeil(key, root);
     }
 
     @Override
@@ -140,7 +157,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        return root == null ? 0 : root.height;
+        return height(root);
     }
 
     @Override
@@ -162,38 +179,96 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         size = 0;
     }
 
-    private @Nullable Node searchElementWhichNeedRemove(@NotNull Key key, @Nullable Node node) {
-        if (node == null) {
-            deletedValue = null;
-            return null;
-        }
+    private @Nullable Key searchMinKeyForCeil(@NotNull Key key, @NotNull Node node) {
         if (key.compareTo(node.key) > 0) {
-            node.right = searchElementWhichNeedRemove(key, node.right);
+            if (node.right != null) {
+                return searchMinKeyForCeil(key, node.right);
+            } else {
+                return null;
+            }
+        } else {
+            if (node.left != null) {
+                if (key.compareTo(node.left.key) > 0) {
+                    if (node.left.right != null) {
+                        return searchMinKeyForCeil(key, node.left.right);
+                    } else {
+                        return node.key;
+                    }
+                } else {
+                    return searchMinKeyForCeil(key, node.left);
+                }
+            } else {
+                return node.key;
+            }
         }
-        if (key.compareTo(node.key) < 0) {
-            node.left = searchElementWhichNeedRemove(key, node.left);
-        }
-        if (key.compareTo(node.key) == 0){
-            node = innerRemove(node);
-        }
-        return node;
     }
 
-    private @Nullable Node innerRemove(@NotNull Node node) {
-        if (node.left == null) {
-            deletedValue = node.value;
-            return node.right;
+    private @Nullable Key searchMinKeyForFloor(@NotNull Key key, @NotNull Node node) {
+        if (key.compareTo(node.key) < 0) {
+            if (node.left != null) {
+                return searchMinKeyForFloor(key, node.left);
+            } else {
+                return null;
+            }
+        } else {
+            if (node.right != null) {
+                if (key.compareTo(node.right.key) < 0) {
+                    if (node.right.left != null) {
+                        return searchMinKeyForFloor(key, node.right.left);
+                    } else {
+                        return node.key;
+                    }
+                } else {
+                    return searchMinKeyForFloor(key, node.right);
+                }
+            } else {
+                return node.key;
+            }
         }
-        if (node.right == null) {
-            deletedValue = node.value;
-            return node.left;
+    }
+
+    private @NotNull Pair searchElementWhichNeedRemove(@NotNull Key key, @NotNull Pair pair) {
+        if (pair.node == null) {
+            return pair;
         }
-        Node tempNode = node;
-        node = searchMinNode(tempNode.right);
-        node.right = deleteMin(tempNode.right);
-        node.left = tempNode.left;
-        deletedValue = tempNode.value;
-        return node;
+        if (key.compareTo(pair.node.key) > 0) {
+            Pair tempPair = new Pair(pair.node.right, pair.value);
+            searchElementWhichNeedRemove(key, tempPair);
+            pair.node.right = tempPair.node;
+            pair.value = tempPair.value;
+        }
+        if (key.compareTo(pair.node.key) < 0) {
+            Pair tempPair = new Pair(pair.node.left, pair.value);
+            searchElementWhichNeedRemove(key, tempPair);
+            pair.node.left = tempPair.node;
+            pair.value = tempPair.value;
+        }
+        if (key.compareTo(pair.node.key) == 0){
+            innerRemove(pair);
+        }
+        if (pair.node != null) {
+            fixHeight(pair.node);
+            pair.node = balance(pair.node);
+        }
+        return pair;
+    }
+
+    private void innerRemove(@NotNull Pair pair) {
+        if (pair.node.left == null) {
+            pair.value = pair.node.value;
+            pair.node = pair.node.right;
+            return;
+        }
+        if (pair.node.right == null) {
+            pair.value = pair.node.value;
+            pair.node = pair.node.left;
+            return;
+        }
+        Node tempNode = pair.node;
+        pair.node = searchMinNode(tempNode.right);
+        pair.node.right = deleteMin(tempNode.right);
+        pair.node.left = tempNode.left;
+        pair.value = tempNode.value;
     }
 
     private @NotNull Node searchPlaceForPut(@NotNull Key key, @NotNull Value value, @Nullable Node node) {
@@ -203,21 +278,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         if (key.compareTo(node.key) > 0) {
             node.right = searchPlaceForPut(key, value, node.right);
-            if (node.left == null) {
-                node.height = node.right.height + 1;
-            } else {
-                node.height = Math.max(node.left.height, node.right.height) + 1;
-            }
         } else if (key.compareTo(node.key) < 0) {
             node.left = searchPlaceForPut(key, value, node.left);
-            if (node.right == null) {
-                node.height = node.left.height + 1;
-            } else {
-                node.height = Math.max(node.left.height, node.right.height) + 1;
-            }
         } else {
             node.value = value;
         }
+        fixHeight(node);
+        node = balance(node);
         return node;
     }
 
@@ -252,6 +319,52 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return node.right;
         }
         node.left = deleteMin(node.left);
+        return node;
+    }
+
+    private int height(@Nullable Node node) {
+        return node == null ? 0 : node.height;
+    }
+
+    private void fixHeight(@NotNull Node node) {
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    private Node rotateRight(@NotNull Node node) {
+        Node leftNode = node.left;
+        node.left = leftNode.right;
+        leftNode.right = node;
+        fixHeight(node);
+        fixHeight(leftNode);
+        return leftNode;
+    }
+
+    private Node rotateLeft(@NotNull Node node) {
+        Node rightNode = node.right;
+        node.right = rightNode.left;
+        rightNode.left = node;
+        fixHeight(node);
+        fixHeight(rightNode);
+        return rightNode;
+    }
+
+    private int factor(@NotNull Node node) {
+        return height(node.left) - height(node.right);
+    }
+
+    private @NotNull Node balance(@NotNull Node node) {
+        if (factor(node) == -2) {
+            if (factor(node.right) > 0) {
+                node.right = rotateRight(node.right);
+            }
+            return rotateLeft(node);
+        }
+        if (factor(node) == 2) {
+            if (factor(node.left) < 0) {
+                node.left = rotateLeft(node.left);
+            }
+            return rotateRight(node);
+        }
         return node;
     }
 }
