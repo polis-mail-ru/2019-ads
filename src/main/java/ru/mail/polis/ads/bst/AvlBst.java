@@ -2,8 +2,8 @@ package ru.mail.polis.ads.bst;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.mail.polis.ads.exception.IllegalHeightException;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -28,9 +28,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         public Node(@NotNull Key key, @NotNull Value value, int height) {
             this.key = key;
             this.value = value;
-            if (height < 1) {
-                throw new IllegalHeightException("Incorrect height");
-            }
             this.height = height;
         }
 
@@ -53,16 +50,22 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Nullable private Value deletedValue;
     private int size;
 
-    public AvlBst(@Nullable Node root) {
+    public AvlBst(@NotNull Map<Key, Value> elements) {
+        this.root = null;
+        this.size = 0;
+        for (Map.Entry<Key, Value> element : elements.entrySet()) {
+            this.put(element.getKey(), element.getValue());
+        }
+    }
+
+    public AvlBst(@NotNull Node root) {
         this.root = root;
         this.size = 1;
-        this.deletedValue = null;
     }
 
     public AvlBst() {
         this.root = null;
         this.size = 0;
-        this.deletedValue = null;
     }
 
     @Override
@@ -77,7 +80,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public @Nullable Value remove(@NotNull Key key) {
-        deletedValue = null;
         root = searchElementWhichNeedRemove(key, root);
         if (deletedValue != null) {
             size--;
@@ -162,6 +164,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private @Nullable Node searchElementWhichNeedRemove(@NotNull Key key, @Nullable Node node) {
         if (node == null) {
+            deletedValue = null;
             return null;
         }
         if (key.compareTo(node.key) > 0) {
@@ -232,14 +235,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private @NotNull Node searchMinNode(@NotNull Node node) {
         if (node.left != null) {
-            searchMinNode(node.left);
+            return searchMinNode(node.left);
         }
         return node;
     }
 
     private @NotNull Node searchMaxNode(@NotNull Node node) {
         if (node.right != null) {
-            searchMaxNode(node.right);
+            return searchMaxNode(node.right);
         }
         return node;
     }
