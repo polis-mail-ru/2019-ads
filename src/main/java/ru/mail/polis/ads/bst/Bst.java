@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.avl_tree.art241111.bst;
+package ru.mail.polis.ads.bst;
 
 /**
  * Binary search tree with ordered operations support.

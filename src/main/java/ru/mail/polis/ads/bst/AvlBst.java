@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.avl_tree.art241111.bst;
+package ru.mail.polis.ads.bst;
 
 /**
  * AVL implementation of binary search tree.
@@ -42,7 +42,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     private void fixHeight(Node x) {
-        x.height = 1 + Math.max(height(x.left), height(x.right));
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
     }
     // End height block
 
@@ -98,7 +98,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     private Node get(Node node, Key key) {
-        while(node.key != null){
+        //if(node == null) return null;
+        while(node != null){
             if(node.key == key) return node;
             else if (key.compareTo(node.key) > 0) node = node.right;
             else node = node.left;
@@ -134,9 +135,11 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (rootNode == null) return null;
         Value value = get(key);
         rootNode = delete(rootNode, key);
-        fixHeight(rootNode);
+
+        if (rootNode != null) fixHeight(rootNode);
+
         return value;
-        //return delete == null ? null : delete.value;
+
     }
 
     private Node delete(Node x, Key key) {

@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.avl_tree.art241111;
+package ru.mail.polis.ads;
 
 import java.io.BufferedReader;
 import java.io.IOException;
