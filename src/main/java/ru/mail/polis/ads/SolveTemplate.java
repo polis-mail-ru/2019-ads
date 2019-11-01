@@ -16,7 +16,7 @@ public final class SolveTemplate {
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+
     }
 
     private static class FastScanner {
