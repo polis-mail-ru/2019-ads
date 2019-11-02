@@ -13,6 +13,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         private Value value;
         private Node left;
         private Node right;
+        private int height;
 
         private Node(Key key, Value value) {
             this.key = key;
@@ -20,17 +21,28 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
 
         private int getHeight() {
+            return height;
+        }
+
+        private void fixHeight() {
             if (left == null) {
                 if (right == null) {
-                    return 1;
+                    height = 1;
+                    return;
                 }
-                return 1 + right.getHeight();
+                right.fixHeight();
+                height = 1 + right.getHeight();
+                return;
             }
+            left.fixHeight();
             if (right == null) {
-                return 1 + left.getHeight();
+                height = 1 + left.getHeight();
+                return;
             }
-            return 1 + Math.max(left.getHeight(), right.getHeight());
+            right.fixHeight();
+            height = 1 + Math.max(left.getHeight(), right.getHeight());
         }
+
     }
 
     private Node top;
@@ -60,6 +72,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Override
     public void put(Key key, Value value) {
         top = put(top, key, value);
+        top.fixHeight();
     }
 
     private Node put(Node node, Key key, Value value) {
@@ -74,6 +87,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         } else {
             node.right = put(node.right, key, value);
         }
+        node.fixHeight();
         return balance(node);
     }
 
@@ -131,7 +145,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         } else {
             deletedParent.right = leastRight;
         }
-
+        leastRight.fixHeight();
         balance(leastRight);
         return deleted.value;
     }
