@@ -5,6 +5,8 @@ package ru.mail.polis.ads.bst;
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
+
+    private Node root = null;
     
     private class Node {
         Key key;
@@ -16,7 +18,16 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return get(root, key);
+    }
+
+    private Value get(Node root, Key key) {
+        if (root == null) return null;
+
+        if (key.compareTo(root.key) < 0) return get(root.left, key);
+        if (key.compareTo(root.key) > 0) return get(root.right, key);
+
+        return root.value;
     }
 
     @Override
