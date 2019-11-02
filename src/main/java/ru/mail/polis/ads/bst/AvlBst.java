@@ -6,9 +6,8 @@ package ru.mail.polis.ads.bst;
 public class AvlBst<Key extends Comparable<Key>, Value>
     implements Bst<Key, Value> {
 
-    private int size;
-
     private class Node {
+
         private Key key;
         private Value value;
         private Node left;
@@ -42,10 +41,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             right.fixHeight();
             height = 1 + Math.max(left.getHeight(), right.getHeight());
         }
-
     }
 
     private Node top;
+    private int size;
 
     @Override
     public Value get(Key key) {
