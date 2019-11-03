@@ -15,7 +15,7 @@ public class Task2 {
 
         long start = Math.max(w, h);
         long end = n * Math.max(w, h);
-        long m = 0;
+        long m;
 
         while (start < end) {
             m = (start + end) / 2;
