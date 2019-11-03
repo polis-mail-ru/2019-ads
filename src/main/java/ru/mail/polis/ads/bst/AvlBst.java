@@ -251,7 +251,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key ceil(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return null;
     }
 
     @Override
