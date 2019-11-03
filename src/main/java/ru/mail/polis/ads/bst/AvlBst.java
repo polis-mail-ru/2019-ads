@@ -165,9 +165,11 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
-    public void remove(Key key) {
-        root = delete(key, root);
+    public Value remove(Key key) {
+        Node result = delete(key, root);
         fixHeight(root);
+        return result.value;
+
     }
 
 
