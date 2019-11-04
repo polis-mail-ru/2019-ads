@@ -137,6 +137,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     private Node innerDelete(Node element) {
+        deletedValue = element.value;
         if (element.right == null) return element.left;
         if (element.left == null) return element.right;
 
@@ -163,12 +164,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return element;
     }
 
+    private Value deletedValue = null;
     @Override
     public Value remove(Key key) {
-        Node result = delete(key, root);
+        root = delete(key, root);
         fixHeight(root);
         size = root == null ? 0 : size--;
-        return result.value;
+        return deletedValue;
 
     }
 
