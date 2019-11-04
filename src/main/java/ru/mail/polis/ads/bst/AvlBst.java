@@ -36,7 +36,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-        return get(root, key).value;
+        Node result = get(root, key);
+        return result == null ? null : result.value;
     }
 
     private Node get(Node element, Key key) {
@@ -76,6 +77,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         else {
             element.value = value;
+            size--;
         }
         fixHeight(element);
         element = balance(element);
@@ -169,7 +171,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     public Value remove(Key key) {
         root = delete(key, root);
         fixHeight(root);
-        size = root == null ? 0 : size--;
+        size = root == null ? 0 : size - 1;
         return deletedValue;
 
     }
@@ -266,7 +268,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        return root.height;
+        return root == null ? 0 : root.height;
     }
 }
 
