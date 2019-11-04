@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 /**
  * Problem solution template.
  */
-public final class Task4 {
+public final class Task5 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
