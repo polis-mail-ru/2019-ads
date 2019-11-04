@@ -144,7 +144,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         element = getMin(temp.right);
         element.right = deleteMin(temp.right);
         element.left = temp.left;
-        size--;
         return element;
     }
 
@@ -168,6 +167,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     public Value remove(Key key) {
         Node result = delete(key, root);
         fixHeight(root);
+        size = root == null ? 0 : size--;
         return result.value;
 
     }
@@ -222,38 +222,39 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return max != null ? max.value : null;
     }
 
+
+    private Key ceil = null;
+    private Key floor = null;
+
     @Override
     public Key floor(Key key) {
-        if (root == null) {
-            return null;
-        }
-
-        Key floor = min();
-        if (floor.compareTo(key) == 1) {
-            return null;
-        }
-
-        Node current = root;
-        while (current != null) {
-            switch (current.key.compareTo(key)) {
-                case 0:
-                    return current.key;
-                case 1:
-                    floor = floor.compareTo(current.key) == 1 ? floor : current.key;
-                    current = current.left;
-                case -1:
-                   floor = getMax(current.left).key;
-                   return floor;
-            }
-        }
-        return floor;
+      ceilFloor(key, root);
+      return floor;
     }
-
-
 
     @Override
     public Key ceil(Key key) {
-        return null;
+        ceilFloor(key, root);
+        return ceil;
+    }
+
+    private void ceilFloor(Key key, Node element) {
+        if (element == null) {
+            return;
+        }
+
+        if (element.key.compareTo(key) == 0) {
+            ceil = element.key;
+            floor = element.key;
+        }
+        else if (element.key.compareTo(key) == 1) {
+            ceil = element.key;
+            ceilFloor(key, element.left);
+        }
+        else {
+            floor = element.key;
+            ceilFloor(key, element.right);
+        }
     }
 
     @Override
