@@ -94,13 +94,49 @@ public class AvlTree <Key extends Comparable<Key>, Value>{
         return get(max());
     }
 
-//    public Key floor(Key key) {
-//        if (root == null) return null;
-//    }
-//
-//    public Key ceil(Key key) {
-//        if (root == null) return null;
-//    }
+    public Key floor(Key key) {
+        Node node = root;
+        Key max = null;
+        if (node == null) return null;
+
+        while (node != null) {
+            if (key.compareTo(node.key) > 0) {
+                max = node.key;
+                node = node.right;
+            } else if (key.compareTo(node.key) < 0) {
+                max = node.key;
+                node = node.left;
+            } else if (key.compareTo(node.key) == 0) {
+                return node.key;
+            }
+        }
+        return max;
+    }
+
+    public Key ceil(Key key) {
+        Node node = root;
+        Node nodeNext = null;
+        Key min = null;
+        if (node == null) return null;
+
+        while (node != null) {
+            nodeNext = node.right;
+            if (key.compareTo(node.key) > 0) {
+                min = node.key;
+                if (key.compareTo(nodeNext.key) < 0) {
+                    break;
+                }
+                node = node.right;
+            } else if (key.compareTo(node.key) < 0) {
+                min = node.key;
+                node = node.left;
+            } else if (key.compareTo(node.key) == 0) {
+                return node.key;
+            }
+        }
+
+        return min;
+    }
 
     // Utility Methods
 
