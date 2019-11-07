@@ -245,7 +245,29 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key floor(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return floor(root, key, null);
+    }
+
+    private Key floor(Node x, Key key, Key max) {
+        if (x == null) {
+            return null;
+        }
+
+        if (key.compareTo(x.key) > 0) {
+            if (max == null || max.compareTo(x.key) < 0) {
+                max = x.key;
+            }
+
+            max = floor(x.right, key, max);
+        }
+        else if (key.compareTo(x.key) < 0) {
+            max = floor(x.left, key, max);
+        }
+        else {
+            max = x.key;
+        }
+
+        return max;
     }
 
     @Override
