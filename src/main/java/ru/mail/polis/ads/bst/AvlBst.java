@@ -47,7 +47,82 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(Key key, Value value) {
-        throw new UnsupportedOperationException("Implement me");
+        root = put(root, key, value);
+    }
+
+    // логарифмическая сложность из-за поиска места вставки
+    private Node put(Node x, Key key, Value value) {
+        if (x == null) {
+            return new Node(key, value, 1);
+        }
+        if (key.compareTo(x.key) > 0) {
+            x.right = put(x.right, key, value);
+        }
+        else if (key.compareTo(x.key) < 0) {
+            x.left = put(x.left, key, value);
+        }
+        else x.value = value;
+
+        setHeight(x);
+        // возвращаясь назад по всему пути проверяем сбалансированность
+        x = balancing(x);
+        return x;
+    }
+
+    private int diff(Node x) {
+        return height(x.left) - height(x.right);
+    }
+
+    // константная временная сложность: указываем с одних вершин на другие
+    private Node balancing(Node x) {
+        // правое вращение необходимо, когда величина левого поддерева
+        // больше величины правого поддерева на 2
+        if (diff(x) == 2) {
+            // какое из поддеревьев левого потомка больше?
+            if (diff(x.left) < 0) {
+                x.left = rotateLeft(x.left);
+            }
+            return rotateRight(x);
+        }
+        // левое вращение необходимо, когда величина правого поддерева
+        // больше величины левого поддерева на 2
+        if (diff(x) == -2) {
+            // какое из поддеревьев правого потомка больше?
+            if (diff(x.right) > 0)  {
+                x.right = rotateRight(x.right);
+            }
+            return rotateLeft(x);
+        }
+
+        return x;
+    }
+
+    private void setHeight(Node x) {
+        x.height = 1 + Math.max(height(x.left), height(x.right));
+    }
+
+    private Node rotateRight(Node x) {
+        Node left = x.left;
+
+        x.left = left.right;
+        left.right = x;
+
+        setHeight(x);
+        setHeight(left);
+
+        return left;
+    }
+
+    private Node rotateLeft(Node x) {
+        Node right = x.right;
+
+        x.right = right.left;
+        right.left = x;
+
+        setHeight(x);
+        setHeight(right);
+
+        return right;
     }
 
     @Override
@@ -92,6 +167,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        throw new UnsupportedOperationException("Implement me");
+        return height(root);
+    }
+
+    private int height(Node x) {
+        return x == null ? 0 : x.height;
     }
 }
