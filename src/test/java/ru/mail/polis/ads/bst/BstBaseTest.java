@@ -57,5 +57,20 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
+
+    @Test
+    void putMany() {
+        Bst<String, String> bst = newBst();
+        bst.put("1", "tar");
+        bst.put("2", "bar");
+        bst.put("3", "var");
+
+
+        assertEquals(3, bst.size());
+        assertEquals("bar", bst.get("2"));
+        assertEquals(2, bst.height());
+    }
+
+
     
 }
