@@ -12,6 +12,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node left;
         Node right;
         int height;
+
+        Node(Key key, Value value, int height) {
+            this.key = key;
+            this.value = value;
+            this.height = height;
+        }
     }
 
     @Override
