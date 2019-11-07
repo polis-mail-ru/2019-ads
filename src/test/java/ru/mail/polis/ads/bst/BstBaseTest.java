@@ -64,13 +64,23 @@ class BstBaseTest {
         bst.put("1", "tar");
         bst.put("2", "bar");
         bst.put("3", "var");
+        bst.put("0", "sar");
 
 
-        assertEquals(3, bst.size());
-        assertEquals("bar", bst.get("2"));
-        assertEquals(2, bst.height());
+        assertEquals(4, bst.size());
+        assertEquals("sar", bst.get("0"));
+        assertEquals(3, bst.height());
     }
 
 
+    @Test
+    void balancingWithBigData() {
+        Bst<String, String> bst = newBst();
+        for (int i = 5; i >= 1; i--) {
+            bst.put(String.valueOf(i), "smth");
+        }
+
+        assertEquals(3, bst.height());
+    }
     
 }
