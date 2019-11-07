@@ -1,13 +1,17 @@
 package ru.mail.polis.ads.bst;
 
 /**
+ * Made by БорискинМА
+ * 07.11.19
+ * gr. Java-10, Технополис
+ * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
  * AVL implementation of binary search tree.
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
     private Node root;
-    
+
     private class Node {
         Key key;
         Value value;
@@ -105,24 +109,30 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node rotateRight(Node x) {
         Node left = x.left;
 
+        // имплементация вращения
         x.left = left.right;
         left.right = x;
 
+        // обновление высоты
         setHeight(x);
         setHeight(left);
 
+        // возвращает новый корень
         return left;
     }
 
     private Node rotateLeft(Node x) {
         Node right = x.right;
 
+        // имплеменатция вращения
         x.right = right.left;
         right.left = x;
 
+        // обновление высоты
         setHeight(x);
         setHeight(right);
 
+        // возвращает новый корень
         return right;
     }
 
@@ -319,4 +329,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private int height(Node x) {
         return x == null ? 0 : x.height;
     }
+
+    // https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
+    // https://www.geeksforgeeks.org/avl-tree-set-2-deletion/
 }
