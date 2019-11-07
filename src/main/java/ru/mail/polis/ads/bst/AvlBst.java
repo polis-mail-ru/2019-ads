@@ -255,7 +255,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Implement me");
+        return size(root);
+    }
+
+    private int size(Node x) {
+        if (x == null) {
+            return 0;
+        }
+
+        return size(x.left) + size(x.right) + 1;
     }
 
     @Override
