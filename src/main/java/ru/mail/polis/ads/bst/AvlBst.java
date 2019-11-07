@@ -55,6 +55,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null) {
             return new Node(key, value, 1);
         }
+
         if (key.compareTo(x.key) > 0) {
             x.right = put(x.right, key, value);
         }
@@ -127,7 +128,73 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value remove(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return remove(root, key).value;
+    }
+
+    // находим вершину, которую необходимо удалить.
+    // Значение вершины меняем с максимальным значение левого поддерева
+    // (максимальное значение среди минимальных),
+    // или же минимальным значением правого поддерева
+    // (минимальным значением среди максимальных).
+    // Затем копируем это значение в удаляемую (текущую) вершину,
+    // а вершину с максимумом удаляем.
+    // Логарифмическая временная сложность.
+    private Node remove(Node x, Key key) {
+        if (x == null) {
+            return null;
+        }
+
+        if (key.compareTo(x.key) > 0) {
+            x.right = remove(x.right, key);
+        }
+        else if (key.compareTo(x.key) < 0) {
+            x.left = remove(x.left, key);
+        }
+        else {
+            x = safeRemove(x);
+        }
+
+        setHeight(x);
+        // проходим по всему маршруту, по которому искали максимум,
+        // и проверяем: сбалансировано ли дерево
+        balancing(x);
+
+        return x;
+    }
+
+    private Node minNode(Node x) {
+        if (x.left == null) {
+            return x;
+        }
+
+        return minNode(x.left);
+    }
+
+    private Node rmMin(Node x) {
+        if (x.left == null) {
+            return x.right;
+        }
+
+        x.left = rmMin(x.left);
+
+        return x;
+    }
+
+    private Node safeRemove(Node x) {
+        if (x.right == null) {
+            return x.left;
+        }
+        if (x.left == null) {
+            return x.right;
+        }
+
+        Node t = x;
+
+        x = minNode(t.right);
+        x.right = rmMin(t.right);
+        x.left = t.left;
+
+        return x;
     }
 
     @Override
