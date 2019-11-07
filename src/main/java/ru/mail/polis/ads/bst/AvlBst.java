@@ -199,12 +199,25 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key min() {
-        throw new UnsupportedOperationException("Implement me");
+        return min(root);
+    }
+
+    private Key min(Node x) {
+        if (x == null) {
+            // структура пустая
+            return null;
+        }
+        if (x.left == null) {
+            return x.key;
+        }
+
+        return min(x.left);
     }
 
     @Override
     public Value minValue() {
-        throw new UnsupportedOperationException("Implement me");
+        // value от минимального key
+        return get(min());
     }
 
     @Override
