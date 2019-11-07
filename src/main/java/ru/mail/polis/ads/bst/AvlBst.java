@@ -5,6 +5,8 @@ package ru.mail.polis.ads.bst;
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
+
+    private Node root;
     
     private class Node {
         Key key;
@@ -22,7 +24,25 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return get(root, key);
+    }
+
+    private Value get(Node x, Key key) {
+        if (x == null) {
+            return null;
+        }
+        // на каждом шаге нет необходимости проверять целое поддерево,
+        // (обеспечим логарифмическую сложность)
+        if (key.compareTo(x.key) > 0) {
+            // не нужно смотреть на левое поддерево
+            return get(x.right, key);
+        }
+        if (key.compareTo(x.key) < 0) {
+            // не нужно смотреть на правое поддерево
+            return get(x.left, key);
+        }
+
+        return x.value;
     }
 
     @Override
