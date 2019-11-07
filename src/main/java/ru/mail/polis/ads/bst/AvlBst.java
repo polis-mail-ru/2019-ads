@@ -222,12 +222,25 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key max() {
-        throw new UnsupportedOperationException("Implement me");
+        return max(root);
+    }
+
+    private Key max(Node x) {
+        if (x == null) {
+            // структура пустая
+            return null;
+        }
+        if (x.right == null) {
+            return x.key;
+        }
+
+        return max(x.right);
     }
 
     @Override
     public Value maxValue() {
-        throw new UnsupportedOperationException("Implement me");
+        // value от максимального key
+        return get(max());
     }
 
     @Override
