@@ -250,7 +250,30 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key ceil(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return ceil(root, key, null);
+    }
+
+    private Key ceil(Node x, Key key, Key min) {
+        if (x == null) {
+            // заданного ключа нет
+            return null;
+        }
+
+        if (key.compareTo(x.key) < 0) {
+            if (/*до*/min == null || min.compareTo(x.key) > 0) {
+                min = x.key;
+            }
+
+            min = ceil(x.left, key, min);
+        }
+        else if (key.compareTo(x.key) > 0) {
+            min = ceil(x.right, key, min);
+        }
+        else {
+            min = x.key;
+        }
+
+        return min;
     }
 
     @Override
