@@ -231,6 +231,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
                 final Node min = minNode(current.right);
                 current.right = deleteMin(current.right);
                 min.right = current.right;
+                min.left = current.left;
                 current = min;
             }
         }
