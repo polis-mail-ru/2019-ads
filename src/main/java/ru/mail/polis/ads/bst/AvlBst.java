@@ -116,18 +116,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             throw new NullPointerException();
         }
 
-        remove(key, root);
+        removeKey(key, root);
     }
 
-    private void remove(Key key, Node x) {
+    private void removeKey(Key key, Node x) {
         if (x == null) {
             throw new NullPointerException();
         }
 
         if (key.compareTo(x.key) > 0 && x.right != null) {
-            remove(key, x.right);
+            removeKey(key, x.right);
         } else if (key.compareTo(x.key) < 0 && x.left != null) {
-            remove(key, x.left);
+            removeKey(key, x.left);
         } else {
             x = removeFound(x);
         }
