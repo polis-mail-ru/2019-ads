@@ -162,7 +162,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
      */
     @Override
     public @Nullable Value remove(@NotNull Key key) {
-        TreeWithoutValue treeWithoutValue = searchElementWhichNeedRemove(key, new TreeWithoutValue(root, null));
+        TreeWithoutValue treeWithoutValue = searchElementWhichNeedRemove(
+            key,
+            new TreeWithoutValue(
+                root,
+                null
+            )
+        );
         root = treeWithoutValue.node;
         if (treeWithoutValue.value != null) {
             size--;
@@ -415,13 +421,19 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return treeWithoutValue;
         }
         if (key.compareTo(treeWithoutValue.node.key) > 0) {
-            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(treeWithoutValue.node.right, treeWithoutValue.value);
+            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+                treeWithoutValue.node.right,
+                treeWithoutValue.value
+            );
             searchElementWhichNeedRemove(key, tempTreeWithoutValue);
             treeWithoutValue.node.right = tempTreeWithoutValue.node;
             treeWithoutValue.value = tempTreeWithoutValue.value;
         }
         if (key.compareTo(treeWithoutValue.node.key) < 0) {
-            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(treeWithoutValue.node.left, treeWithoutValue.value);
+            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+                treeWithoutValue.node.left,
+                treeWithoutValue.value
+            );
             searchElementWhichNeedRemove(key, tempTreeWithoutValue);
             treeWithoutValue.node.left = tempTreeWithoutValue.node;
             treeWithoutValue.value = tempTreeWithoutValue.value;
