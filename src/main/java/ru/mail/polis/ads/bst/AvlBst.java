@@ -30,20 +30,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-        if (topNode == null) return null;
+        if (topNode == null)
+            return null;
         Node node = get(key, topNode);
-        if (node == null) return null;
-        else return node.value;
+        return node != null ? node.value : null;
     }
 
     private Node get(Key key, Node node) {
 
         if (key.compareTo(node.key) > 0) {
-            if (node.right != null) return get(key, node.right);
-            else return null;
+            return node.right != null ? get(key, node.right) : null;
         } else if (key.compareTo(node.key) < 0) {
-            if (node.left != null) return get(key, node.left);
-            else return null;
+            return node.left != null ? get(key, node.left) : null;
         } else {
             return node;
         }
@@ -51,7 +49,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(Key key, Value value) {
-
         if (topNode == null) {
             topNode = new Node(key, value, 1);
             size++;
@@ -85,44 +82,49 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void remove(Key key) {
-        if (topNode == null) {
-            return;
-        }
-
-        remove(key, topNode);
+        if (topNode != null) topNode = remove(key, topNode);
     }
 
-    private void remove(Key key, Node node) {
-
-        if (node == null) return;
-
+    private Node remove(Key key, Node node) {
         if (key.compareTo(node.key) > 0) {
-            if (node.right != null) remove(key, node.right);
+            if (node.right != null)
+                node.right = remove(key, node.right);
         } else if (key.compareTo(node.key) < 0) {
-            if (node.left != null)  remove(key, node.left);
+            if (node.left != null)
+                node.left = remove(key, node.left);
         } else {
-            deleteNode(node);
+            node =  deleteNode(node);
         }
+
+        if (node != null) {
+            fixHeight(node);
+            node = balance(node);
+        }
+        return node;
     }
 
-    private void deleteNode(Node node) {
-        if (node.right == null && node.left == null)
+    private Node deleteNode(Node node) {
+        if (node.right == null && node.left == null) {
             node = null;
-        else if (node.right != null && node.left == null)
+        }
+        else if (node.right != null && node.left == null) {
             node = node.right;
-        else if (node.right == null)
+        }
+        else if (node.right == null) {
             node = node.left;
+        }
         else {
             Node minNodeOfRightChild = min(node.right);
-            Node left = node.left;
-            Node right = node.right;
-            node.key = minNodeOfRightChild.key;
-            node.value = minNodeOfRightChild.value;
-            minNodeOfRightChild = minNodeOfRightChild.right;
-            node.left = left;
-            node.right = right;
+            Key key = minNodeOfRightChild.key;
+            Value value = minNodeOfRightChild.value;
+            remove(minNodeOfRightChild.key);
+            node.key = key;
+            node.value = value;
+            // size-- уже выполнялся в remove(minNodeOfRightChild.key)
+            return node;
         }
         size--;
+        return node;
     }
 
     @Override
@@ -186,8 +188,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        if (topNode == null) return 0;
-        return topNode.height;
+        return topNode != null ? topNode.height : 0;
     }
 
     private void fixHeight(Node node) {

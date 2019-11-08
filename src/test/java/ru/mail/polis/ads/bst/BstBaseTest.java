@@ -11,7 +11,11 @@ class BstBaseTest {
     
     Bst<String, String> newBst() {
         return new AvlBst<>();
-    } 
+    }
+
+    Bst<Integer, String> newIntBst() {
+        return new AvlBst<>();
+    }
     
     @Test
     void emptyBst() {
@@ -65,22 +69,40 @@ class BstBaseTest {
         bst.put("2", "bar");
         bst.put("3", "var");
         bst.put("0", "sar");
+        bst.put("5", "zar");
+        bst.put("66", "car");
+        bst.put("36", "par");
 
 
-        assertEquals(4, bst.size());
+        assertEquals(7, bst.size());
         assertEquals("sar", bst.get("0"));
-        assertEquals(3, bst.height());
+        assertEquals(4, bst.height());
+
+        bst.remove("0");
+        assertNull(bst.get("0"));
+
     }
 
 
     @Test
-    void balancingWithBigData() {
-        Bst<String, String> bst = newBst();
-        for (int i = 5; i >= 1; i--) {
-            bst.put(String.valueOf(i), "smth");
+    void balancing() {
+        Bst<Integer, String> bst = newIntBst();
+        for (int i = 1; i <= 15; i++) {
+            bst.put(i, "smth");
         }
 
-        assertEquals(3, bst.height());
+        assertEquals(4, bst.height());
+    }
+
+    @Test
+    void remove() {
+        Bst<String, String> bst = newBst();
+        for (int i = 1; i <= 5; i++) {
+            bst.put(String.valueOf(i), "s" + i);
+        }
+
+        bst.remove("2");
+        assertEquals("s5", bst.get("5"));
     }
     
 }
