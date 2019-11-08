@@ -62,13 +62,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Class for {@code remove}. Contains current node and removed value
+     * Class for {@code remove}. Contains contains a reference to a subtree without removed node and removed value
      */
-    private class Pair {
+    private class TreeWithoutValue {
         @Nullable Node node;
         @Nullable Value value;
 
-        Pair(@Nullable Node node, @Nullable Value value) {
+        TreeWithoutValue(@Nullable Node node, @Nullable Value value) {
             this.node = node;
             this.value = value;
         }
@@ -162,12 +162,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
      */
     @Override
     public @Nullable Value remove(@NotNull Key key) {
-        Pair pair = searchElementWhichNeedRemove(key, new Pair(root, null));
-        root = pair.node;
-        if (pair.value != null) {
+        TreeWithoutValue treeWithoutValue = searchElementWhichNeedRemove(key, new TreeWithoutValue(root, null));
+        root = treeWithoutValue.node;
+        if (treeWithoutValue.value != null) {
             size--;
         }
-        return pair.value;
+        return treeWithoutValue.value;
     }
 
     /**
@@ -407,57 +407,57 @@ public class AvlBst<Key extends Comparable<Key>, Value>
      * Auxiliary recursive method for {@code remove} with main implementation
      *
      * @param key key which necessary remove
-     * @param pair pair of the current node and removed value
-     * @return pair which contain node and removed value
+     * @param treeWithoutValue treeWithoutValue of the current node and removed value
+     * @return treeWithoutValue which contain node and removed value
      */
-    private Pair searchElementWhichNeedRemove(Key key, Pair pair) {
-        if (pair.node == null) {
-            return pair;
+    private TreeWithoutValue searchElementWhichNeedRemove(Key key, TreeWithoutValue treeWithoutValue) {
+        if (treeWithoutValue.node == null) {
+            return treeWithoutValue;
         }
-        if (key.compareTo(pair.node.key) > 0) {
-            Pair tempPair = new Pair(pair.node.right, pair.value);
-            searchElementWhichNeedRemove(key, tempPair);
-            pair.node.right = tempPair.node;
-            pair.value = tempPair.value;
+        if (key.compareTo(treeWithoutValue.node.key) > 0) {
+            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(treeWithoutValue.node.right, treeWithoutValue.value);
+            searchElementWhichNeedRemove(key, tempTreeWithoutValue);
+            treeWithoutValue.node.right = tempTreeWithoutValue.node;
+            treeWithoutValue.value = tempTreeWithoutValue.value;
         }
-        if (key.compareTo(pair.node.key) < 0) {
-            Pair tempPair = new Pair(pair.node.left, pair.value);
-            searchElementWhichNeedRemove(key, tempPair);
-            pair.node.left = tempPair.node;
-            pair.value = tempPair.value;
+        if (key.compareTo(treeWithoutValue.node.key) < 0) {
+            TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(treeWithoutValue.node.left, treeWithoutValue.value);
+            searchElementWhichNeedRemove(key, tempTreeWithoutValue);
+            treeWithoutValue.node.left = tempTreeWithoutValue.node;
+            treeWithoutValue.value = tempTreeWithoutValue.value;
         }
-        if (key.compareTo(pair.node.key) == 0){
-            innerRemove(pair);
+        if (key.compareTo(treeWithoutValue.node.key) == 0){
+            innerRemove(treeWithoutValue);
         }
-        if (pair.node != null) {
-            fixHeight(pair.node);
-            pair.node = balance(pair.node);
+        if (treeWithoutValue.node != null) {
+            fixHeight(treeWithoutValue.node);
+            treeWithoutValue.node = balance(treeWithoutValue.node);
         }
-        return pair;
+        return treeWithoutValue;
     }
 
     /**
      * Auxiliary method for {@code searchElementWhichNeedRemove} with
      * main implementation of the replace removed node and some node of tree
      *
-     * @param pair pair of the current node and removed value
+     * @param treeWithoutValue treeWithoutValue of the current node and removed value
      */
-    private void innerRemove(Pair pair) {
-        if (pair.node.left == null) {
-            pair.value = pair.node.value;
-            pair.node = pair.node.right;
+    private void innerRemove(TreeWithoutValue treeWithoutValue) {
+        if (treeWithoutValue.node.left == null) {
+            treeWithoutValue.value = treeWithoutValue.node.value;
+            treeWithoutValue.node = treeWithoutValue.node.right;
             return;
         }
-        if (pair.node.right == null) {
-            pair.value = pair.node.value;
-            pair.node = pair.node.left;
+        if (treeWithoutValue.node.right == null) {
+            treeWithoutValue.value = treeWithoutValue.node.value;
+            treeWithoutValue.node = treeWithoutValue.node.left;
             return;
         }
-        Node tempNode = pair.node;
-        pair.node = searchMinNode(tempNode.right);
-        pair.node.right = deleteMin(tempNode.right);
-        pair.node.left = tempNode.left;
-        pair.value = tempNode.value;
+        Node tempNode = treeWithoutValue.node;
+        treeWithoutValue.node = searchMinNode(tempNode.right);
+        treeWithoutValue.node.right = deleteMin(tempNode.right);
+        treeWithoutValue.node.left = tempNode.left;
+        treeWithoutValue.value = tempNode.value;
     }
 
     /**
