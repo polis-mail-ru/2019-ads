@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -14,13 +15,13 @@ import java.util.StringTokenizer;
  */
 public final class Task1457 {
     private Task1457() {
-        // Should not be instantiated https://www.e-olymp.com/ru/submissions/5976679 https://www.e-olymp.com/ru/submissions/5976217
+        // Should not be instantiated https://www.e-olymp.com/ru/submissions/6067825
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int len = in.nextInt();
         int weight = in.nextInt();
-        List<Integer> train = new LinkedList<>();
+        List<Integer> train = new ArrayList<>();
         for (int i = 0; i < len; i++) {
             train.add(in.nextInt());
         }
@@ -28,8 +29,7 @@ public final class Task1457 {
         {
             int j = i;
             int k = train.get(i);
-            while (j > 0 && train.get(j - 1) > train.get(j))
-            {
+            while (j > 0 && train.get(j - 1) > train.get(j)) {
                 if (weight < train.get(j - 1) + k)
                 {
                     out.println("No");

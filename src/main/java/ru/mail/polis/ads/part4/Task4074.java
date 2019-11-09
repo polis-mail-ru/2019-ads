@@ -13,17 +13,23 @@ public final class Task4074 {
         // Should not be instantiated
     }
 
+    //create your own heap with comparator
+
     final static PriorityQueue<Integer> minHeap = new PriorityQueue<>();
     final static PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
+    private static void solve(final PrintWriter out) {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         maxHeap.add(Integer.MIN_VALUE);
         minHeap.add(Integer.MAX_VALUE);
-        int ctr = 1;
-        String s = in.next();
-        while (s != null && !s.isEmpty()) {
-            int n = Integer.parseInt(s);
-
+        int ctr = 0;
+        int n = -1;
+        while (true) {
+            try {
+                n = Integer.parseInt(br.readLine().trim());
+            } catch (Exception e) {
+                return;
+            }
             if (n >= minHeap.peek()) {
                 minHeap.add(n);
             } else {
@@ -71,7 +77,7 @@ public final class Task4074 {
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
         try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
+            solve(out);
         }
     }
 }

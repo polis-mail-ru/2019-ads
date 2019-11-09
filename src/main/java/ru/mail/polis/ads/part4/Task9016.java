@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
  */
 public final class Task9016 {
     private Task9016() {
-        // Should not be instantiated https://www.e-olymp.com/ru/submissions/5974954
+        // Should not be instantiated https://www.e-olymp.com/ru/submissions/6067816
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
@@ -25,12 +25,31 @@ public final class Task9016 {
         }
         for (int i = 0; i < numberCount; i++) {
             int num = in.nextInt();
-            if (Arrays.binarySearch(arr, num) >= 0) {
+            if (binarySearch(arr, num)) {
                 out.println("YES");
             } else {
                 out.println("NO");
             }
         }
+    }
+
+    private static boolean binarySearch(int[] arr, int num) {
+        Integer i = -1;
+            int low = 0, high = arr.length, mid;
+            while (low < high) {
+                mid = (low + high) >>> 1;
+                if (num == arr[mid]) {
+                    i = mid;
+                    break;
+                } else {
+                    if (num < arr[mid]) {
+                        high = mid;
+                    } else {
+                        low = mid + 1;
+                    }
+                }
+            }
+        return i >= 0;
     }
 
     private static class FastScanner {
