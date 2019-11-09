@@ -25,7 +25,7 @@ class BstBaseTest {
     @Test
     void orderedOnEmpty() {
         Bst<String, String> bst = newBst();
-        assertNull(bst.ceil("some key"));
+        assertNull(bst.ceil("root"));
         assertNull(bst.floor("some key"));
 
         assertNull(bst.min());
