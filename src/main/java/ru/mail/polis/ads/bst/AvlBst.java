@@ -234,6 +234,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
             return rotate(node, true);
         }
+
+        return node;
     }
 
     private int heightDiff(Node node) {
