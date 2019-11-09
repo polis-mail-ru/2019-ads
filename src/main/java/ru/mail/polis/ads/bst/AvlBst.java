@@ -50,7 +50,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private Node put(Node node, Key key, Value value) {
         if (node == null) {
-            return new Node(Key, value, 1);
+            return new Node(key, value, 1);
         }
 
         if (key.compareTo(node.key) < 0) {
