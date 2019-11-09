@@ -104,6 +104,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
+
     public void remove(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
         if (!containsKey(key)) return;
@@ -131,6 +132,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private boolean containsKey(Key key){
         return get(key) != null;
+
+    public Value remove(Key key) {
+        throw new UnsupportedOperationException("Implement me");
+
     }
 
     @Override
