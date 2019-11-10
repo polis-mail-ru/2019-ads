@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.bst;
+package main.java.ru.mail.polis.ads.bst;
 
 /**
  * Binary search tree with ordered operations support.
