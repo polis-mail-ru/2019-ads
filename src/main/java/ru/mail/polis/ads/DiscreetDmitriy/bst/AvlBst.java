@@ -48,6 +48,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node put(Node node, Key key, Value value) {
         if (node == null)
             return new Node(key, value, 1);
+
         if (key.compareTo(node.key) < 0)
             node.left = put(node.left, key, value);
         else if (key.compareTo(node.key) > 0)
@@ -56,6 +57,51 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             node.value = value;
 
         fixHeight(node);
+
+        node = balance(node);
+
+        return node;
+    }
+
+    private Node rotateLeft(Node node) {
+        Node right = node.right;
+        node.right = right.left;
+
+        right.left = node;
+
+        fixHeight(node);
+        fixHeight(right);
+
+        return right;
+    }
+
+    private Node rotateRight(Node node) {
+        Node left = node.left;
+        node.left = left.right;
+
+        left.right = node;
+
+        fixHeight(node);
+        fixHeight(left);
+
+        return left;
+    }
+
+    private Node balance(Node node) {
+        if (factor(node) == 2) {
+            if (factor(node.left) < 0)
+                node.left = rotateLeft(node.left);
+
+            return rotateRight(node);
+        }
+
+        if (factor(node) == -2) {
+            if (factor(node.right) > 0)
+                node.right = rotateRight(node.right);
+
+            return rotateLeft(node);
+        }
+
         return node;
     }
 
