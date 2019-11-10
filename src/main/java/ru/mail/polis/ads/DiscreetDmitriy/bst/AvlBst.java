@@ -5,7 +5,9 @@ package ru.mail.polis.ads.DiscreetDmitriy.bst;
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
-    
+
+    private Node root = null;
+
     private class Node {
         Key key;
         Value value;
