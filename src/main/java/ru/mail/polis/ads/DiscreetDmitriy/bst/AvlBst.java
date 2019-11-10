@@ -94,6 +94,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return height(root);
     }
 
+    private void fixHeight(Node node) {
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+    }
+
     private int height(Node node) {
         return node == null ? 0 : node.height;
     }
