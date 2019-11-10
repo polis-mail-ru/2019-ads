@@ -71,12 +71,21 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key max() {
-        throw new UnsupportedOperationException("Implement me");
+        return root == null ? null : max(root).key;
     }
 
     @Override
     public Value maxValue() {
-        throw new UnsupportedOperationException("Implement me");
+        return root == null ? null : max(root).value;
+    }
+
+    private Node max(Node node) {
+        Node max = node;
+
+        while (max.right != null)
+            max = max.right;
+
+        return max;
     }
 
     @Override
