@@ -130,6 +130,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         node.height = 1 + Math.max(height(node.left), height(node.right));
     }
 
+    private int factor(Node node) {
+        return height(node.left) - height(node.right);
+    }
+
     private int height(Node node) {
         return node == null ? 0 : node.height;
     }
