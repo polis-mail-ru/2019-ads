@@ -24,7 +24,20 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return get(root, key);
+    }
+
+    private Value get(Node node, Key key) {
+        if (node == null)
+            return null;
+
+        if (key.compareTo(node.key) < 0)
+            return get(node.left, key);
+
+        if (key.compareTo(node.key) > 0)
+            return get(node.right, key);
+
+        return node.value;
     }
 
     @Override
