@@ -52,12 +52,21 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key min() {
-        throw new UnsupportedOperationException("Implement me");
+        return root == null ? null : min(root).key;
     }
 
     @Override
     public Value minValue() {
-        throw new UnsupportedOperationException("Implement me");
+        return root == null ? null : min(root).value;
+    }
+
+    private Node min(Node node) {
+        Node min = node;
+
+        while (min.left != null)
+            min = min.left;
+
+        return min;
     }
 
     @Override
