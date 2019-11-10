@@ -209,8 +209,28 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key ceil(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (key == null || size() == 0)
+            return null;
+
+        Node node = ceil(root, key);
+
+        return node == null ? null : node.key;
     }
+
+    private Node ceil(Node node, Key key) {
+        if (node == null)
+            return null;
+
+        if (key == node.key)
+            return node;
+        if (key.compareTo(node.key) > 0)
+            return ceil(node.right, key);
+
+        Node left = ceil(node.left, key);
+
+        return left == null ? node : left;
+    }
+
 
     @Override
     public int size() {
