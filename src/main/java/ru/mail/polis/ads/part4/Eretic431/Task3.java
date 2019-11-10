@@ -49,7 +49,6 @@ public class Task3 {
                 } else {
                     out.println(ls.peek());
                 }
-                out.flush();
                 continue;
             }
 
@@ -62,7 +61,6 @@ public class Task3 {
                     ls.insert(gt.extract());
                     out.println(ls.peek());
                 }
-                out.flush();
                 continue;
             }
 
@@ -72,9 +70,8 @@ public class Task3 {
                 gt.insert(n);
                 out.println((ls.peek() + gt.peek()) / 2);
             }
-            out.flush();
         }
-
+        out.flush();
     }
 
     private static class BinaryHeap {
