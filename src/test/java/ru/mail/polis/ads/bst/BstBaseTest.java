@@ -1,6 +1,8 @@
 package ru.mail.polis.ads.bst;
 
 import org.junit.jupiter.api.Test;
+import ru.mail.polis.ads.DiscreetDmitriy.bst.AvlBst;
+import ru.mail.polis.ads.DiscreetDmitriy.bst.Bst;
 
 import static org.junit.jupiter.api.Assertions.*;
 
