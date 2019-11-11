@@ -4,9 +4,8 @@ package ru.mail.polis.ads.bst;
  * AVL implementation of binary search tree.
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
-
         implements Bst<Key, Value> {
-
+    
     private class Node {
         private Key key;
         private Value value;
