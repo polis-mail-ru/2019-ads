@@ -1,3 +1,8 @@
+package ru.mail.polis.ads.bst;
+
+/**
+ * Binary search tree with ordered operations support.
+ */
 public interface Bst<Key extends Comparable<Key>, Value> {
     Value get(Key key);
 

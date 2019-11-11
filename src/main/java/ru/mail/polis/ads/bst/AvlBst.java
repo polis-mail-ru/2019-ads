@@ -1,3 +1,5 @@
+package ru.mail.polis.ads.bst;
+
 /**
  * AVL implementation of binary search tree.
  */
