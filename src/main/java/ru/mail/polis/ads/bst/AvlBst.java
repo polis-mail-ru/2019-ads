@@ -91,7 +91,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return left;
     }
 
-
     @Override
     public Value remove(Key key) {
         return remove(root, key).value;
