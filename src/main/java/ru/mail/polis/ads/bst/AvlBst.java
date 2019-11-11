@@ -5,7 +5,7 @@ package ru.mail.polis.ads.bst;
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
-    
+
     private class Node {
         private Key key;
         private Value value;
@@ -54,11 +54,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         x = balance(x);
         return x;
     }
-    
-    @Override
-    public Value remove(Key key) {
-        return remove(root, key).value;        
-    }
 
     private Node balance(Node x) {
         if (delta(x) == -2) {
@@ -95,7 +90,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         fixHeight(left);
         return left;
     }
-    
+
+
+    @Override
+    public Value remove(Key key) {
+        return remove(root, key).value;
+    }
+
     private Node remove(Node x, Key key) {
         if (x == null) return null;
         if (key.compareTo(x.key) > 0) x.right = remove(x.right, key);
@@ -235,4 +236,3 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return x == null ? 0 : x.height;
     }
 }
-
