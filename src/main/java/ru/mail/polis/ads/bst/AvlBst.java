@@ -91,11 +91,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return left;
     }
 
-    @Override
-    public Value remove(Key key) {
-        return remove(root, key).value;
-    }
-
     private Node remove(Node x, Key key) {
         if (x == null) return null;
         if (key.compareTo(x.key) > 0) x.right = remove(x.right, key);
@@ -128,6 +123,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         x.right = deleteMin(t.right);
         x.left = t.left;
         return x;
+    }
+
+
+    @Override
+    public Value remove(Key key) {
+        return remove(root, key).value;
     }
 
     @Override
