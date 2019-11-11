@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Basic binary search tree invariants.
  */
 class BstBaseTest {
-    
+
     Bst<String, String> newBst() {
-        return new AvlBst<>();
-    } 
-    
+        return new AvlBst<String, String>();
+    }
+
     @Test
     void emptyBst() {
         Bst<String, String> bst = newBst();
@@ -39,9 +39,9 @@ class BstBaseTest {
     void put() {
         Bst<String, String> bst = newBst();
         bst.put("foo", "bar");
-        
+
         assertEquals("bar", bst.get("foo"));
-        
+
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
@@ -57,5 +57,5 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
-    
+
 }
