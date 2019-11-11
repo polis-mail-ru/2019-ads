@@ -93,7 +93,41 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value remove(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return remove(root, key).value;
+    }
+
+    private Node remove(Node x, Key key) {
+        if (x == null) return null;
+        if (key.compareTo(x.key) > 0) x.right = remove(x.right, key);
+        else if (key.compareTo(x.key) < 0) x.left = remove(x.left, key);
+        else x = innerDelete(x);
+        fixHeight(x);
+        balance(x);
+        return x;
+    }
+
+    private Node minNode(Node x) {
+        if (x.left == null) return x;
+        return minNode(x.left);
+    }
+
+    private Node deleteMin(Node x) {
+        if (x.left == null) {
+            return x.right;
+        }
+
+        x.left = deleteMin(x.left);
+        return x;
+    }
+
+    private Node innerDelete(Node x) {
+        if (x.left == null) return x.right;
+        if (x.right == null) return x.left;
+        Node t = x;
+        x = minNode(t.right);
+        x.right = deleteMin(t.right);
+        x.left = t.left;
+        return x;
     }
 
     @Override
