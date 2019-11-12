@@ -62,16 +62,21 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private boolean deleted = false;
 
     @Override
-    public void remove(Key key) {
+    public Value remove(Key key) {
+        Value val = null;
         if (size == 1) {
             if (root.key == key) {
+                val = root.value;
                 root = null;
                 size--;
             }
         } else {
+            Node remNode = remove(root, key);
+            val = remNode.value;
             root = remove(root, key);
         }
         deleted = false;
+        return val;
     }
 
 
