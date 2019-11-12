@@ -233,30 +233,31 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
 
     @Override
-    public void remove(Key key) {
+    public Value remove(Key key) {
         Node removingNode = getNode(key);
 
         if (removingNode == null) {
-            return;
+            return removingNode.value;
         }
 
         if (removingNode.left == null && removingNode.right == null) {
             removeNodeWithNoChildren(removingNode);
             rotation();
             height(head);
-            return;
+            return removingNode.value;
         }
 
         if (removingNode.left == null || removingNode.right == null) {
             removeNodeWithOneChild(removingNode);
             rotation();
             height(head);
-            return;
+            return removingNode.value;
         }
 
         removeNodeWithTwoChildren(removingNode);
         rotation();
         height(head);
+        return removingNode.value;
     }
 
 

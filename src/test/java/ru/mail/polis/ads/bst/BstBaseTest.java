@@ -146,19 +146,19 @@ class BstBaseTest {
         bst.put(97,"v");
 
         //no children
-        bst.remove(97);
+        assertEquals("v",bst.remove(97));
         assertNull(bst.get(97));
         assertEquals(6, bst.size());
         // one child
-        bst.remove(75);
+        assertEquals("w",bst.remove(75));
         assertNull(bst.get(75));
         assertEquals(5, bst.size());
         //two children
-        bst.remove(25);
+        assertEquals("r", bst.remove(25));
         assertNull(bst.get(25));
         assertEquals(4, bst.size());
         //head
-        bst.remove(50);
+        assertEquals("s",bst.remove(50));
         assertNull(bst.get(50));
         assertEquals(3, bst.size());
         assertEquals(2, bst.height());
