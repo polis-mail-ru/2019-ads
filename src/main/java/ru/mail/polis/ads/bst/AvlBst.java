@@ -78,6 +78,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return val;
     }
 
+    private Node deleteMin(Node node) {
+        if (node.left == null) return node.right;
+        node.left = deleteMin(node.left);
+        return node;
+    }
+
     private Node remove(Node node, Key key) {
         if (node == null) return null;
 
@@ -102,12 +108,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         fixHeight(node);
         balance(node);
-        return node;
-    }
-
-    private Node deleteMin(Node node) {
-        if (node.left == null) return node.right;
-        node.left = deleteMin(node.left);
         return node;
     }
 
