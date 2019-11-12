@@ -2,7 +2,8 @@ package ru.mail.polis.ads.bst;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Basic binary search tree invariants.
@@ -57,5 +58,8 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
+
+    @Test
+    void
     
 }
