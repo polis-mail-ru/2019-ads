@@ -54,8 +54,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         else {
             node.value = value;
         }
-        /*fixHeight(node);
-        node = balance(node);*/
+        fixHeight(node);
+        node = balance(node);
         return node;
     }
 
@@ -86,44 +86,25 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         } else if (!deleted) {
             deleted = true;
             size--;
-            if (node.left != null && node.right != null){
+            if (node.left != null && node.right != null) {
                 Node xNode = node;
                 node = min(xNode.right);
                 node.right = deleteMin(xNode.right);
                 node.left = xNode.left;
-            }
-            else if (node.left != null) {
+            } else if (node.left != null) {
                 node = node.left;
             } else {
                 node = node.right;
             }
         }
-            /*fixedNodeHeight(node);
-            return balanceNode(node);*/
+        fixHeight(node);
+        balance(node);
         return node;
     }
 
-    /*private Node innerDelete(Node node) {
-        if (node.right == null) {
-            node = node.left;
-            return null;
-        }
-        if (node.left == null) {
-            node = node.right;
-            return null;
-        }
-        Node xNode = node;
-        node = min(xNode.right);
-        node.right = deleteMin(xNode.right);
-        node.left = xNode.left;
-        return node;
-    }*/
-
     private Node deleteMin(Node node) {
         if (node.left == null) return node.right;
-
         node.left = deleteMin(node.left);
-
         return node;
     }
 
@@ -143,7 +124,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
         return node;
     }
-
 
     @Override
     public Value minValue() {
@@ -178,12 +158,38 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key floor(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return floor(root, key);
+    }
+
+    private Key floor(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+        if (key.compareTo(node.key) < 0) {
+            return floor(node.left, key);
+        }
+        if (key.compareTo(node.right.key) > 0) {
+            return floor(node.right, key);
+        }
+        return node.key;
     }
 
     @Override
     public Key ceil(Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return ceil(root, key);
+    }
+
+    private Key ceil(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+        if (key.compareTo(node.key) > 0) {
+            return ceil(node.right, key);
+        }
+        if (key.compareTo(node.left.key) < 0) {
+            return ceil(node.left, key);
+        }
+        return node.key;
     }
 
     @Override
@@ -193,6 +199,54 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        throw new UnsupportedOperationException("Implement me");
+        return size == 0 ? 0 : root.height;
+    }
+
+    private Node rotateLeft(Node node) {
+        Node right = node.right;
+        node.right = right.left;
+        right.left = node;
+        fixHeight(node);
+        fixHeight(right);
+        return right;
+    }
+
+    private Node rotateRight(Node node) {
+        Node left = node.left;
+        node.left = left.right;
+        left.right = node;
+        fixHeight(node);
+        fixHeight(left);
+        return left;
+    }
+
+    private void fixHeight(Node node) {
+        if (size == 0 || node == null) return;
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+    }
+
+    private int height(Node node) {
+        return node == null ? 0 : node.height;
+    }
+
+    private int factor(Node node) {
+        return height(node.left) - height(node.right);
+    }
+
+    private Node balance(Node node) {
+        if (size == 0 || node == null) return null;
+        if (factor(node) == 2) {
+            if (factor(node.left) < 0) {
+                node.left = rotateLeft(node.left);
+            }
+            return rotateRight(node);
+        }
+        if (factor(node) == -2) {
+            if (factor(node.right) > 0) {
+                node.right = rotateRight(node.right);
+            }
+            return rotateLeft(node);
+        }
+        return node;
     }
 }
