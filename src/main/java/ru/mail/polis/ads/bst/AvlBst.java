@@ -141,11 +141,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private Node max(Node node) {
         if (node == null) return null;
-
         while (node.right != null) {
             node = node.right;
         }
-
         return node;
     }
 
