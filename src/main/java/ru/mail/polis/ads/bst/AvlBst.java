@@ -71,9 +71,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
                 size--;
             }
         } else {
-            Node remNode = remove(root, key);
-            val = remNode.value;
             root = remove(root, key);
+            val = root.value;
         }
         deleted = false;
         return val;
