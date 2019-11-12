@@ -2,17 +2,18 @@ package ru.mail.polis.ads.bst;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Basic binary search tree invariants.
  */
 class BstBaseTest {
-    
+
     Bst<String, String> newBst() {
         return new BstAvlImpl<>();
-    } 
-    
+    }
+
     @Test
     void emptyBst() {
         Bst<String, String> bst = newBst();
@@ -39,9 +40,9 @@ class BstBaseTest {
     void put() {
         Bst<String, String> bst = newBst();
         bst.put("foo", "bar");
-        
+
         assertEquals("bar", bst.get("foo"));
-        
+
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
@@ -57,5 +58,5 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
-    
+
 }
