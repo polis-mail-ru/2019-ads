@@ -1,61 +1,75 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
- * AVL implementation of binary search tree.
+ * LLRB implementation of binary search tree.
  */
-public class AvlBst<Key extends Comparable<Key>, Value>
+public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
+
+    private static final boolean BLACK = false;
+    private static final boolean RED = true;
     
     private class Node {
         Key key;
         Value value;
         Node left;
         Node right;
-        int height;
+        boolean color;
     }
 
+    @Nullable
     @Override
-    public Value get(Key key) {
+    public Value get(@NotNull Key key) {
         throw new UnsupportedOperationException("Implement me");
     }
 
     @Override
-    public void put(Key key, Value value) {
+    public void put(@NotNull Key key, @NotNull Value value) {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
-    public Value remove(Key key) {
+    public Value remove(@NotNull Key key) {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
     public Key min() {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
     public Value minValue() {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
     public Key max() {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
     public Value maxValue() {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
-    public Key floor(Key key) {
+    public Key floor(@NotNull Key key) {
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Nullable
     @Override
-    public Key ceil(Key key) {
+    public Key ceil(@NotNull Key key) {
         throw new UnsupportedOperationException("Implement me");
     }
 
