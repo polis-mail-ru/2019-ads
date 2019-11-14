@@ -52,21 +52,57 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key min() {
+        Node min = min(node);
+
+        return min == null ? null : min.key;
     }
 
     @Nullable
     @Override
     public Value minValue() {
+        Node min = min(node);
+
+        return min == null ? null : min.value;
     }
 
     @Nullable
     @Override
     public Key max() {
+        Node max = max(node);
+
+        return max == null ? null : max.key;
     }
 
     @Nullable
     @Override
     public Value maxValue() {
+        Node max = max(node);
+
+        return max == null ? null : max.value;
+    }
+
+    private Node min(Node node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.left == null) {
+            return node;
+        }
+
+        return min(node.left);
+    }
+
+    private Node max(Node node) {
+        if (node == null) {
+            return null;
+        }
+
+        if (node.right == null) {
+            return node;
+        }
+
+        return max(node.right);
     }
 
     @Nullable
@@ -107,5 +143,17 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         updateHeight(tmp);
 
         return tmp;
+    }
+
+    private void colorFlip(Node node) {
+        node.color = !node.color;
+
+        if (node.left != null) {
+            node.left.color = !node.left.color;
+        }
+
+        if (node.right != null) {
+            node.right.color = !node.right.color;
+        }
     }
 }
