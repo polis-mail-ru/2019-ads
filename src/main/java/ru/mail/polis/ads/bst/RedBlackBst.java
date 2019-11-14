@@ -242,18 +242,22 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node balance(Node node) {
-        if (node.right.color && !node.left.color) {
+        if (isRed(node.right) && !isRed(node.left)) {
             node = rotate(node, true);
         }
 
-        if (node.left.color && !node.left.left.color) {
+        if (isRed(node.left) && !isRed(node.left.left)) {
             node = rotate(node, false);
         }
 
-        if (node.left.color && node.right.color) {
+        if (isRed(node.left) && isRed(node.right)) {
             colorFlip(node);
         }
 
         return node;
+    }
+
+    private boolean isRed(Node node) {
+        return (node != null) && node.color;
     }
 }
