@@ -34,11 +34,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (key.compareTo(x.key) > 0){
             return get(x.right, key);
         }
-        if (key.compareTo(x.key) < 0){
+        else if (key.compareTo(x.key) < 0){
             return get(x.left, key);
+        }else{
+            return x.value;
         }
 
-        return x.value;
+
     }
 
     @Override
@@ -47,20 +49,21 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             root = new Node(key, value, 1);
             return;
         }
-        put(root, key, value);
+        root = put(root, key, value);
     }
     public Node put(Node x, Key key, Value value){
         if (x == null){
-            x = new Node(key, value, 1);
-            return x;
+            return new Node(key, value, 1);
         }
         if (key.compareTo(x.key) > 0){
-            return put(x.right, key, value);
+            x.right = put(x.right, key, value);
         }
-         if (key.compareTo(x.key) < 0){
-            return put(x.left, key, value);
+         else if (key.compareTo(x.key) < 0){
+            x.left = put(x.left, key, value);
+        }else {
+            x.value = value;
+            return x;
         }
-        x.value = value;
         fixHeight(x);
         x = balance(x);
         return x;
@@ -69,19 +72,29 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value remove(Key key) {
-        return remove(root, key).value;
+
+        Node res = remove(root, key);
+        if (res == null){
+            return null;
+        }else{
+            return res.value;
+        }
     }
     public Node remove(Node x, Key key){
-        if (x.value == null){
+        if (x == null){
             return null;
         }
         if (key.compareTo(x.key) > 0){
-            return remove(x.right, key);
+            x.right = remove(x.right, key);
         }
-        if (key.compareTo(x.key) < 0){
-            return remove(x.left, key);
+        else if (key.compareTo(x.key) < 0){
+            x.left = remove(x.left, key);
         }
-        return delete(x);
+        else {
+            x = delete(x);
+
+        }
+        return x;
     }
     Node deleteMin(Node x) {
         if (x.left == null){
@@ -89,18 +102,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         x.left = deleteMin(x.left);
         return x;
-        }
+    }
     Node delete(Node x){
         if (x.right == null) return x.left;
         if (x.left == null) return x.right;
-        Node temp = x;
-        x = min(temp.right);
-        x.right = deleteMin(temp.right);
-        x.left = temp.left;
+        Node t = x;
+        x = min(t.right);
+        x.right = deleteMin(t.right);
+        x.left = t.left;
         return x;
-    }
-    void deleteMin() {
-        root = deleteMin(root);
     }
     @Override
     public Key min() {
@@ -157,14 +167,22 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (root == null){
             return null;
         }
-        return  floor(root, key);
+        return floor(root, key);
     }
     Key floor(Node x, Key key){
-        if (key.compareTo(x.key) < 0){
-            return max(x.left).key;
-        }else if (key == x.key){
+        if (x == null){
+            return null;
+        }
+        if (key.compareTo(x.key) == 0) {
             return x.key;
-        }return floor(x.left, key);
+        }
+        if (key.compareTo(x.key) < 0) {
+            return floor(x.left, key);
+        }
+        Key rslt = floor(x.right, key);
+        return (rslt == null) ? x.key : rslt;
+
+
     }
 
     @Override
@@ -176,11 +194,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     Key ceil(Node x, Key key){
-        if (key.compareTo(x.key) > 0){
-            return min(x.right).key;
-        }else if (key == x.key){
+        if (x == null){
+            return null;
+        }
+        if (key.compareTo(x.key) == 0) {
             return x.key;
-        }return ceil(x.right, key);
+        }
+        if (key.compareTo(x.key) > 0) {
+            return ceil(x.right, key);
+        }
+        Key rslt = ceil(x.left, key);
+        return (rslt == null) ? x.key : rslt;
+
     }
 
     @Override
@@ -191,10 +216,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null){
             return 0;
         }
-        if (x.left == null && x.right == null ){
-            return 1;
-        }
-        return size(x.left)+size(x.right);
+        return size(x.left)+size(x.right)+1;
     }
 
     @Override
@@ -209,48 +231,39 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     void fixHeight(Node x){
-        if (x.left == null){
-            if (x.right == null){
-                x.height = height(x);
-            }else {
-                x.height = height(x.right);
-            }
-        }else if (x.right == null){
-                x.height = height(x.left);
-            }
-        else{
-            x.height = Math.max(height(x.left), height(x.right));
+            x.height = Math.max(height(x.left), height(x.right))+1;
         }
-    }
 
     Node rotateRight(Node x){
-        Node t = x.left;
-        t.right = x;
-        x.left = null;
+        Node left = x.left;
+        x.left = left.right;
+        left.right = x;
         fixHeight(x);
-        fixHeight(t);
-        return t;
+        fixHeight(left);
+        return left;
     }
     Node rotateLeft(Node x){
-        Node t = x.right;
-        t.left = x;
-        x.right = null;
+        Node right = x.right;
+        x.right = right.left;
+        right.left = x;
         fixHeight(x);
-        fixHeight(t);
-        return t;
+        fixHeight(right);
+
+        return right;
     }
     int factor(Node x){
         return height(x.left) - height(x.right);
     }
 
-    Node balance(Node x){
-        if (factor(x) == -2) {
-            if (factor(x.left) > 0){
-                rotateLeft(x.left);
+    public Node balance(Node x){
+        if(factor(x) == 2){
+            if(factor(x.left) < 0){
+                x.left = rotateLeft(x.left);
             }
             return rotateRight(x);
-        }if (factor(x) == -2) {
-            if (factor(x.right) > 0) {
+        }
+        if(factor(x) == -2){
+            if(factor(x.right) > 0){
                 x.right = rotateRight(x.right);
             }
             return rotateLeft(x);
