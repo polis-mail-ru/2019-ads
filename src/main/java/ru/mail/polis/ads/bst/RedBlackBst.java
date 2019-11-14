@@ -20,10 +20,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         boolean color;
         int height;
 
-        Node(Key key, Value value, boolean color) {
+        Node(Key key, Value value, boolean color, int height) {
           this.key = key;
           this.value = value;
           this.color = color;
+          this.height = height;
         }
     }
 
@@ -58,7 +59,24 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node put(Node node, Key key, Value value) {
+        if (node == null) {
+            return new Node(key, value, RED, 1);
+        }
 
+        if (key.compareTo(node.key) < 0) {
+            node.left = put(node.left, key, value);
+        }
+
+        if (key.compareTo(node.key) > 0) {
+            node.right = put(node.right, key, value);
+        }
+
+        node.value = value;
+
+        node = balance(node);
+        updateHeight(node);
+
+        return node;
     }
 
     @Nullable
@@ -221,5 +239,21 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (node.right != null) {
             node.right.color = !node.right.color;
         }
+    }
+
+    private Node balance(Node node) {
+        if (node.right.color && !node.left.color) {
+            node = rotate(node, true);
+        }
+
+        if (node.left.color && !node.left.left.color) {
+            node = rotate(node, false);
+        }
+
+        if (node.left.color && node.right.color) {
+            colorFlip(node);
+        }
+
+        return node;
     }
 }
