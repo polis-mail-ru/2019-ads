@@ -97,7 +97,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     private void rotate(Node x, Node y){
-        y.size = x.size;
         x.size = 1 + size(x.left) + size(x.right);
         x.height = 1 + Math.max(height(x.left), height(x.right));
         y.height = 1 + Math.max(height(y.left), height(y.right));
