@@ -212,9 +212,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private int size(Node node) {
         if (node == null) return 0;
-        return node.color != RED?
-                        1 + size(node.left) + size(node.right):
-                        size(node.left) + size(node.right);
+        return 1 + size(node.left) + size(node.right);
     }
 
     @Override
@@ -223,7 +221,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     // Height block
-    private int height(Node x) {
-        return x == null ? 0 : x.height;
+    private int height(Node node) {
+        if (node == null) return 0;
+        return node.color != RED?
+                1 + height(node.left):
+                height(node.left);
     }
 }
