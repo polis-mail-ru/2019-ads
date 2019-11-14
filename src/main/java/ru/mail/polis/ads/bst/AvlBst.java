@@ -104,11 +104,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
-
-    public void remove(Key key) {
+    public Value remove(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
-        if (!containsKey(key)) return;
-        root = remove(root, key);
+        if (!containsKey(key)) return null;
+        return remove(root, key).value;
     }
 
     private Node remove(Node node, Key key){
@@ -130,12 +129,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return balance(node);
     }
 
-    private boolean containsKey(Key key){
+    private boolean containsKey(Key key) {
         return get(key) != null;
-
-    public Value remove(Key key) {
-        throw new UnsupportedOperationException("Implement me");
-
     }
 
     @Override
