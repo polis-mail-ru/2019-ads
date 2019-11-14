@@ -32,6 +32,23 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
+        return get(node, key);
+    }
+
+    private Value get(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+
+        if (key.compareTo(node.key) < 0) {
+            return get(node.left, key);
+        }
+
+        if (key.compareTo(node.key) > 0) {
+            return get(node.right, key);
+        }
+
+        return node.value;
     }
 
     @Override
@@ -47,6 +64,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
+        throw new UnsupportedOperationException("Implement me"); //this is the next part
     }
 
     @Nullable
@@ -108,19 +126,67 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
+        return floor(node, key);
+    }
+
+    private Key floor(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+
+        if (key.compareTo(node.key) < 0) {
+            return floor(node.left, key);
+        }
+
+        if (key.compareTo(node.key) > 0) {
+            return floor(node.right, key);
+        }
+
+        return node.key;
     }
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
+        return ceil(node, key);
+    }
+
+    private Key ceil(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+
+        if (key.compareTo(node.key) > 0) {
+            return floor(node.right, key);
+        }
+
+        if (key.compareTo(node.key) < 0) {
+            return floor(node.left, key);
+        }
+
+        return node.key;
     }
 
     @Override
     public int size() {
+        return size(node);
+    }
+
+    private int size(Node node) {
+        return node == null ? 0 : size(node.left) + size(node.right) + 1;
     }
 
     @Override
     public int height() {
+        return height(node);
+    }
+
+    private int height(Node node) {
+        return node == null ? 0 : node.height;
+    }
+
+    private void updateHeight(Node node) {
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
     }
 
     private Node rotate(Node node, boolean left) {
