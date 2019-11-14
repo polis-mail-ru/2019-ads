@@ -18,68 +18,94 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         Node left;
         Node right;
         boolean color;
+        int height;
+
+        Node(Key key, Value value, boolean color) {
+          this.key = key;
+          this.value = value;
+          this.color = color;
+        }
     }
+
+    private Node node;
 
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        throw new UnsupportedOperationException("Implement me");
+      node = put(node, key, value);
+      node.color = BLACK;
+    }
+
+    private Node put(Node node, Key key, Value value) {
+
     }
 
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Key min() {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Value minValue() {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Key max() {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Value maxValue() {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Implement me");
     }
 
     @Override
     public int height() {
-        throw new UnsupportedOperationException("Implement me");
+    }
+
+    private Node rotate(Node node, boolean left) {
+        Node tmp = null;
+
+        if (left) {
+            tmp = node.right;
+            node.right = node.left;
+            node.left = node;
+        } else {
+            tmp = node.left;
+            node.left = node.right;
+            node.right = node;
+        }
+
+        tmp.color = node.color;
+        node.color = RED;
+
+        updateHeight(node);
+        updateHeight(tmp);
+
+        return tmp;
     }
 }
