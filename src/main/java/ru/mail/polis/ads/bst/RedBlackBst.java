@@ -42,6 +42,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         left.color = x.color;
         x.color = RED;
 
+        fixHeight(x);
+        fixHeight(left);
+
         return left;
     }
 
@@ -52,6 +55,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         right.color = x.color;
         x.color = RED;
+
+        fixHeight(x);
+        fixHeight(right);
 
         return right;
     }
@@ -75,20 +81,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
-    private Node put(Node node,Key key, Value value){
-        if(node==null)
-            return new Node(key,value,RED);
 
-        if (key.compareTo(node.key) < 0)
-            node.left = put(node.left,key,value);
-        else if(key.compareTo(node.key) > 0)
-            node.right = put(node.right,key,value);
-        else
-            node.value = value;
-
-        node = fixUp(node);
-        return node;
-    }
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
@@ -108,6 +101,24 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     public void put(@NotNull Key key, @NotNull Value value) {
         root = put(root,key,value);
         root.color = BLACK;
+    }
+
+    private Node put(Node node,Key key, Value value){
+        if(node==null)
+            return new Node(key,value,RED);
+
+        if (key.compareTo(node.key) < 0)
+            node.left = put(node.left,key,value);
+        else if(key.compareTo(node.key) > 0)
+            node.right = put(node.right,key,value);
+        else
+            node.value = value;
+
+        node = fixUp(node);
+
+        fixHeight(node);
+
+        return node;
     }
 
     @Nullable
@@ -220,11 +231,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return height(root);
     }
 
-    // Height block
-    private int height(Node node) {
-        if (node == null) return 0;
-        return node.color != RED?
-                1 + height(node.left):
-                height(node.left);
+    private int height(Node x) {
+        return x == null ? 0 : x.height;
+    }
+
+    private void fixHeight(Node x) {
+        x.height = Math.max(height(x.left), height(x.right)) + 1;
     }
 }
