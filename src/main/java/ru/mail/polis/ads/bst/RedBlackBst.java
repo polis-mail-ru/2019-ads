@@ -595,16 +595,16 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     /**
      *  Fixing color and balance for the specific node.
-     *  To be 3 case:
+     *  There are 3 case:
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
      *          before fixing     +        after fixing        +
      *                            +                            +
-     *    1)  root ---> BLACK     +     root ---> BLACK        +
-     *                 /    \     +              /    \        +
-     *            BLACK     RED   +           RED     BLACK    +
+     *    1)  root ---> BLACK     +   root ---> BLACK          +
+     *                 /    \     +            /    \          +
+     *            BLACK     RED   +         RED     BLACK      +
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-     *   2)  root ---> ...        +   root ---> ...            +
-     *                 |          +              |             +
+     *   2)  root ---> ...        +  root ---> ...             +
+     *                 |          +             |              +
      *              BLACK         +            RED             +
      *             /    \         +           /   \            +
      *          RED     ...       +     BLACK     BLACK        +
