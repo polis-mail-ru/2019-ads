@@ -1,28 +1,35 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Binary search tree with ordered operations support.
  */
 public interface Bst<Key extends Comparable<Key>, Value> {
-    Value get(Key key);
+    @Nullable Value get(@NotNull Key key);
 
-    void put(Key key, Value value);
+    void put(@NotNull Key key, @NotNull Value value);
 
+    @Nullable Value remove(@NotNull Key key);
+
+<<<<<<< HEAD
     Value remove(Key key);
+=======
+    @Nullable Key min();
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776
 
-    Key min();
+    @Nullable Value minValue();
 
-    Value minValue();
+    @Nullable Key max();
 
-    Key max();
+    @Nullable Value maxValue();
 
-    Value maxValue();
+    @Nullable Key floor(@NotNull Key key);
 
-    Key floor(Key key);
+    @Nullable Key ceil(@NotNull Key key);
 
-    Key ceil(Key key);
-    
     int size();
-    
+
     int height();
 }

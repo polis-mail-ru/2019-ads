@@ -1,18 +1,29 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
- * AVL implementation of binary search tree.
+ * LLRB implementation of binary search tree.
  */
-public class AvlBst<Key extends Comparable<Key>, Value>
+public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
     private Node root;
 
     class Node {
+=======
+    private static final boolean BLACK = false;
+    private static final boolean RED = true;
+    
+    private class Node {
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
         Key key;
         Value value;
         Node left;
         Node right;
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
         int height;
         int size;
 
@@ -22,9 +33,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             this.height = height;
             this.size = size;
         }
+=======
+        boolean color;
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
     }
 
+    @Nullable
     @Override
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
     public Value get(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
         Node x = get(root, key);
@@ -100,9 +116,20 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         x.size = 1 + size(x.left) + size(x.right);
         x.height = 1 + Math.max(height(x.left), height(x.right));
         y.height = 1 + Math.max(height(y.left), height(y.right));
+=======
+    public Value get(@NotNull Key key) {
+        throw new UnsupportedOperationException("Implement me");
     }
 
     @Override
+    public void put(@NotNull Key key, @NotNull Value value) {
+        throw new UnsupportedOperationException("Implement me");
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+    }
+
+    @Nullable
+    @Override
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
     public Value remove(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
         if (!containsKey(key)) return null;
@@ -130,14 +157,20 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private boolean containsKey(Key key) {
         return get(key) != null;
+=======
+    public Value remove(@NotNull Key key) {
+        throw new UnsupportedOperationException("Implement me");
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
     }
 
+    @Nullable
     @Override
     public Key min() {
         if (root == null) return null;
         return min(root).key;
     }
 
+    @Nullable
     @Override
     public Value minValue() {
         if (root == null) return null;
@@ -157,12 +190,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return balance(node);
     }
 
+    @Nullable
     @Override
     public Key max() {
         if (root == null) return null;
         return max(root).key;
     }
 
+    @Nullable
     @Override
     public Value maxValue() {
         if (root == null) return null;
@@ -174,7 +209,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return min(node.right);
     }
 
+    @Nullable
     @Override
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
     public Key floor(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
         if (root == null) return null;
@@ -189,9 +226,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         else if (cmp < 0) return floor(node.left, key);
         Node y = floor(node.right, key);
         return y != null ? y : node;
+=======
+    public Key floor(@NotNull Key key) {
+        throw new UnsupportedOperationException("Implement me");
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
     }
 
+    @Nullable
     @Override
+<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
     public Key ceil(Key key) {
         if (key == null) throw new IllegalArgumentException("Input key is null");
         if (root == null) return null;
@@ -206,6 +249,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         else if (cmp > 0) return ceil(node.right, key);
         Node y = ceil(node.left, key);
         return y != null ? y : node;
+=======
+    public Key ceil(@NotNull Key key) {
+        throw new UnsupportedOperationException("Implement me");
+>>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
     }
 
     @Override
