@@ -598,7 +598,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      *  There are 3 case:
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
      *          before fixing     +        after fixing        +
-     *      1) root ---> ...      +     root ---> ...          +
+     *      1) root ---> ...      +    root ---> ...           +
      *                    |       +               |            +
      *                  BLACK     +             BLACK          +
      *                 /    \     +            /               +
@@ -606,7 +606,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      *                            +        /                   +
      *                            +    BLACK                   +
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
-     *    2) root ---> ...        +  root ---> ...             +
+     *   2) root ---> ...        +  root ---> ...              +
      *                 |          +             |              +
      *              BLACK         +            RED             +
      *             /    \         +           /   \            +
