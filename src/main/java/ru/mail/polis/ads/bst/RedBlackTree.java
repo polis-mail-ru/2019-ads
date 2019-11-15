@@ -6,8 +6,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * AVL implementation of binary search tree.
  */
-public class AvlBst<Key extends Comparable<Key>, Value>
-        implements Bst<Key, Value> {
+public class RedBlackTree<Key extends Comparable<Key>, Value>
+        implements Bst<Key, Value>  {
 
     static final boolean RED = true;
     static final boolean BLACK = false;
@@ -119,7 +119,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         throw new UnsupportedOperationException("Implement me");
     }
 
-    @Nullable
     @Override
     public Key min() {
         if (root == null){
@@ -136,7 +135,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
-    @Nullable
     @Override
     public Value minValue() {
         if (root == null){
@@ -146,8 +144,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
-
-    @Nullable
     @Override
     public Key max() {
         if (root == null){
@@ -158,14 +154,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
     Node max(Node x){
         if (x.right != null){
-            System.out.println(x+" "+x.right);
             return max(x.right);
         }else{
             return x;
         }
     }
 
-    @Nullable
     @Override
     public Value maxValue() {
         if (root == null){
@@ -175,38 +169,48 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
-    @Nullable
     @Override
-    public Key floor(@NotNull Key key) {
+    public Key floor(Key key) {
         if (root == null){
             return null;
         }
-        return  floor(root, key);
+        return floor(root, key);
     }
     Key floor(Node x, Key key){
-        if (key.compareTo(x.key) < 0){
-            return max(x.left).key;
-        }else if (key == x.key){
-            return x.key;
-        }return floor(x.left, key);
-    }
-
-
-        @Nullable
-    @Override
-    public Key ceil(@NotNull Key key) {
-            if (root == null){
-                return null;
-            }
-            return ceil(root, key);
+        if (x == null){
+            return null;
         }
 
+        if (key.compareTo(x.key) < 0) {
+            return floor(x.left, key);
+        }
+        Key rslt = floor(x.right, key);
+        return (rslt == null) ? x.key : rslt;
+
+
+    }
+
+    @Override
+    public Key ceil(Key key) {
+        if (root == null){
+            return null;
+        }
+        return ceil(root, key);
+    }
+
     Key ceil(Node x, Key key){
-        if (key.compareTo(x.key) > 0){
-            return min(x.right).key;
-        }else if (key == x.key){
+        if (x == null){
+            return null;
+        }
+        if (key.compareTo(x.key) == 0) {
             return x.key;
-        }return ceil(x.right, key);
+        }
+        if (key.compareTo(x.key) > 0) {
+            return ceil(x.right, key);
+        }
+        Key rslt = ceil(x.left, key);
+        return (rslt == null) ? x.key : rslt;
+
     }
 
     @Override
@@ -217,23 +221,20 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null){
             return 0;
         }
-        if (x.left == null && x.right == null ){
-            return 1;
-        }
-        return size(x.left)+size(x.right);
+        return size(x.left)+size(x.right)+1;
     }
-
 
     @Override
     public int height() {
         return height(root);
     }
-    int height(Node x){
-        if (x == null){
+    int height(Node x) {
+        if (x==null){
             return 0;
         }
         return x.height;
     }
+
     void fixHeight(Node x){
         if (x.left == null){
             if (x.right == null){
