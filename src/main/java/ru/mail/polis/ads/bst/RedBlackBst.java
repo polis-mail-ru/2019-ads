@@ -601,8 +601,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      *      1) root ---> ...      +    root ---> ...           +
      *                    |       +               |            +
      *                  BLACK     +             BLACK          +
-     *                 /    \     +            /               +
-     *            BLACK     RED   +         RED                +
+     *                 /    \     +            /    \          +
+     *            BLACK     RED   +         RED    ...         +
      *                            +        /                   +
      *                            +    BLACK                   +
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
