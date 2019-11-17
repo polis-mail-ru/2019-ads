@@ -17,6 +17,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         private Node(Key key, Value value) {
             this.key = key;
             this.value = value;
+            this.height = 1;
         }
 
         private int getHeight() {
@@ -24,22 +25,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
 
         private void fixHeight() {
-            if (left == null) {
-                if (right == null) {
-                    height = 1;
-                    return;
-                }
-                right.fixHeight();
-                height = 1 + right.getHeight();
-                return;
-            }
-            left.fixHeight();
-            if (right == null) {
-                height = 1 + left.getHeight();
-                return;
-            }
-            right.fixHeight();
-            height = 1 + Math.max(left.getHeight(), right.getHeight());
+            height = 1 + Math.max((left != null ? left.height : 0), (right != null ? right.height : 0));
         }
     }
 
@@ -71,7 +57,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Override
     public void put(Key key, Value value) {
         top = put(top, key, value);
-        top.fixHeight();
     }
 
     private Node put(Node node, Key key, Value value) {
@@ -92,6 +77,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value remove(Key key) {
+
+        // Ищем элемент для удаления
         Node deletedParent = null;
         Node deleted = top;
         while (deleted != null && key.compareTo(deleted.key) != 0) {
@@ -103,15 +90,19 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             }
         }
 
+        // Элемент не найден
         if (deleted == null) {
             return null;
         }
 
+        // Элемент найден
+
         size--;
 
+        // Если нет правого, то просто перекидываем ссылки
         if (deleted.right == null) {
             if (deletedParent == null) {
-                top = null;
+                top = deleted.left;
             } else {
                 if (deletedParent.left == deleted) {
                     deletedParent.left = deleted.left;
@@ -123,6 +114,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return deleted.value;
         }
 
+        // Ищем наименьший элемент справа
         Node leastRightParent = deleted;
         Node leastRight = deleted.right;
 
@@ -131,12 +123,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             leastRight = leastRight.left;
         }
 
+        // Удаляем наименьший элемент справа и вешаем на него детей удаляемого элемента
         leastRightParent.left = leastRight.right;
         leastRight.left = deleted.left;
         if (deleted.right != leastRight) {
             leastRight.right = deleted.right;
         }
 
+        // Привязываем новый элемент к дереву
         if (deletedParent == null) {
             top = leastRight;
         } else if (deletedParent.left == deleted) {
@@ -145,7 +139,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             deletedParent.right = leastRight;
         }
         leastRight.fixHeight();
-        balance(leastRight);
         return deleted.value;
     }
 
@@ -263,6 +256,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node leftNode = node.left;
         node.left = leftNode.right;
         leftNode.right = node;
+        node.fixHeight();
+        leftNode.fixHeight();
         return leftNode;
     }
 
@@ -270,6 +265,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node rightNode = node.right;
         node.right = rightNode.left;
         rightNode.left = node;
+        node.fixHeight();
+        rightNode.fixHeight();
         return rightNode;
     }
 

@@ -125,7 +125,19 @@ class BstBaseTest {
 
         assertEquals("value2", bst.remove("key2"));
         assertEquals(0, bst.size());
+
+        bst.put("key2", "value2");
+        bst.put("key1", "value1");
+
+        assertEquals("value2", bst.remove("key2"));
+        assertEquals(1, bst.size());
         assertNull(bst.get("key2"));
+        assertEquals("value1", bst.get("key1"));
+
+        assertEquals("value1", bst.remove("key1"));
+        assertEquals(0, bst.size());
+        assertNull(bst.get("key1"));
+
     }
 
     @Test
