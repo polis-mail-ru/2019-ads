@@ -25,13 +25,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return element == null ? 0: element.height;
     }
 
-    private int fixHeight(Node element) {
-        if (element == null) {
-            return 0;
-        }
-
-        element.height = 1 + Math.max(fixHeight(element.left), fixHeight(element.right));
-        return element.height;
+    private void fixHeight(Node element) {
+        element.height = 1 + Math.max(height(element.left), height(element.right));
     }
 
     @Override
@@ -167,6 +162,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     private Value deletedValue = null;
+
     @Override
     public Value remove(Key key) {
         root = delete(key, root);
