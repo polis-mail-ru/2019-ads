@@ -15,17 +15,75 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node left;
         Node right;
         int height;
+        boolean color;
+
+        Node (Key key, Value value, int height, boolean color) {
+            this.key = key;
+            this.value = value;
+            this.height = height;
+            this.color = color;
+        }
     }
+
+    AvlBst() {
+        size = 0;
+    }
+    private Node topNode;
+    private int size;
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
 
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return topNode != null ? get(topNode, key).value : null;
+    }
+
+    private Node get(Node node, Key key) {
+        if (node == null) return null;
+
+        if (key.compareTo(node.key) > 0) {
+            return get(node.right, key);
+        } else if (key.compareTo(node.key) < 0) {
+            return get(node.left, key);
+        } else {
+            return node;
+        }
     }
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        throw new UnsupportedOperationException("Implement me");
+        topNode = put(topNode, key, value);
+        topNode.color = BLACK;
+    }
+
+    private Node put(Node node, Key key, Value value) {
+        if (node == null) {
+            size++;
+            return new Node(key, value, 1, RED);
+        }
+
+        if (key.compareTo(node.key) > 0) {
+            node.right = put(node.right, key, value);
+        } else if (key.compareTo(node.key) < 0) {
+            node.left = put(node.left, key, value);
+        } else {
+            node.value = value;
+        }
+        node = fixUp(node);
+        fixHeight(node);
+        return node;
+    }
+
+    private void fixHeight(Node node) {
+        if (node.right == null && node.left != null)
+            node.height = isRed(node.left) ? node.left.height : node.left.height + 1;
+        else if (node.right != null && node.left == null)
+            node.height = node.right.height + 1;
+        else if (node.right == null)
+            node.height = 1;
+        else
+            node.height = Math.max(node.left.height, node.right.height) + 1;
     }
 
     @Nullable
@@ -37,46 +95,110 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key min() {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node node = min(topNode);
+        return node.key;
+    }
+
+    private Node min(Node node) {
+        if (node.left == null) return node;
+        return min(node.left);
     }
 
     @Nullable
     @Override
     public Value minValue() {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node minNode = min(topNode);
+        return minNode.value;
     }
 
     @Nullable
     @Override
     public Key max() {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node node = max(topNode);
+        return node.key;
+    }
+
+    private Node max(Node node) {
+        if (node.right == null) return node;
+        return max(node.right);
     }
 
     @Nullable
     @Override
     public Value maxValue() {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node maxNode = max(topNode);
+        return maxNode.value;
     }
 
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node node = get(topNode, key);
+        return node != null ? max(node.left).key : null;
     }
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (topNode == null) return null;
+        Node node = get(topNode, key);
+        return node != null ? min(node.right).key : null;
     }
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Implement me");
+        return size;
     }
 
     @Override
     public int height() {
-        throw new UnsupportedOperationException("Implement me");
+        return topNode != null ? topNode.height : 0;
     }
+
+    private boolean isRed(Node node) {
+        return node != null && node.color == RED;
+    }
+
+    private Node rotateLeft(Node node) {
+        Node right = node.right;
+        node.right = right.left;
+        right.left = node;
+        right.color = node.color;
+        node.color = RED;
+        return right;
+    }
+
+    private Node rotateRight(Node node) {
+        Node left = node.left;
+        node.left = left.right;
+        left.right = node;
+        left.color = node.color;
+        node.color = RED;
+        return left;
+    }
+
+    private void flipColors(Node node) {
+        node.color = !node.color;
+        node.right.color = !node.right.color;
+        node.left.color = !node.left.color;
+    }
+
+    private Node fixUp(Node node) {
+        if (isRed(node.right) && !isRed(node.left)) {
+            node = rotateLeft(node);
+        }
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateRight(node);
+        }
+        if (isRed(node.right) && isRed(node.left)) {
+            flipColors(node);
+        }
+        return node;
+    }
+
 }

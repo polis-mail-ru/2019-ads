@@ -11,8 +11,12 @@ class BstBaseTest {
     
     Bst<String, String> newBst() {
         return new AvlBst<>();
-    } 
-    
+    }
+
+    Bst<Integer, String> newBstInt() {
+        return new AvlBst<>();
+    }
+
     @Test
     void emptyBst() {
         Bst<String, String> bst = newBst();
@@ -56,6 +60,19 @@ class BstBaseTest {
 
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
+    }
+
+    @Test
+    void checkHeight() {
+        Bst<Integer, String> bst = newBstInt();
+        bst.put(1, "1");
+        bst.put(2, "2");
+        bst.put(3, "3");
+        bst.put(4, "4");
+        bst.put(5, "5");
+        bst.put(6, "6");
+
+        assertEquals(3, bst.height());
     }
     
 }
