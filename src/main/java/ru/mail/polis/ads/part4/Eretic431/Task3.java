@@ -118,7 +118,19 @@ public class Task3 {
 
         private void siftUp(int n) {
             int child = n;
-            int parent = parentIndex(n);
+            int parent;
+
+            if (n == 0) {
+                parent = 0;
+            }
+
+            if (n % 2 == 0) {
+                parent = (n - 1) / 2;
+            } else {
+                parent = n / 2;
+            }
+
+
             boolean condition;
             if (max) {
                 condition = pyramid[child] > pyramid[parent];
@@ -129,7 +141,16 @@ public class Task3 {
             while (condition) {
                 swap(child, parent);
                 child = parent;
-                parent = parentIndex(child);
+
+                if (child == 0) {
+                    parent = 0;
+                }
+
+                if (child % 2 == 0) {
+                    parent = (n - 1) / 2;
+                } else {
+                    parent = n / 2;
+                }
 
                 if (max) {
                     condition = pyramid[child] > pyramid[parent];
@@ -176,46 +197,6 @@ public class Task3 {
             final int tmp = pyramid[lhs];
             pyramid[lhs] = pyramid[rhs];
             pyramid[rhs] = tmp;
-        }
-
-        private int parentIndex(int n) {
-            int parent;
-
-            if (n == 0) {
-                return 0;
-            }
-
-            if (n % 2 == 0) {
-                parent = (n - 1) / 2;
-            } else {
-                parent = n / 2;
-            }
-
-            return parent;
-        }
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
         }
     }
 }
