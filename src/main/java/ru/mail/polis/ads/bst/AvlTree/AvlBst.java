@@ -1,6 +1,6 @@
-package ru.mail.polis.ads.bst.Bst;
+package ru.mail.polis.ads.bst.AvlTree;
 
-public class AvlTree <Key extends Comparable<Key>, Value>{
+public class AvlBst <Key extends Comparable<Key>, Value>{
 
     private Node root;
     private int size;
