@@ -1,4 +1,4 @@
-class AvlTree <Key extends Comparable<Key>, Value> implements Bst<Key, Value>{
+class AvlTree <Key extends Comparable<Key>, Value>{
 
     private Node root;
     private int size;
