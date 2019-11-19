@@ -23,6 +23,6 @@ public interface Bst<Key extends Comparable<Key>, Value> {
     Key ceil(Key key);
     
     int size();
-    
+
     int height();
 }

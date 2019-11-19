@@ -94,11 +94,6 @@ public class RedBlackTree <Key extends Comparable<Key>, Value>
     return size;
   }
 
-  @Override
-  public int height() {
-    return 0;
-  }
-
   private Node get(Node x, Key key) {
     if (x == null) {
       return null;
