@@ -64,6 +64,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         throw new UnsupportedOperationException("Implement me");
     }
 
+    @Override
     public int height() {
         throw new UnsupportedOperationException("Implement me");
     }
