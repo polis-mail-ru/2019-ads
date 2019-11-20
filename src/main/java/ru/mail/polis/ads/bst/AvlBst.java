@@ -1,6 +1,9 @@
 package ru.mail.polis.ads.bst;
 
-import javax.swing.tree.FixedHeightLayoutCache;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 /**
  * AVL implementation of binary search tree.
@@ -8,6 +11,7 @@ import javax.swing.tree.FixedHeightLayoutCache;
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
     Node root;
+
     private class Node {
         Key key;
         Value value;
@@ -22,6 +26,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    @Nullable
     @Override
     public Value get(Key key) {
         return get(root, key);
@@ -78,6 +83,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }else{
             return res;
         }
+
     }
     public Node remove(Node x, Key key){
         if (x == null){
@@ -91,7 +97,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         else {
             x = delete(x);
-
         }
         return x;
     }
@@ -111,6 +116,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         x.left = t.left;
         return x;
     }
+    @Nullable
     @Override
     public Key min() {
         if (root == null){
@@ -127,6 +133,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    @Nullable
     @Override
     public Value minValue() {
         if (root == null){
@@ -136,6 +143,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    @Nullable
     @Override
     public Key max() {
         if (root == null){
@@ -152,6 +160,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    @Nullable
     @Override
     public Value maxValue() {
         if (root == null){
@@ -161,6 +170,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    @Nullable
     @Override
     public Key floor(Key key) {
         if (root == null){
@@ -181,9 +191,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Key rslt = floor(x.right, key);
         return (rslt == null) ? x.key : rslt;
 
-
     }
 
+    @Nullable
     @Override
     public Key ceil(Key key) {
         if (root == null){
@@ -204,7 +214,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         Key rslt = ceil(x.left, key);
         return (rslt == null) ? x.key : rslt;
-
     }
 
     @Override
