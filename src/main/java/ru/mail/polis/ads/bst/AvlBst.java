@@ -24,7 +24,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value get(Key key) {
-
         return get(root, key);
     }
     public Value get(Node x, Key key){
@@ -72,12 +71,12 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Value remove(Key key) {
-
-        Node res = remove(root, key);
+        Value res = this.get(key);
+        remove(root, key);
         if (res == null){
             return null;
         }else{
-            return res.value;
+            return res;
         }
     }
     public Node remove(Node x, Key key){

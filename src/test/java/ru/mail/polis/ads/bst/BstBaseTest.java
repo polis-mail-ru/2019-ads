@@ -76,7 +76,7 @@ class BstBaseTest {
         }
         for (int i = 1; i <= elementsCount; i += 2) {
             assertEquals(i, bst.get(i));
-            bst.remove(i);
+            assertEquals(i, bst.remove(i));
             assertNull(bst.get(i));
             assertEquals(i + 1, bst.get(i + 1));
         }
