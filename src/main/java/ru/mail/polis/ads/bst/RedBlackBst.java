@@ -12,6 +12,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private static final boolean BLACK = false;
     private static final boolean RED = true;
     
+    private static final boolean RIGHT = false;
+    private static final boolean LEFT = true;
+    
     private class Node {
         Key key;
         Value value;
@@ -248,11 +251,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private Node balance(Node node) {
         if (isRed(node.right) && !isRed(node.left)) {
-            node = rotate(node, true);
+            node = rotate(node, LEFT);
         }
 
         if (isRed(node.left) && !isRed(node.left.left)) {
-            node = rotate(node, false);
+            node = rotate(node, RIGHT);
         }
 
         if (isRed(node.left) && isRed(node.right)) {
