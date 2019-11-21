@@ -252,7 +252,7 @@ public class OwnHashTable<Key, Value>
     @Override
     public Value get(@NotNull Key key) {
         int hash = hash(key);
-        int index = hash % (table.length - 1);
+        int index = hash % table.length;
         Node<Key, Value> node = table[index];
         while (node != null) {
             if (node.hash == hash && key.equals(node.key)) {
@@ -280,7 +280,7 @@ public class OwnHashTable<Key, Value>
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
         int hash = hash(key);
-        int index = hash % (table.length - 1);
+        int index = hash % table.length;
         Node<Key, Value> node = table[index];
         Node<Key, Value> tempNode = null;
         while (node != null) {
@@ -312,7 +312,7 @@ public class OwnHashTable<Key, Value>
     @Override
     public Value remove(@NotNull Key key) {
         int hash = hash(key);
-        int index = hash % (table.length - 1);
+        int index = hash % table.length;
         Node<Key, Value> removedNode = remove(hash, key, index);
         return removedNode != null ? removedNode.value : null;
     }
@@ -357,7 +357,7 @@ public class OwnHashTable<Key, Value>
      * @param node added node from old table
      */
     private void putDuringResize(Node<Key, Value> node) {
-        int index = node.hash % (table.length - 1);
+        int index = node.hash % table.length;
         node.next = table[index];
         if (node.next == null) {
             size++;
