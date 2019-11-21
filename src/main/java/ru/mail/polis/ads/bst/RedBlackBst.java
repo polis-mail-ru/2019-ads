@@ -63,11 +63,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return new Node(key, value, RED, 1);
         }
 
-        if (key.compareTo(node.key) < 0) {
+        boolean isLess = key.compareTo(node.key) < 0;
+
+        if (isLess) {
             node.left = put(node.left, key, value);
         }
 
-        if (key.compareTo(node.key) > 0) {
+        if (!isLess) {
             node.right = put(node.right, key, value);
         }
 
