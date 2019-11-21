@@ -47,31 +47,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             this.color = RED;
         }
 
-        Node(@NotNull Key key, @NotNull Value value, boolean color) {
-            this.key = key;
-            this.value = value;
-            this.height = 1;
-            this.color = color;
-        }
-
-        Node(@NotNull Key key, @NotNull Value value, int height) {
-            this.key = key;
-            this.value = value;
-            this.height = height;
-            this.color = RED;
-        }
-
-        Node(@NotNull Key key, @NotNull Value value, int height, boolean color) {
-            this.key = key;
-            this.value = value;
-            this.height = height;
-            this.color = color;
-        }
-
-        boolean isRed(@Nullable Node node) {
-            return node != null && node.color == RED;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -84,6 +59,19 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         @Override
         public int hashCode() {
             return Objects.hash(key, value);
+        }
+    }
+
+    /**
+     * Class for {@code remove}. Contains contains a reference to a subtree without removed node and removed value
+     */
+    private class TreeWithoutValue {
+        @Nullable Node node;
+        @Nullable Value value;
+
+        TreeWithoutValue(@Nullable Node node, @Nullable Value value) {
+            this.node = node;
+            this.value = value;
         }
     }
 
@@ -179,7 +167,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        TreeWithoutValue treeWithoutValue = delete(key, new TreeWithoutValue(root, null));
+        root = treeWithoutValue.node;
+
+        if (treeWithoutValue.value != null) {
+            size--;
+        }
+
+        if (root != null) {
+            root.color = BLACK;
+        }
+
+        return treeWithoutValue.value;
     }
 
     /**
@@ -191,11 +190,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key min() {
-        if (root == null) {
-            return null;
-        }
-        Node node = searchMinNode(root);
-        return node.key;
+        return root != null ? searchMinNode(root).key : null;
     }
 
     /**
@@ -207,11 +202,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value minValue() {
-        if (root == null) {
-            return null;
-        }
-        Node node = searchMinNode(root);
-        return node.value;
+        return root != null ? searchMinNode(root).value : null;
     }
 
     /**
@@ -223,11 +214,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key max() {
-        if (root == null) {
-            return null;
-        }
-        Node node = searchMaxNode(root);
-        return node.key;
+        return root != null ? searchMaxNode(root).key : null;
     }
 
     /**
@@ -239,11 +226,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value maxValue() {
-        if (root == null) {
-            return null;
-        }
-        Node node = searchMaxNode(root);
-        return node.value;
+        return root != null ? searchMaxNode(root).value : null;
     }
 
     /**
@@ -259,10 +242,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        if (root == null) {
-            return null;
-        }
-        return searchMaxKeyForFloor(key, root);
+        return root!= null ? searchMaxKeyForFloor(key, root) : null;
     }
 
     /**
@@ -278,10 +258,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        if (root == null) {
-            return null;
-        }
-        return searchMinKeyForCeil(key, root);
+        return root!= null ? searchMinKeyForCeil(key, root) : null;
     }
 
     /**
@@ -313,10 +290,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      */
     @Override
     public boolean containsKey(@NotNull Key key) {
-        if (root == null) {
-            return false;
-        }
-        return searchValue(key, root) != null;
+        return root != null && searchValue(key, root) != null;
     }
 
     /**
@@ -329,10 +303,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      */
     @Override
     public boolean containsValue(@NotNull Value value) {
-        if (root == null) {
-            return false;
-        }
-        return searchValue(value, root);
+        return root != null && searchValue(value, root);
     }
 
     /**
@@ -355,10 +326,54 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         size = 0;
     }
 
+    /**
+     * Removes node with min {@code key} or returns null if {@code root} == {@code null}
+     *
+     * @return {@code value} which mapped a min {@code key} or {@code null}
+     */
+    @Override
+    @Nullable
+    public Value deleteMin() {
+        TreeWithoutValue treeWithoutValue = deleteMin(new TreeWithoutValue(root, null));
+        root = treeWithoutValue.node;
+
+        if (treeWithoutValue.value != null) {
+            size--;
+        }
+
+        if (root != null) {
+            root.color = BLACK;
+        }
+
+        return treeWithoutValue.value;
+    }
+
+    /**
+     * Removes node with max {@code key} or returns null if {@code root} == {@code null}
+     *
+     * @return {@code value} which mapped a max {@code key} or {@code null}
+     */
+    @Override
+    @Nullable
+    public Value deleteMax() {
+        TreeWithoutValue treeWithoutValue = deleteMax(new TreeWithoutValue(root, null));
+        root = treeWithoutValue.node;
+
+        if (treeWithoutValue.value != null) {
+            size--;
+        }
+
+        if (root != null) {
+            root.color = BLACK;
+        }
+
+        return treeWithoutValue.value;
+    }
+
     /* -------------- Package-private operations -------------- */
 
     /**
-     * Package-private getter for root-node
+     * Method for check the correct operation of the tree construction
      *
      * @return {@code root}
      */
@@ -369,11 +384,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     /* ------------------ Private operations ------------------ */
 
     /**
-     * Auxiliary recursive method for {@code min} and {@code minValue}
-     * with main implementation
+     * Returns {@code node} with min {@code key} and {@code value}.
+     * Uses in methods {@code min} and {@code minValue}
      *
-     * @param node current node for recursive method
-     * @return node from tree
+     * @param node current node
+     * @return {@code node} with min {@code key} and {@code value}
      */
     private Node searchMinNode(Node node) {
         if (node.left != null) {
@@ -383,11 +398,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code max} and {@code maxValue}
-     * with main implementation
+     * Returns {@code node} with max {@code key} and {@code value}.
+     * Uses in methods {@code max} and {@code maxValue}
      *
      * @param node current node for recursive method
-     * @return node from tree
+     * @return {@code node} with max {@code key} and {@code value}
      */
     private Node searchMaxNode(Node node) {
         if (node.right != null) {
@@ -397,7 +412,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code ceil} with main implementation
+     * Method for {@code ceil} with main implementation
+     * Search a minimum key {@code k} from tree which equal or more than
+     * given key {@code key}.
      *
      * @param key  key {@code key} which more than
      *             or equal to the necessary key
@@ -429,7 +446,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code floor} with main implementation
+     * Method for {@code floor} with main implementation
+     * Search a maximum key {@code k} from tree which equal or less than
+     * given key {@code key}.
      *
      * @param key  key {@code key} which less than
      *             or equal to the necessary key
@@ -461,7 +480,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code height} with main implementation
+     * Method for {@code height} with main implementation
+     * Returns the number of maximum height of the node in this tree.
      *
      * @param node node from which we are looking a height
      * @return number of height of the necessary node
@@ -471,7 +491,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code containsKey} with main implementation
+     * Method for {@code containsKey} with main implementation
+     * Returns {@code true} if this tree contains a mapping for the
+     * specified key.
      *
      * @param key The key whose presence in this tree is to be tested
      * @param currentNode current node for recursive method
@@ -491,7 +513,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code containsValue} with main implementation
+     * Method for {@code containsValue} with main implementation
+     * Returns {@code true} if this tree maps one or more keys to the
+     * specified value.
      *
      * @param value The value whose presence in this tree is to be tested
      * @param currentNode current node for recursive method
@@ -546,8 +570,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Changes the color of the node to red and the color of its left and
-     * right node to black
+     * Swap the color of the node and the color of its left and
+     * right node
      *
      * @param node node which necessary rotate
      * @return node with another color
@@ -569,7 +593,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Auxiliary recursive method for {@code put} with main implementation
+     * method for {@code put} with main implementation
      *
      * @param key added key
      * @param value added value
@@ -581,9 +605,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             size++;
             return new Node(key, value);
         }
-        if (key.compareTo(node.key) < 0) {
+        int result = key.compareTo(node.key);
+        if (result < 0) {
             node.left = put(key, value, node.left);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (result > 0) {
             node.right = put(key, value, node.right);
         } else {
             node.value = value;
@@ -608,9 +633,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
      *   2) root ---> ...         +  root ---> ...             +
      *                 |          +             |              +
-     *              BLACK         +            RED             +
+     *              BLACK         +           BLACK            +
      *             /    \         +           /   \            +
-     *          RED     ...       +     BLACK     BLACK        +
+     *          RED     ...       +        RED    RED          +
      *         /                  +                            +
      *      RED                   +                            +
      * + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
@@ -646,5 +671,218 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
      */
     private boolean isRed(Node node) {
         return node != null && node.color;
+    }
+
+    /**
+     * Maintains 3-node state when moving to the left
+     *
+     * @param node current node {@code node}
+     * @return 3-node
+     */
+    private Node moveRedLeft(Node node) {
+        flipColors(node);
+        if (isRed(node.right.left)) {
+            node.right = rotateRight(node.right);
+            node = rotateLeft(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
+    /**
+     * Method for {@code deleteMin} with main implementation
+     *
+     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed min value
+     * @return treeWithoutValue which contain node and removed min value
+     */
+    private TreeWithoutValue deleteMin(TreeWithoutValue treeWithoutValue) {
+        if (treeWithoutValue.node == null) {
+            return treeWithoutValue;
+        }
+        if (treeWithoutValue.node.left == null) {
+            treeWithoutValue.value = treeWithoutValue.node.value;
+            treeWithoutValue.node = null;
+            return treeWithoutValue;
+        }
+        if (!isRed(treeWithoutValue.node.left) && !isRed(treeWithoutValue.node.left.left)) {
+            treeWithoutValue.node = moveRedLeft(treeWithoutValue.node);
+        }
+        TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+            treeWithoutValue.node.left,
+            treeWithoutValue.value
+        );
+        deleteMin(tempTreeWithoutValue);
+        treeWithoutValue.node.left = tempTreeWithoutValue.node;
+        treeWithoutValue.value = tempTreeWithoutValue.value;
+        treeWithoutValue.node = fixUp(treeWithoutValue.node);
+        fixHeight(treeWithoutValue.node);
+        return treeWithoutValue;
+    }
+
+    /**
+     * Maintains 3-node state when moving to the right
+     *
+     * @param node current node {@code node}
+     * @return 3-node
+     */
+    private Node moveRedRight(Node node) {
+        flipColors(node);
+        if (isRed(node.left.left)) {
+            node = rotateRight(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
+    /**
+     * Method for {@code deleteMax} with main implementation
+     *
+     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed max value
+     * @return treeWithoutValue which contain node and removed max value
+     */
+    private TreeWithoutValue deleteMax(TreeWithoutValue treeWithoutValue) {
+        if (treeWithoutValue.node == null) {
+            return treeWithoutValue;
+        }
+        if (isRed(treeWithoutValue.node.left)) {
+            treeWithoutValue.node = rotateRight(treeWithoutValue.node);
+        }
+        if (treeWithoutValue.node.right == null) {
+            treeWithoutValue.value = treeWithoutValue.node.value;
+            treeWithoutValue.node = null;
+            return treeWithoutValue;
+        }
+        if (!isRed(treeWithoutValue.node.right) && !isRed(treeWithoutValue.node.right.right)) {
+            treeWithoutValue.node = moveRedRight(treeWithoutValue.node);
+        }
+        TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+            treeWithoutValue.node.right,
+            treeWithoutValue.value
+        );
+        deleteMax(tempTreeWithoutValue);
+        treeWithoutValue.node.right = tempTreeWithoutValue.node;
+        treeWithoutValue.value = tempTreeWithoutValue.value;
+        treeWithoutValue.node = fixUp(treeWithoutValue.node);
+        fixHeight(treeWithoutValue.node);
+        return treeWithoutValue;
+    }
+
+    /**
+     * Method for {@code remove} with main implementation
+     *
+     * @param key key whose mapping is to be removed from the tree
+     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed value
+     * @return treeWithoutValue which contain node and removed value
+     */
+    private TreeWithoutValue delete(Key key, TreeWithoutValue treeWithoutValue) {
+        if (treeWithoutValue.node == null) {
+            return treeWithoutValue;
+        }
+        int result = key.compareTo(treeWithoutValue.node.key);
+        if (result < 0) {
+            if (treeWithoutValue.node.left != null) {
+                if (!isRed(treeWithoutValue.node.left) && !isRed(treeWithoutValue.node.left.left)) {
+                    treeWithoutValue.node = moveRedLeft(treeWithoutValue.node);
+                }
+                TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+                    treeWithoutValue.node.left,
+                    treeWithoutValue.value
+                );
+                delete(key, tempTreeWithoutValue);
+                treeWithoutValue.node.left = tempTreeWithoutValue.node;
+                treeWithoutValue.value = tempTreeWithoutValue.value;
+            }
+        } else if (result > 0) {
+            if (treeWithoutValue.node.right != null) {
+                if (isRed(treeWithoutValue.node.left)) {
+                    treeWithoutValue.node = rotateRight(treeWithoutValue.node);
+                }
+                if (!isRed(treeWithoutValue.node.right) && !isRed(treeWithoutValue.node.right.left)) {
+                    treeWithoutValue.node = moveRedRight(treeWithoutValue.node);
+                }
+                TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
+                    treeWithoutValue.node.right,
+                    treeWithoutValue.value
+                );
+                delete(key, tempTreeWithoutValue);
+                treeWithoutValue.node.right = tempTreeWithoutValue.node;
+                treeWithoutValue.value = tempTreeWithoutValue.value;
+            }
+        } else {
+            if (isRed(treeWithoutValue.node.left)) {
+                treeWithoutValue.node = rotateRight(treeWithoutValue.node);
+                if (treeWithoutValue.node.right != null){
+                    Node tempNode = treeWithoutValue.node.right;
+                    treeWithoutValue.value = tempNode.value;
+                    if (tempNode.right == null) {
+                        treeWithoutValue.node.right = treeWithoutValue.node.right.left;
+                    } else {
+                        treeWithoutValue.node.right.key = searchMinNode(tempNode.right).key;
+                        treeWithoutValue.node.right.value = searchValue(
+                            treeWithoutValue.node.right.key,
+                            treeWithoutValue.node.right.right
+                        );
+                        treeWithoutValue.node.right.right = deleteMin(tempNode.right);
+                        if (treeWithoutValue.node.right.right == null
+                            && treeWithoutValue.node.right.left != null
+                            && !isRed(treeWithoutValue.node.right.left)) {
+
+                            treeWithoutValue.node.right.left.color = RED;
+                            treeWithoutValue.node.right.color = BLACK;
+                        }
+                    }
+                    treeWithoutValue.node = fixUp(treeWithoutValue.node);
+                    fixHeight(treeWithoutValue.node);
+                    return treeWithoutValue;
+                }
+            }
+            if (treeWithoutValue.node.right == null) {
+                treeWithoutValue.value = treeWithoutValue.node.value;
+                treeWithoutValue.node = null;
+                return treeWithoutValue;
+            }
+            if (treeWithoutValue.node.left != null
+                && !isRed(treeWithoutValue.node)
+                && !isRed(treeWithoutValue.node.right)
+                && !isRed(treeWithoutValue.node.left)) {
+
+                flipColors(treeWithoutValue.node);
+                treeWithoutValue.node.color = BLACK;
+            }
+            Node tempNode = treeWithoutValue.node;
+            treeWithoutValue.value = tempNode.value;
+            treeWithoutValue.node.key = searchMinNode(tempNode.right).key;
+            treeWithoutValue.node.value = searchValue(treeWithoutValue.node.key, treeWithoutValue.node.right);
+            treeWithoutValue.node.right = deleteMin(tempNode.right);
+            if (treeWithoutValue.node.right == null
+                && treeWithoutValue.node.left != null
+                && !isRed(treeWithoutValue.node.left)) {
+
+                treeWithoutValue.node.left.color = RED;
+                treeWithoutValue.node.color = BLACK;
+            }
+        }
+        treeWithoutValue.node = fixUp(treeWithoutValue.node);
+        fixHeight(treeWithoutValue.node);
+        return treeWithoutValue;
+    }
+
+    /**
+     * Method for {@code delete} which searching min node for replace
+     *
+     * @param node current node for recursive method
+     * @return node from tree
+     */
+    private Node deleteMin(Node node) {
+        if (node.left == null) {
+            return null;
+        }
+        if (!isRed(node.left) && !isRed(node.left.left)) {
+            node = moveRedLeft(node);
+        }
+        node.left = deleteMin(node.left);
+        node = fixUp(node);
+        fixHeight(node);
+        return node;
     }
 }

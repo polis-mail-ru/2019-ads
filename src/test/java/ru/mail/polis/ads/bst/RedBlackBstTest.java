@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RedBlackBstTest {
@@ -58,25 +57,25 @@ public class RedBlackBstTest {
 
         assertEquals(redBlackBstInterface.size(), size);
 
-//        redBlackBst.remove("testStringKey0");
-//        assertNull(redBlackBst.get("testStringKey0"));
-//
-//        redBlackBst.remove("testStringKey1");
-//        assertNull(redBlackBst.get("testStringKey1"));
-//
-//        redBlackBst.remove("testStringKey2");
-//        assertNull(redBlackBst.get("testStringKey2"));
-//
-//        redBlackBst.remove("testStringKey3");
-//        assertNull(redBlackBst.get("testStringKey3"));
-//
-//        redBlackBst.remove("testStringKey4");
-//        assertNull(redBlackBst.get("testStringKey4"));
-//
-//        redBlackBst.remove("testStringKey5");
-//        assertNull(redBlackBst.get("testStringKey5"));
-//
-//        assertEquals(redBlackBst.size(), 0);
+        redBlackBstInterface.remove("testStringKey0");
+        assertNull(redBlackBstInterface.get("testStringKey0"));
+
+        redBlackBstInterface.remove("testStringKey1");
+        assertNull(redBlackBstInterface.get("testStringKey1"));
+
+        redBlackBstInterface.remove("testStringKey2");
+        assertNull(redBlackBstInterface.get("testStringKey2"));
+
+        redBlackBstInterface.remove("testStringKey3");
+        assertNull(redBlackBstInterface.get("testStringKey3"));
+
+        redBlackBstInterface.remove("testStringKey4");
+        assertNull(redBlackBstInterface.get("testStringKey4"));
+
+        redBlackBstInterface.remove("testStringKey5");
+        assertNull(redBlackBstInterface.get("testStringKey5"));
+
+        assertEquals(redBlackBstInterface.size(), 0);
     }
 
     @Test
@@ -126,51 +125,134 @@ public class RedBlackBstTest {
     }
 
     @Test
+    void testWorkingDeleteMin() {
+        assertNull(redBlackBstInterface.deleteMin());
+        assertTrue(redBlackBstInterface.empty());
+
+        redBlackBstInterface.put("1", "testStringValue1");
+        redBlackBstInterface.put("3", "testStringValue3");
+        redBlackBstInterface.put("8", "testStringValue8");
+        redBlackBstInterface.put("2", "testStringValue2");
+        redBlackBstInterface.put("9", "testStringValue9");
+        redBlackBstInterface.put("4", "testStringValue4");
+
+        assertFalse(redBlackBstInterface.empty());
+        int size = redBlackBstInterface.size();
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue1");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("1"));
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue2");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("2"));
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue3");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("3"));
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue4");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("4"));
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue8");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("8"));
+
+        assertEquals(redBlackBstInterface.deleteMin(), "testStringValue9");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("9"));
+
+        assertTrue(redBlackBstInterface.empty());
+    }
+
+    @Test
+    void testWorkingDeleteMax() {
+        assertNull(redBlackBstInterface.deleteMax());
+        assertTrue(redBlackBstInterface.empty());
+
+        redBlackBstInterface.put("1", "testStringValue1");
+        redBlackBstInterface.put("3", "testStringValue3");
+        redBlackBstInterface.put("8", "testStringValue8");
+        redBlackBstInterface.put("2", "testStringValue2");
+        redBlackBstInterface.put("9", "testStringValue9");
+        redBlackBstInterface.put("4", "testStringValue4");
+
+        assertFalse(redBlackBstInterface.empty());
+        int size = redBlackBstInterface.size();
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue9");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("9"));
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue8");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("8"));
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue4");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("4"));
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue3");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("3"));
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue2");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("2"));
+
+        assertEquals(redBlackBstInterface.deleteMax(), "testStringValue1");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("1"));
+
+        assertTrue(redBlackBstInterface.empty());
+    }
+
+    @Test
     void testWorkingRemove() {
-        assertThrows(UnsupportedOperationException.class, () -> redBlackBstInterface.remove("fefwefs"));
-//        assertNull(redBlackBst.remove("case when bst is empty"));
-//        assertTrue(redBlackBst.empty());
-//
-//        redBlackBst.put("testStringKey3", "testStringValue3");
-//        redBlackBst.put("testStringKey4", "testStringValue4");
-//        redBlackBst.put("testStringKey2", "testStringValue2");
-//        redBlackBst.put("testStringKey5", "testStringValue5");
-//        redBlackBst.put("testStringKey1", "testStringValue1");
-//        redBlackBst.put("testStringKey0", "testStringValue0");
-//
-//        assertFalse(redBlackBst.empty());
-//        int size = redBlackBst.size();
-//
-//        assertEquals(redBlackBst.remove("testStringKey4"), "testStringValue4");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey4"));
-//
-//        assertEquals(redBlackBst.remove("testStringKey1"), "testStringValue1");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey1"));
-//
-//        assertNull(redBlackBst.remove("testStringKey1"), "testStringValue1");
-//        assertEquals(redBlackBst.size(), size);
-//        assertFalse(redBlackBst.empty());
-//        assertFalse(redBlackBst.containsKey("testStringKey1"));
-//
-//        assertEquals(redBlackBst.remove("testStringKey3"), "testStringValue3");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey3"));
-//
-//        assertEquals(redBlackBst.remove("testStringKey0"), "testStringValue0");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey0"));
-//
-//        assertEquals(redBlackBst.remove("testStringKey2"), "testStringValue2");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey2"));
-//
-//        assertEquals(redBlackBst.remove("testStringKey5"), "testStringValue5");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertFalse(redBlackBst.containsKey("testStringKey5"));
-//
-//        assertTrue(redBlackBst.empty());
+        assertNull(redBlackBstInterface.remove("case when bst is empty"));
+        assertTrue(redBlackBstInterface.empty());
+
+        redBlackBstInterface.put("3", "testStringValue3");
+        redBlackBstInterface.put("4", "testStringValue4");
+        redBlackBstInterface.put("2", "testStringValue2");
+        redBlackBstInterface.put("5", "testStringValue5");
+        redBlackBstInterface.put("1", "testStringValue1");
+        redBlackBstInterface.put("0", "testStringValue0");
+
+        assertFalse(redBlackBstInterface.empty());
+        int size = redBlackBstInterface.size();
+
+        assertEquals(redBlackBstInterface.remove("4"), "testStringValue4");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("4"));
+
+        assertEquals(redBlackBstInterface.remove("1"), "testStringValue1");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("1"));
+
+        assertNull(redBlackBstInterface.remove("1"), "testStringValue1");
+        assertEquals(redBlackBstInterface.size(), size);
+        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.containsKey("1"));
+
+        assertEquals(redBlackBstInterface.remove("3"), "testStringValue3");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("3"));
+
+        assertEquals(redBlackBstInterface.remove("0"), "testStringValue0");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("0"));
+
+        assertEquals(redBlackBstInterface.remove("2"), "testStringValue2");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("2"));
+
+        assertEquals(redBlackBstInterface.remove("5"), "testStringValue5");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertFalse(redBlackBstInterface.containsKey("5"));
+
+        assertTrue(redBlackBstInterface.empty());
     }
 
     @Test
@@ -198,25 +280,25 @@ public class RedBlackBstTest {
         assertEquals(redBlackBstInterface.max(), "testStringKey7");
         assertEquals(redBlackBstInterface.maxValue(), "testStringValue7");
 
-//        redBlackBstInterface.remove("testStringKey5");
-//
-//        assertEquals(redBlackBstInterface.max(), "testStringKey7");
-//        assertEquals(redBlackBstInterface.maxValue(), "testStringValue7");
-//
-//        redBlackBstInterface.remove("testStringKey7");
-//
-//        assertEquals(redBlackBstInterface.max(), "testStringKey2");
-//        assertEquals(redBlackBstInterface.maxValue(), "testStringValue2");
-//
-//        redBlackBstInterface.remove("testStringKey0");
-//
-//        assertEquals(redBlackBstInterface.max(), "testStringKey2");
-//        assertEquals(redBlackBstInterface.maxValue(), "testStringValue2");
-//
-//        redBlackBstInterface.remove("testStringKey2");
-//
-//        assertNull(redBlackBstInterface.max());
-//        assertNull(redBlackBstInterface.maxValue());
+        redBlackBstInterface.remove("testStringKey5");
+
+        assertEquals(redBlackBstInterface.max(), "testStringKey7");
+        assertEquals(redBlackBstInterface.maxValue(), "testStringValue7");
+
+        redBlackBstInterface.remove("testStringKey7");
+
+        assertEquals(redBlackBstInterface.max(), "testStringKey2");
+        assertEquals(redBlackBstInterface.maxValue(), "testStringValue2");
+
+        redBlackBstInterface.remove("testStringKey0");
+
+        assertEquals(redBlackBstInterface.max(), "testStringKey2");
+        assertEquals(redBlackBstInterface.maxValue(), "testStringValue2");
+
+        redBlackBstInterface.remove("testStringKey2");
+
+        assertNull(redBlackBstInterface.max());
+        assertNull(redBlackBstInterface.maxValue());
     }
 
     @Test
@@ -244,25 +326,25 @@ public class RedBlackBstTest {
         assertEquals(redBlackBstInterface.min(), "testStringKey0");
         assertEquals(redBlackBstInterface.minValue(), "testStringValue0");
 
-//        redBlackBst.remove("testStringKey5");
-//
-//        assertEquals(redBlackBst.min(), "testStringKey0");
-//        assertEquals(redBlackBst.minValue(), "testStringValue0");
-//
-//        redBlackBst.remove("testStringKey0");
-//
-//        assertEquals(redBlackBst.min(), "testStringKey3");
-//        assertEquals(redBlackBst.minValue(), "testStringValue3");
-//
-//        redBlackBst.remove("testStringKey9");
-//
-//        assertEquals(redBlackBst.min(), "testStringKey3");
-//        assertEquals(redBlackBst.minValue(), "testStringValue3");
-//
-//        redBlackBst.remove("testStringKey3");
-//
-//        assertNull(redBlackBst.min());
-//        assertNull(redBlackBst.minValue());
+        redBlackBstInterface.remove("testStringKey5");
+
+        assertEquals(redBlackBstInterface.min(), "testStringKey0");
+        assertEquals(redBlackBstInterface.minValue(), "testStringValue0");
+
+        redBlackBstInterface.remove("testStringKey0");
+
+        assertEquals(redBlackBstInterface.min(), "testStringKey3");
+        assertEquals(redBlackBstInterface.minValue(), "testStringValue3");
+
+        redBlackBstInterface.remove("testStringKey9");
+
+        assertEquals(redBlackBstInterface.min(), "testStringKey3");
+        assertEquals(redBlackBstInterface.minValue(), "testStringValue3");
+
+        redBlackBstInterface.remove("testStringKey3");
+
+        assertNull(redBlackBstInterface.min());
+        assertNull(redBlackBstInterface.minValue());
     }
 
     @Test
@@ -284,17 +366,17 @@ public class RedBlackBstTest {
         assertTrue(redBlackBstInterface.containsValue("testStringValue"));
         assertTrue(redBlackBstInterface.containsValue("testStringValue1"));
 
-//        redBlackBst.remove("testStringKey");
-//        assertTrue(redBlackBst.containsKey("testStringKey1"));
-//        assertFalse(redBlackBst.containsKey("testStringKey"));
-//        assertTrue(redBlackBst.containsValue("testStringValue1"));
-//        assertFalse(redBlackBst.containsValue("testStringValue"));
-//
-//        redBlackBst.remove("testStringKey1");
-//        assertFalse(redBlackBst.containsKey("testStringKey"));
-//        assertFalse(redBlackBst.containsKey("testStringKey1"));
-//        assertFalse(redBlackBst.containsValue("testStringValue"));
-//        assertFalse(redBlackBst.containsValue("testStringValue1"));
+        redBlackBstInterface.remove("testStringKey");
+        assertTrue(redBlackBstInterface.containsKey("testStringKey1"));
+        assertFalse(redBlackBstInterface.containsKey("testStringKey"));
+        assertTrue(redBlackBstInterface.containsValue("testStringValue1"));
+        assertFalse(redBlackBstInterface.containsValue("testStringValue"));
+
+        redBlackBstInterface.remove("testStringKey1");
+        assertFalse(redBlackBstInterface.containsKey("testStringKey"));
+        assertFalse(redBlackBstInterface.containsKey("testStringKey1"));
+        assertFalse(redBlackBstInterface.containsValue("testStringValue"));
+        assertFalse(redBlackBstInterface.containsValue("testStringValue1"));
     }
 
     @Test
@@ -307,11 +389,11 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("testStringKey1", "testStringValue1");
         assertFalse(redBlackBstInterface.empty());
 
-//        redBlackBst.remove("testStringKey");
-//        assertFalse(redBlackBst.empty());
-//
-//        redBlackBst.remove("testStringKey1");
-//        assertTrue(redBlackBst.empty());
+        redBlackBstInterface.remove("testStringKey");
+        assertFalse(redBlackBstInterface.empty());
+
+        redBlackBstInterface.remove("testStringKey1");
+        assertTrue(redBlackBstInterface.empty());
     }
 
     @Test
@@ -454,7 +536,7 @@ public class RedBlackBstTest {
         100(R)
         height = 4
          */
-        redBlackBstInterface.put("900", "testStringValue0");
+        redBlackBstInterface.put("900", "testStringValue900");
         assertEquals(redBlackBstInterface.height(), 4);
 
         /*
@@ -466,7 +548,7 @@ public class RedBlackBstTest {
         100(B)  400(B) 600(B)  900(B)
         height = 4
          */
-        redBlackBstInterface.put("400", "testStringValue0");
+        redBlackBstInterface.put("400", "testStringValue400");
         assertEquals(redBlackBstInterface.height(), 3);
 
         /*
@@ -482,6 +564,91 @@ public class RedBlackBstTest {
          */
         redBlackBstInterface.put("0", "testStringValue0");
         assertEquals(redBlackBstInterface.height(), 4);
+
+        /*
+        rb bst visualisation :
+        root --------> 500(B)
+                      /     \
+                100(B)      800(B)
+               /    \       /    \
+             0(B)  400(B) 600(B)  900(B)
+        height = 3
+         */
+        assertEquals(redBlackBstInterface.remove("200"), "testStringValue200");
+        assertEquals(redBlackBstInterface.height(), 3);
+
+        /*
+        rb bst visualisation :
+        root --------> 600(B)
+                      /     \
+                100(R)      900(B)
+               /    \       /
+             0(B)  400(B) 800(R)
+        height = 3
+         */
+        assertEquals(redBlackBstInterface.remove("500"), "same key");
+        assertEquals(redBlackBstInterface.height(), 3);
+
+        /*
+        rb bst visualisation :
+        root --------> 800(B)
+                      /     \
+                100(R)      900(B)
+               /    \
+             0(B)  400(B)
+        height = 3
+         */
+        assertEquals(redBlackBstInterface.remove("600"), "testStringValue600");
+        assertEquals(redBlackBstInterface.height(), 3);
+
+        /*
+        rb bst visualisation :
+        root --------> 100(B)
+                      /     \
+                   0(B)      900(B)
+                             /
+                        400(R)
+        height = 3
+         */
+        assertEquals(redBlackBstInterface.remove("800"), "testStringValue800");
+        assertEquals(redBlackBstInterface.height(), 3);
+
+        /*
+        rb bst visualisation :
+        root --------> 400(B)
+                      /     \
+                 100(B)      900(B)
+        height = 2
+         */
+        assertEquals(redBlackBstInterface.remove("0"), "testStringValue0");
+        assertEquals(redBlackBstInterface.height(), 2);
+
+        /*
+        rb bst visualisation :
+        root --------> 900(B)
+                      /
+                 400(R)
+        height = 2
+         */
+        assertEquals(redBlackBstInterface.remove("100"), "testStringValue100");
+        assertEquals(redBlackBstInterface.height(), 2);
+
+        /*
+        rb bst visualisation :
+        root --------> 400(B)
+        height = 1
+         */
+        assertEquals(redBlackBstInterface.remove("900"), "testStringValue900");
+        assertEquals(redBlackBstInterface.height(), 1);
+
+        /*
+        rb bst visualisation :
+        root --------> null
+        height = 0
+         */
+        assertEquals(redBlackBstInterface.remove("400"), "testStringValue400");
+        assertEquals(redBlackBstInterface.height(), 0);
+        assertTrue(redBlackBstInterface.empty());
     }
 
     @Test
@@ -658,6 +825,153 @@ public class RedBlackBstTest {
         testNode(tempNode, "230", "testStringValue230", false, 2);
         testNode(tempNode.left, "220", "testStringValue220", false, 1);
         testNode(tempNode.right, "240", "testStringValue240", false, 1);
+
+        /*
+        rb bst visualisation :
+        root ----> 241(B)
+                  /     \
+             230(B)     250(B)
+             /   \      /    \
+        220(B) 240(B) 242(B) 300(B)
+        height = 3
+         */
+        assertEquals(redBlackBst.remove("400"), "testStringValue400");
+        assertEquals(redBlackBst.height(), 3);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "241", "testStringValue241", false, 3);
+        tempNode = tempNode.right;
+        testNode(tempNode, "250", "testStringValue250", false, 2);
+        testNode(tempNode.left, "242", "testStringValue242", false, 1);
+        testNode(tempNode.right, "300", "testStringValue300", false, 1);
+        tempNode = redBlackBst.getRoot().left;
+        testNode(tempNode, "230", "testStringValue230", false, 2);
+        testNode(tempNode.left, "220", "testStringValue220", false, 1);
+        testNode(tempNode.right, "240", "testStringValue240", false, 1);
+        assertFalse(redBlackBst.containsKey("400"));
+
+        /*
+        rb bst visualisation :
+        root ---->     250(B)
+                      /     \
+                  241(R)     300(B)
+                 /     \
+            240(B)      242(B)
+            /
+        220(R)
+        height = 4
+        */
+        assertEquals(redBlackBst.remove("230"), "testStringValue230");
+        assertEquals(redBlackBst.height(), 4);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "250", "testStringValue250", false, 4);
+        tempNode = tempNode.right;
+        testNode(tempNode, "300", "testStringValue300", false, 1);
+        tempNode = redBlackBst.getRoot().left;
+        testNode(tempNode, "241", "testStringValue241", true, 3);
+        testNode(tempNode.left, "240", "testStringValue240", false, 2);
+        testNode(tempNode.right, "242", "testStringValue242", false, 1);
+        testNode(tempNode.left.left, "220", "testStringValue220", true, 1);
+        assertFalse(redBlackBst.containsKey("230"));
+
+        /*
+        rb bst visualisation :
+        root ---->     250(B)
+                      /     \
+                  240(R)     300(B)
+                 /     \
+            220(B)      242(B)
+        height = 3
+        */
+        assertEquals(redBlackBst.remove("241"), "testStringValue241");
+        assertEquals(redBlackBst.height(), 3);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "250", "testStringValue250", false, 3);
+        tempNode = tempNode.right;
+        testNode(tempNode, "300", "testStringValue300", false, 1);
+        tempNode = redBlackBst.getRoot().left;
+        testNode(tempNode, "240", "testStringValue240", true, 2);
+        testNode(tempNode.left, "220", "testStringValue220", false, 1);
+        testNode(tempNode.right, "242", "testStringValue242", false, 1);
+        assertFalse(redBlackBst.containsKey("241"));
+
+        /*
+        rb bst visualisation :
+        root ----> 240(B)
+                  /     \
+             220(B)     300(B)
+                        /
+                    242(R)
+        height = 3
+        */
+        assertEquals(redBlackBst.remove("250"), "testStringValue250");
+        assertEquals(redBlackBst.height(), 3);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "240", "testStringValue240", false, 3);
+        tempNode = tempNode.right;
+        testNode(tempNode, "300", "testStringValue300", false, 2);
+        testNode(tempNode.left, "242", "testStringValue242", true, 1);
+        tempNode = redBlackBst.getRoot().left;
+        testNode(tempNode, "220", "testStringValue220", false, 1);
+        assertFalse(redBlackBst.containsKey("250"));
+
+        /*
+        rb bst visualisation :
+        root ----> 242(B)
+                  /     \
+             240(B)     300(B)
+        height = 2
+        */
+        assertEquals(redBlackBst.remove("220"), "testStringValue220");
+        assertEquals(redBlackBst.height(), 2);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "242", "testStringValue242", false, 2);
+        testNode(tempNode.right, "300", "testStringValue300", false, 1);
+        testNode(tempNode.left, "240", "testStringValue240", false, 1);
+        assertFalse(redBlackBst.containsKey("220"));
+
+        /*
+        rb bst visualisation :
+        root ----> 300(B)
+                  /
+             240(R)
+        height = 2
+        */
+        assertEquals(redBlackBst.remove("242"), "testStringValue242");
+        assertEquals(redBlackBst.height(), 2);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "300", "testStringValue300", false, 2);
+        testNode(tempNode.left, "240", "testStringValue240", true, 1);
+        assertFalse(redBlackBst.containsKey("242"));
+
+        /*
+        rb bst visualisation :
+        root ----> 240(B)
+        height = 1
+        */
+        assertEquals(redBlackBst.remove("300"), "testStringValue300");
+        assertEquals(redBlackBst.height(), 1);
+        assertEquals(redBlackBst.size(), --size);
+        tempNode = redBlackBst.getRoot();
+        testNode(tempNode, "240", "testStringValue240", false, 1);
+        assertFalse(redBlackBst.containsKey("300"));
+
+         /*
+        rb bst visualisation :
+        root ----> null
+        height = 0
+        */
+        assertEquals(redBlackBst.remove("240"), "testStringValue240");
+        assertEquals(redBlackBst.height(), 0);
+        assertEquals(redBlackBst.size(), --size);
+        assertFalse(redBlackBst.containsKey("240"));
+        assertTrue(redBlackBst.empty());
+
     }
 
     @Test
@@ -676,10 +990,10 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("testStringKey2", "testStringValue3");
 
         assertEquals(redBlackBstInterface.size(), size);
-//        assertEquals(redBlackBst.remove("testStringKey1"), "testStringValue1");
-//        assertEquals(redBlackBst.size(), --size);
-//        assertNull(redBlackBst.remove("not exist key"));
-//        assertEquals(redBlackBst.size(), size);
+        assertEquals(redBlackBstInterface.remove("testStringKey1"), "testStringValue1");
+        assertEquals(redBlackBstInterface.size(), --size);
+        assertNull(redBlackBstInterface.remove("not exist key"));
+        assertEquals(redBlackBstInterface.size(), size);
         assertEquals(redBlackBstInterface.get("testStringKey2"), "testStringValue3");
         assertEquals(redBlackBstInterface.size(), size);
         assertNull(redBlackBstInterface.get("not exist key"));
