@@ -19,6 +19,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     static final boolean RED = true;
     static final boolean BLACK = false;
     public Node root;
+    int n=0;
 
     private class Node {
         Key key;
@@ -62,6 +63,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
         if (root == null){
+            n+=1;
             root = new Node(key, value, 1, BLACK);
             return;
         }
@@ -70,13 +72,15 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
     Node put(Node x, Key key, Value value){
         if (x == null){
+            n+=1;
             return new Node(key, value, 1, RED);
 
         }
-        if (key.compareTo(x.key) > 0){
+        int comp = key.compareTo(x.key);
+        if (comp > 0){
             x.right = put(x.right, key, value);
         }
-        else if (key.compareTo(x.key) < 0){
+        else if (comp < 0){
             x.left = put(x.left, key, value);
         }
         else{
@@ -122,15 +126,16 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Nullable
     @Override
-    public Value remove(@NotNull Key key) {
+    public Value remove(@NotNull Key key)  {
         Value res = this.get(key);
         if (res == null){
             return null;
         }
         remove(root, key);
+        return res;
     }
-    Node remove(Node x, Key key){
-
+    Node remove(Node x, Key key)  {
+        return null;
     }
 
     @Override
@@ -229,13 +234,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int size() {
-        return size(root);
-    }
-    int size(Node x){
-        if (x == null){
-            return 0;
-        }
-        return size(x.left)+size(x.right)+1;
+        return n;
     }
 
     @Override
