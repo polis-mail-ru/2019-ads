@@ -37,26 +37,23 @@ public class Task4261 {
     }
 
     public static void sort(int[] arr, int start, int mid, int end) {
+        int[] res = new int[end];
         int[] left = Arrays.copyOfRange(arr, start, mid);
         int[] right = Arrays.copyOfRange(arr, mid, end);
 
-        int leftPos = 0, rightPos = 0;
+        int leftPos = 0, rightPos = 0, i = 0;
 
-        for (int i = start; i < end; i++) {
-            if (leftPos == left.length) {
-                arr[i] = right[rightPos++];
-            } else if (rightPos == right.length) {
-                arr[i] = left[leftPos++];
+        while (leftPos < left.length && rightPos < right.length) {
+            if (left[leftPos] < right[rightPos]) {
+                res[i++] = left[leftPos];
                 leftPos++;
-                count++;
-            } else if (left[leftPos] < right[rightPos]) {
-                arr[i] = left[leftPos++];
             } else {
-                arr[i] = right[rightPos++];
+                res[i++] = right[rightPos];
                 rightPos++;
-                count++;
+                count = count + left.length - leftPos;
             }
         }
+
     }
 
     private static class FastScanner {
