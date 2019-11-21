@@ -241,7 +241,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private void colorFlip(Node node) {
         if ((node.left == null) || (node.right == null))
         {
-            throw NullPointerException("One of the tree nodes is null.");
+            throw new NullPointerException("One of the tree nodes is null.");
         }
 
         node.color = !node.color;
