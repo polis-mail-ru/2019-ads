@@ -20,4 +20,6 @@ public interface HashTable<Key, Value> {
     int size();
     
     boolean isEmpty();
+
+    void clear();
 }
