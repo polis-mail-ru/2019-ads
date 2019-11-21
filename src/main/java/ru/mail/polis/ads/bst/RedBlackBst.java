@@ -29,18 +29,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
     }
 
-    // For tests
-    @Override
-    public boolean isEmpty(){
-        return root == null;
-    }
-
-    @Override
-    public boolean containsKey(Key key) {
-        return get(key) != null;
-    }
-
-    // Maim part
     private boolean isRed(Node node){
         return node != null && node.color == RED;
     }
