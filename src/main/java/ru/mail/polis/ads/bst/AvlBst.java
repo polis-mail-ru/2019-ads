@@ -1,5 +1,8 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * AVL implementation of binary search tree.
  */
@@ -32,8 +35,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node top;
     private int size;
 
+    @Nullable
     @Override
-    public Value get(Key key) {
+    public Value get(@NotNull Key key) {
         Node node = findNode(top, key);
         if (node == null) {
             return null;
@@ -55,7 +59,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
     @Override
-    public void put(Key key, Value value) {
+    public void put(@NotNull Key key, @NotNull Value value) {
         top = put(top, key, value);
     }
 
@@ -75,8 +79,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return balance(node);
     }
 
+    @Nullable
     @Override
-    public Value remove(Key key) {
+    public Value remove(@NotNull Key key) {
 
         // Ищем элемент для удаления
         Node deletedParent = null;
@@ -150,6 +155,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
 
+    @Nullable
     @Override
     public Key min() {
         if (top == null) {
@@ -158,6 +164,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return min(top).key;
     }
 
+    @Nullable
     @Override
     public Value minValue() {
         if (top == null) {
@@ -173,6 +180,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return max(node.right);
     }
 
+    @Nullable
     @Override
     public Key max() {
         if (top == null) {
@@ -181,6 +189,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return max(top).key;
     }
 
+    @Nullable
     @Override
     public Value maxValue() {
         if (top == null) {
@@ -202,8 +211,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
+    @Nullable
     @Override
-    public Key floor(Key key) {
+    public Key floor(@NotNull Key key) {
         if (top == null) {
             return null;
         }
@@ -227,8 +237,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
+    @Nullable
     @Override
-    public Key ceil(Key key) {
+    public Key ceil(@NotNull Key key) {
         if (top == null) {
             return null;
         }
