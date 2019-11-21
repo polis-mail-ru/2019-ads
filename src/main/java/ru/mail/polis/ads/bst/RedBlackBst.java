@@ -57,8 +57,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-      node = put(node, key, value);
-      node.color = BLACK;
+        node = put(node, key, value);
+        node.color = BLACK;
     }
 
     private Node put(Node node, Key key, Value value) {
@@ -136,6 +136,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             node.value = get(node.right, node.key);
             node.right = removeMin(node.right);
         }
+
+        updateHeight(node);
 
         return value;
     }
