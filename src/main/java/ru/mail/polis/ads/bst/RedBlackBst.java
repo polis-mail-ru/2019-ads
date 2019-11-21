@@ -154,11 +154,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (key.compareTo(node.key) < 0) {
+        boolean isLess = key.compareTo(node.key) < 0;
+
+        if (isLess) {
             return floor(node.left, key);
         }
 
-        if (key.compareTo(node.key) > 0) {
+        if (!isLess) {
             return floor(node.right, key);
         }
 
@@ -176,11 +178,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (key.compareTo(node.key) > 0) {
+        boolean isLess = key.compareTo(node.key) < 0;
+
+        if (isLess) {
             return floor(node.right, key);
         }
 
-        if (key.compareTo(node.key) < 0) {
+        if (!isLess) {
             return floor(node.left, key);
         }
 
@@ -232,15 +236,14 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private void colorFlip(Node node) {
+        if ((node.left == null) || (node.right == null))
+        {
+            throw NullPointerException("One of the tree nodes is null.");
+        }
+
         node.color = !node.color;
-
-        if (node.left != null) {
-            node.left.color = !node.left.color;
-        }
-
-        if (node.right != null) {
-            node.right.color = !node.right.color;
-        }
+        node.left.color = !node.left.color;
+        node.right.color = !node.right.color;
     }
 
     private Node balance(Node node) {
