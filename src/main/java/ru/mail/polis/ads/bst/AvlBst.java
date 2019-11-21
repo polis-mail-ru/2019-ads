@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
     Node root;
+    int n = 0;
 
     private class Node {
         Key key;
@@ -50,19 +51,23 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Override
     public void put(Key key, Value value) {
         if (root == null){
+            n+=1;
             root = new Node(key, value, 1);
             return;
         }
         root = put(root, key, value);
     }
     public Node put(Node x, Key key, Value value){
+
         if (x == null){
+            n+=1;
             return new Node(key, value, 1);
         }
-        if (key.compareTo(x.key) > 0){
+        int comp = key.compareTo(x.key);
+        if (comp > 0){
             x.right = put(x.right, key, value);
         }
-         else if (key.compareTo(x.key) < 0){
+         else if (comp < 0){
             x.left = put(x.left, key, value);
         }else {
             x.value = value;
@@ -81,6 +86,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (res == null){
             return null;
         }else{
+            n-=1;
             return res;
         }
 
@@ -89,13 +95,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null){
             return null;
         }
-        if (key.compareTo(x.key) > 0){
+        int comp = key.compareTo(x.key);
+        if ( comp > 0){
             x.right = remove(x.right, key);
         }
-        else if (key.compareTo(x.key) < 0){
+        else if (comp < 0){
             x.left = remove(x.left, key);
         }
         else {
+
             x = delete(x);
         }
         return x;
@@ -218,13 +226,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int size() {
-        return size(root);
-    }
-    int size(Node x){
-        if (x == null){
-            return 0;
-        }
-        return size(x.left)+size(x.right)+1;
+        return n;
     }
 
     @Override

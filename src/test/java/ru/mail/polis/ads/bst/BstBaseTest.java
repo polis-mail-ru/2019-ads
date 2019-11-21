@@ -70,7 +70,7 @@ class BstBaseTest {
     @Test
     void remove() {
         Bst<Integer, Integer> bst = new AvlBst<>();
-        final int elementsCount = 4;
+        final int elementsCount = 8;
         for (int i = 1; i <= elementsCount; ++i) {
             bst.put(i, i);
         }
