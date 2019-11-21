@@ -66,13 +66,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return new Node(key, value, RED, 1);
         }
 
-        boolean isLess = key.compareTo(node.key) < 0;
+        int compRes = key.compareTo(node.key);
 
-        if (isLess) {
+        if (compRes < 0) {
             node.left = put(node.left, key, value);
         }
 
-        if (!isLess) {
+        if (compRes > 0) {
             node.right = put(node.right, key, value);
         }
 
@@ -87,7 +87,57 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me"); //this is the next part
+        Value value = remove(node, key);
+        node.color = BLACK;
+
+        return value;
+    }
+
+    private Value remove(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+
+        Value value = null;
+        int compRes = key.compareTo(node.key);
+
+        if (compRes < 0) {
+            if (node.left != null) {
+                if (!isRed(node.left) && !isRed(node.left.left)) {
+                    node = moveRed(node, LEFT);
+                }
+
+                value = remove(node.left, key);
+            }
+        } else if (compRes > 0) {
+            if (node.right != null) {
+                if (isRed(node.left)) {
+                    node = rotate(node, RIGHT);
+                }
+
+                if (!isRed(node.right) && !isRed(node.right.left)) {
+                    node = moveRed(node, RIGHT);
+                }
+
+                value = remove(node.right, key);
+            }
+        } else {
+            if (isRed(node.left)) {
+                node = rotate(node, RIGHT);
+            }
+
+            if (node.right == null) {
+                return null;
+            }
+
+            value = node.value;
+
+            node.key = min(node.right);
+            node.value = get(node.right, node.key);
+            node.right = removeMin(node.right);
+        }
+
+        return value;
     }
 
     @Nullable
@@ -157,13 +207,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        boolean isLess = key.compareTo(node.key) < 0;
+        int compRes = key.compareTo(node.key);
 
-        if (isLess) {
+        if (compRes < 0) {
             return floor(node.left, key);
         }
 
-        if (!isLess) {
+        if (compRes > 0) {
             return floor(node.right, key);
         }
 
@@ -181,13 +231,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        boolean isLess = key.compareTo(node.key) < 0;
+        int compRes = key.compareTo(node.key);
 
-        if (isLess) {
+        if (compRes < 0) {
             return floor(node.right, key);
         }
 
-        if (!isLess) {
+        if (compRes > 0) {
             return floor(node.left, key);
         }
 
@@ -263,6 +313,35 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
 
         return node;
+    }
+
+    private Node moveRed(Node node, boolean left) {
+        colorFlip(node);
+
+        if (isRed((left ? node.right : node.left).left)) {
+            if (left) {
+                node.right = rotate(node.right, RIGHT);
+            }
+
+            node = rotate(node, left ? LEFT : RIGHT); //Ternary just for better code readability.
+            colorFlip(node);
+        }
+
+        return node;
+    }
+
+    private Node removeMin(Node node) {
+        if (node.left == null) {
+            return null;
+        }
+
+        if (!isRed(node.left) && !isRed(node.left.left)) {
+            node = moveRed(node, LEFT);
+        }
+
+        node.left = removeMin(node.left);
+
+        return balance(node);
     }
 
     private boolean isRed(Node node) {
