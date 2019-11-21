@@ -60,7 +60,6 @@ class BstBaseTest {
     @Test
     void morePut() {
         Bst<String, String> bst = newBst();
-
         int size = 0;
         assertEquals(bst.size(), size);
         assertNull(bst.max());
@@ -156,7 +155,6 @@ class BstBaseTest {
     @Test
     void max() {
         Bst<String, String> bst = newBst();
-
         assertNull(bst.max());
         assertNull(bst.maxValue());
 
@@ -204,7 +202,6 @@ class BstBaseTest {
     @Test
     void min() {
         Bst<String, String> bst = newBst();
-
         assertNull(bst.min());
         assertNull(bst.minValue());
 
@@ -252,7 +249,6 @@ class BstBaseTest {
     @Test
     void contains() {
         Bst<String, String> bst = newBst();
-
         assertFalse(bst.containsKey("testStringKey"));
         assertFalse(bst.containsKey("testStringKey1"));
 
@@ -276,7 +272,6 @@ class BstBaseTest {
     @Test
     void empty() {
         Bst<String, String> bst = newBst();
-
         assertTrue(bst.isEmpty());
 
         bst.put("testStringKey", "testStringValue");
@@ -295,7 +290,6 @@ class BstBaseTest {
     @Test
     void ceil() {
         Bst<String, String> bst = newBst();
-
         bst.put("1", "testStringValue3");
         bst.put("3", "testStringValue4");
         bst.put("5", "testStringValue2");
@@ -317,7 +311,6 @@ class BstBaseTest {
     @Test
     void floor() {
         Bst<String, String> bst = newBst();
-
         bst.put("1", "testStringValue3");
         bst.put("3", "testStringValue4");
         bst.put("5", "testStringValue2");
@@ -339,7 +332,6 @@ class BstBaseTest {
     @Test
     void moreReplace() {
         Bst<String, String> bst = newBst();
-
         assertNull(bst.get("1"));
 
         bst.put("1", "testStringValue3");
