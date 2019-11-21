@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface Bst<Key extends Comparable<Key>, Value> {
     @Nullable Value get(@NotNull Key key);
-
+    
     void put(@NotNull Key key, @NotNull Value value);
 
     @Nullable Value remove(@NotNull Key key);
@@ -37,7 +37,9 @@ public interface Bst<Key extends Comparable<Key>, Value> {
 
     boolean containsValue(@NotNull Value key);
 
-    boolean empty();
-
     void clear();
+    
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 }

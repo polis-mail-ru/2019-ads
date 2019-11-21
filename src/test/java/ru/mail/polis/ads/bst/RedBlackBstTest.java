@@ -26,12 +26,12 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("testStringKey2", "testStringValue2");
 
         assertEquals(redBlackBstInterface.size(), 2);
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.clear();
 
         assertEquals(redBlackBstInterface.size(), 0);
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmptygit ());
     }
 
     @Test
@@ -127,7 +127,7 @@ public class RedBlackBstTest {
     @Test
     void testWorkingDeleteMin() {
         assertNull(redBlackBstInterface.deleteMin());
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.put("1", "testStringValue1");
         redBlackBstInterface.put("3", "testStringValue3");
@@ -136,7 +136,7 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("9", "testStringValue9");
         redBlackBstInterface.put("4", "testStringValue4");
 
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
         int size = redBlackBstInterface.size();
 
         assertEquals(redBlackBstInterface.deleteMin(), "testStringValue1");
@@ -163,13 +163,13 @@ public class RedBlackBstTest {
         assertEquals(redBlackBstInterface.size(), --size);
         assertFalse(redBlackBstInterface.containsKey("9"));
 
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
     void testWorkingDeleteMax() {
         assertNull(redBlackBstInterface.deleteMax());
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.put("1", "testStringValue1");
         redBlackBstInterface.put("3", "testStringValue3");
@@ -178,7 +178,7 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("9", "testStringValue9");
         redBlackBstInterface.put("4", "testStringValue4");
 
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
         int size = redBlackBstInterface.size();
 
         assertEquals(redBlackBstInterface.deleteMax(), "testStringValue9");
@@ -205,13 +205,13 @@ public class RedBlackBstTest {
         assertEquals(redBlackBstInterface.size(), --size);
         assertFalse(redBlackBstInterface.containsKey("1"));
 
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
     void testWorkingRemove() {
         assertNull(redBlackBstInterface.remove("case when bst is empty"));
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.put("3", "testStringValue3");
         redBlackBstInterface.put("4", "testStringValue4");
@@ -220,7 +220,7 @@ public class RedBlackBstTest {
         redBlackBstInterface.put("1", "testStringValue1");
         redBlackBstInterface.put("0", "testStringValue0");
 
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
         int size = redBlackBstInterface.size();
 
         assertEquals(redBlackBstInterface.remove("4"), "testStringValue4");
@@ -233,7 +233,7 @@ public class RedBlackBstTest {
 
         assertNull(redBlackBstInterface.remove("1"), "testStringValue1");
         assertEquals(redBlackBstInterface.size(), size);
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
         assertFalse(redBlackBstInterface.containsKey("1"));
 
         assertEquals(redBlackBstInterface.remove("3"), "testStringValue3");
@@ -252,7 +252,7 @@ public class RedBlackBstTest {
         assertEquals(redBlackBstInterface.size(), --size);
         assertFalse(redBlackBstInterface.containsKey("5"));
 
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
@@ -381,19 +381,19 @@ public class RedBlackBstTest {
 
     @Test
     void testWorkingEmpty() {
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.put("testStringKey", "testStringValue");
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.put("testStringKey1", "testStringValue1");
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.remove("testStringKey");
-        assertFalse(redBlackBstInterface.empty());
+        assertFalse(redBlackBstInterface.isEmpty());
 
         redBlackBstInterface.remove("testStringKey1");
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
@@ -648,7 +648,7 @@ public class RedBlackBstTest {
          */
         assertEquals(redBlackBstInterface.remove("400"), "testStringValue400");
         assertEquals(redBlackBstInterface.height(), 0);
-        assertTrue(redBlackBstInterface.empty());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
@@ -658,7 +658,7 @@ public class RedBlackBstTest {
         root ---> null
         height = 0
          */
-        assertTrue(redBlackBst.empty());
+        assertTrue(redBlackBst.isEmpty());
         int size = 0;
         assertEquals(redBlackBst.height(), 0);
         assertEquals(redBlackBst.size(), size);
@@ -970,7 +970,7 @@ public class RedBlackBstTest {
         assertEquals(redBlackBst.height(), 0);
         assertEquals(redBlackBst.size(), --size);
         assertFalse(redBlackBst.containsKey("240"));
-        assertTrue(redBlackBst.empty());
+        assertTrue(redBlackBst.isEmpty());
 
     }
 

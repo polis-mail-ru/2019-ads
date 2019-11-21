@@ -307,16 +307,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Returns {@code true} if this tree contains no key-value mappings.
-     *
-     * @return {@code true} if this tree contains no key-value mappings
-     */
-    @Override
-    public boolean empty() {
-        return size == 0;
-    }
-
-    /**
      * Removes all of the mappings from this tree.
      * The tree will be empty after this call returns.
      */
