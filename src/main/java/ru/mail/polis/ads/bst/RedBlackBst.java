@@ -132,7 +132,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
             value = node.value;
 
-            node.key = min(node.right);
+            node.key = min(node.right).key;
             node.value = get(node.right, node.key);
             node.right = removeMin(node.right);
         }
