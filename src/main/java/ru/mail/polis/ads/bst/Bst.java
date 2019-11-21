@@ -28,4 +28,8 @@ public interface Bst<Key extends Comparable<Key>, Value> {
     int size();
 
     int height();
+
+    boolean isEmpty();
+
+    boolean containsKey(Key key);
 }

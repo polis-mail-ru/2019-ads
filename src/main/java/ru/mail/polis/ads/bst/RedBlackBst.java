@@ -29,6 +29,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
     }
 
+    // For tests
+    @Override
+    public boolean isEmpty(){
+        return root == null;
+    }
+
+    @Override
+    public boolean containsKey(Key key) {
+        return get(key) != null;
+    }
+
+    // Maim part
     private boolean isRed(Node node){
         return node != null && node.color == RED;
     }
@@ -64,18 +76,19 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private void flipColors(Node node){
         node.color = !node.color;
-        node.left.color = !node.left.color;
-        node.right.color = !node.right.color;
+        if (node.left != null) node.left.color = !node.left.color;
+        if (node.right != null) node.right.color = !node.right.color;
     }
 
     private Node fixUp(Node node){
         if(isRed(node.right) && !isRed(node.left))
             node = rotateLeft(node);
 
-        if(isRed(node.left) && !isRed(node.left.left))
+        if(isRed(node.left) && isRed(node.left.left))
             node = rotateRight(node);
 
-        if(isRed(node.left) && !isRed(node.right))
+
+        if(isRed(node.left) && isRed(node.right))
            flipColors(node);
 
         return node;
@@ -85,7 +98,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        return root == null ? null : get(root,key).value;
+        Node node = get(root,key);
+        if(root == null) return null;
+        if(node == null) return null;
+        else return node.value;
+//        return root == null ? null : get(root,key).value;
     }
 
     private Node get(Node node, Key key) {
@@ -107,9 +124,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if(node==null)
             return new Node(key,value,RED);
 
-        if (key.compareTo(node.key) < 0)
+        byte isKeyMoreNodeKey = (byte) key.compareTo(node.key);
+        if (isKeyMoreNodeKey < 0)
             node.left = put(node.left,key,value);
-        else if(key.compareTo(node.key) > 0)
+        else if(isKeyMoreNodeKey > 0)
             node.right = put(node.right,key,value);
         else
             node.value = value;
@@ -124,14 +142,99 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
-    }
+            Value value = get(key);
+            if(root != null){
+                root = remove(root,key);
+                return value;
+            } else return null;
+        }
+
+        private Node remove(Node node, Key key) {
+            if (node == null) return null;
+            byte isKeyMoreNodeKey = (byte) key.compareTo(node.key);
+
+            if (isKeyMoreNodeKey < 0) {
+                // delete left snippet
+                if (node.left != null) {
+                    if (!isRed(node.left) && !isRed(node.left.left))
+                        node = moveRedLeft(node);
+                    node.left = remove(node.left, key);
+                }
+
+            } else if (isKeyMoreNodeKey > 0) {
+                // delete right snippet
+                if (node.right != null) {
+                    if (isRed(node.left)) node = rotateRight(node);
+                    if (!isRed(node.right) && !isRed(node.right.left))
+                        node = moveRedRight(node);
+                    node.right = remove(node.right, key);
+                }
+            } else {
+                if (isRed(node.left)) node = rotateRight(node);
+                if (node.right == null) {
+                    if(node.left != null) return node.left;
+                    else return null;
+                }
+
+                node.key = min(node.right).key;
+                node.value = get(node.right, node.key).value;
+                node.right = deleteMin(node.right);
+            }
+
+            return fixUp(node);
+            }
+
+            private void deleteMin() {
+                root = deleteMin(root);
+                root.color = BLACK;
+                }
+
+            void deleteMax() {
+                root = deleteMax(root);
+                root.color = BLACK;
+                }
+
+                private Node moveRedLeft(Node x) {
+                    flipColors(x);
+                    if ((x.right != null) && (isRed(x.right.left))) {
+                        x.right = rotateRight(x.right);
+                        x = rotateLeft(x);
+                        flipColors(x);
+                    }
+                    return x;
+                    }
+                private Node moveRedRight(Node x) {
+                    flipColors(x);
+                    if (isRed(x.left.left)) {
+                        x = rotateRight(x);
+                        flipColors(x);
+                    }
+                    return x;
+                    }
+
+                private Node deleteMin(Node x) {
+                    if (x.left == null)
+                        return null;
+                    if (!isRed(x.left) && !isRed(x.left.left))
+                        x = moveRedLeft(x);
+                    x.left = deleteMin(x.left);
+                    return fixUp(x);
+                    }
+
+                private Node deleteMax(Node x) {
+                        if (isRed(x.left)) x = rotateRight(x);
+                        if (x.right == null) return null;
+                        if (!isRed(x.right) &&!isRed(x.right.left))
+                            x = moveRedRight(x);
+                        x.right = deleteMax(x.right);
+                        return fixUp(x);
+                    }
 
     // Search min
     private Node min(Node node) {
-        while(node.left != null){
+        if (node == null) return null;
+        while(node.left != null)
             node = node.left;
-        }
         return node;
     }
 
