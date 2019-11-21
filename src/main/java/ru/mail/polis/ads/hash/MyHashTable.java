@@ -69,12 +69,12 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         capacity = capacity >> 1;
         ArrayList<ArrayList<Pair>> arr_new = new ArrayList<>(capacity);
         for (int i = 0; i < capacity; i++){
-            arr_new.add(new ArrayList<Pair>());
+            arr_new.add(new ArrayList<>());
         }
-        for (int i = 0; i < arr.size(); i++){
-            for (Pair j: arr.get(i)) {
+        for (ArrayList<Pair> pairs : arr) {
+            for (Pair j : pairs) {
                 int h = j.key.hashCode();
-                arr_new.get(hash(h) & (capacity-1)).add(j);
+                arr_new.get(hash(h) & (capacity - 1)).add(j);
             }
         }
         loadFactor = (double)n/capacity;
