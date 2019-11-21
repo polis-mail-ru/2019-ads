@@ -1,10 +1,14 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * AVL implementation of binary search tree.
  */
 public class AvlBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
+
     private Node root = null;
     private int size = 0;
 
@@ -30,7 +34,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         element.height = 1 + Math.max(height(element.left), height(element.right));
     }
 
+    @Nullable
     @Override
+
     public Value get(Key key) {
         Node result = get(root, key);
         return result == null ? null : result.value;
@@ -180,17 +186,20 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
 
+
     @Override
     public Key min() {
         Node min = getMin(root);
         return min != null ? min.key : null;
     }
 
+    @Nullable
     @Override
     public Value minValue() {
         Node min = getMin(root);
         return min != null ? min.value : null;
     }
+
 
     private Node getMin(Node start){
         if (start == null) {
@@ -217,27 +226,32 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     }
 
 
+    @Nullable
     @Override
     public Key max() {
         Node max = getMax(root);
         return max != null ? max.key : null;
     }
 
+    @Nullable
     @Override
     public Value maxValue() {
         Node max = getMax(root);
         return max != null ? max.value : null;
     }
 
+    @Nullable
     @Override
-    public Key floor(Key key) {
+    public Key floor(@NotNull Key key) {
         CeilFloorHelper<Key> context = new CeilFloorHelper();
         ceilFloor(key, root, context);
         return context.floor;
     }
 
+    @Nullable
     @Override
-    public Key ceil(Key key) {
+
+    public Key ceil(@NotNull Key key) {
         CeilFloorHelper<Key> context = new CeilFloorHelper();
         ceilFloor(key, root, context);
         return context.ceil;
