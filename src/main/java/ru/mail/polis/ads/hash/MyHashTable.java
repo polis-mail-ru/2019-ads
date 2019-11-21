@@ -1,15 +1,8 @@
 package ru.mail.polis.ads.hash;
 
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Set;
-//
 
 public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     int capacity = 16;
