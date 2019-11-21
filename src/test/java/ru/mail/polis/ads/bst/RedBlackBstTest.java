@@ -31,7 +31,7 @@ public class RedBlackBstTest {
         redBlackBstInterface.clear();
 
         assertEquals(redBlackBstInterface.size(), 0);
-        assertTrue(redBlackBstInterface.isEmptygit ());
+        assertTrue(redBlackBstInterface.isEmpty());
     }
 
     @Test
