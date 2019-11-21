@@ -18,6 +18,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         Node(Key key, Value value) {
             this.key = key;
             this.value = value;
+            this.height = 1;
         }
     }
 
@@ -40,19 +41,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        switch (element.key.compareTo(key)) {
-            case 0:
-                return element;
+        int comparisonResult = element.key.compareTo(key);
 
-            case 1:
-                return get(element.left, key);
-
-            case -1:
-                return get(element.right, key);
-
+        if (comparisonResult > 0) {
+            return get(element.left, key);
+        }
+        else if (comparisonResult < 0) {
+            return get(element.right, key);
+        }
+        else {
+            return element;
         }
 
-        return element;
     }
 
     @Override
@@ -64,16 +64,19 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node addElement(Node element, Key key, Value value) {
         if (element == null) return new Node(key, value);
 
-        if (key.compareTo(element.key) == -1) {
+        int comparatorResult = element.key.compareTo(key);
+
+        if (comparatorResult > 0) {
             element.left = addElement(element.left, key, value);
         }
-        else  if (key.compareTo(element.key) == 1){
+        else  if (comparatorResult < 0){
             element.right = addElement(element.right, key, value);
         }
         else {
             element.value = value;
             size--;
         }
+
         fixHeight(element);
         element = balance(element);
         return element;
@@ -142,6 +145,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         element = getMin(temp.right);
         element.right = deleteMin(temp.right);
         element.left = temp.left;
+        element = balance(element);
         return element;
     }
 
@@ -149,13 +153,16 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (element == null) {
             return null;
         }
-        if (key.compareTo(element.key) == -1) {
+
+        int comparatorResult = key.compareTo(element.key);
+
+        if (comparatorResult < 0) {
             element.left = delete(key, element.left);
         }
-        if (key.compareTo(element.key) == 1) {
+        else if (comparatorResult > 0) {
             element.right = delete(key, element.right);
         }
-        if (key.compareTo(element.key) == 0) {
+         else {
             element = innerDelete(element);
         }
         return element;
@@ -222,39 +229,42 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return max != null ? max.value : null;
     }
 
-
-    private Key ceil = null;
-    private Key floor = null;
-
     @Override
     public Key floor(Key key) {
-      ceilFloor(key, root);
-      return floor;
+        CeilFloorHelper<Key> context = new CeilFloorHelper();
+        ceilFloor(key, root, context);
+        return context.floor;
     }
 
     @Override
     public Key ceil(Key key) {
-        ceilFloor(key, root);
-        return ceil;
+        CeilFloorHelper<Key> context = new CeilFloorHelper();
+        ceilFloor(key, root, context);
+        return context.ceil;
     }
 
-    private void ceilFloor(Key key, Node element) {
+    private void ceilFloor(Key key, Node element, CeilFloorHelper context) {
         if (element == null) {
             return;
         }
 
         if (element.key.compareTo(key) == 0) {
-            ceil = element.key;
-            floor = element.key;
+            context.ceil = element.key;
+            context.floor = element.key;
         }
         else if (element.key.compareTo(key) == 1) {
-            ceil = element.key;
-            ceilFloor(key, element.left);
+            context.ceil = element.key;
+            ceilFloor(key, element.left, context);
         }
         else {
-            floor = element.key;
-            ceilFloor(key, element.right);
+            context.floor = element.key;
+            ceilFloor(key, element.right, context);
         }
+    }
+
+    private class CeilFloorHelper<Key> {
+        public Key ceil = null;
+        public Key floor = null;
     }
 
     @Override
@@ -264,7 +274,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int height() {
-        return root == null ? 0 : root.height;
+        return height(root);
     }
 }
 
