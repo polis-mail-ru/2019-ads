@@ -63,10 +63,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (key.compareTo(node.key) > 0) {
+        int matching = key.compareTo(node.key);
+        if (matching > 0) {
             return findNode(key, node.right);
         }
-        else if (key.compareTo(node.key) < 0) {
+        else if (matching < 0) {
             return findNode(key, node.left);
         }
         else if (key == node.key) {
@@ -78,6 +79,103 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
+        // к-ч дерево
+        root = put(key, value, root);
+        root.color = BLACK;
+    }
+
+    // https://www.geeksforgeeks.org/red-black-tree-set-2-insert/
+    // Идем от корня до тех пор, пока следующий сын не лист;
+    // вместо него вставляем новый элемент с красным цветом и с нулевыми потомками.
+    // Далее проверки на баланс.
+    // Визуализация: https://www.cs.usfca.edu/~galles/visualization/RedBlack.html
+    private Node put(Key key, Value value, Node node) {
+        if (node == null) {
+            size++;
+            return new Node(key, value);
+        }
+
+        int matching = key.compareTo(node.key);
+        // тот же проход по дереву
+        if (matching < 0) {
+            node.left = put(key, value, node.left);
+        }
+        else if (matching > 0) {
+            node.right = put(key, value, node.right);
+        }
+        else {
+            node.value = value;
+        }
+
+        node = checkColor(node);
+        node.height = newHeight(node);
+
+        return node;
+    }
+
+    private int newHeight(Node node) {
+        return Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    private Node checkColor(Node node) {
+
+        Node current = node;
+
+        if (isRED(current.left) && isRED(current.left.left)) {
+            current = rightRotate(current);
+        }
+
+        if (isRED(current.left) && isRED(current.right)) {
+            swap(current);
+        }
+
+        if (isRED(current.right) && !isRED(current.left)) {
+            current = leftRotate(current);
+        }
+
+        return current;
+    }
+
+    private boolean isRED(Node node) {
+        return (node != null && node.color);
+    }
+
+    private Node swap(Node node) {
+        node.left.color = !node.left.color;
+
+        node.right.color = !node.right.color;
+
+        node.color = !node.color;
+
+        return node;
+    }
+
+    private Node rightRotate(Node node) {
+        Node lNode = node.left;
+        node.left = lNode.right;
+        lNode.right = node;
+
+        node.height = newHeight(node);
+        node.height = newHeight(lNode);
+
+        lNode.color = node.color;
+        node.color = RED;
+
+        return lNode;
+    }
+
+    private Node leftRotate(Node node) {
+        Node rNode = node.right;
+        node.right = rNode.left;
+        rNode.left = node;
+
+        node.height = newHeight(node);
+        node.height = newHeight(rNode);
+
+        rNode.color = node.color;
+        node.color = RED;
+
+        return rNode;
     }
 
     @Nullable
