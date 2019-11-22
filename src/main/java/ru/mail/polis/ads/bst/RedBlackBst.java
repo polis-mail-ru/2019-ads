@@ -235,11 +235,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         int compRes = key.compareTo(node.key);
 
-        if (compRes < 0) {
+        if (compRes > 0) {
             return floor(node.right, key);
         }
 
-        if (compRes > 0) {
+        if (compRes < 0) {
             return floor(node.left, key);
         }
 
