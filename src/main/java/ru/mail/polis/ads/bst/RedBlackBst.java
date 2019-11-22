@@ -122,6 +122,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 value = remove(node.right, key);
             }
         } else {
+            value = node.value;
+
             if (isRed(node.left)) {
                 node = rotate(node, RIGHT);
             }
@@ -130,9 +132,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 return null;
             }
 
-            value = node.value;
-
-            node.key = node.right.min();
+            node.key = min(node.right).key;
             node.value = get(node.right, node.key);
             node.right = removeMin(node.right);
         }
