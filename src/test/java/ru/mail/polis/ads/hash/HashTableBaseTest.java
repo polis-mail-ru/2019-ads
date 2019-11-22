@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HashTableBaseTest {
 
     HashTable<String, String> newTable() {
-        // Use implementation
-        return null;
+        HashTable<String,String> table = new HashTableClass<>();
+        return table;
     }
 
     @Test
