@@ -13,6 +13,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private static final boolean RED = true;
 
     private Node root;
+    private Value valueDelete = null;
     
     private class Node {
         Key key;
@@ -130,11 +131,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-            Value value = get(key);
-            if(root != null){
-                root = remove(root,key);
-                return value;
-            } else return null;
+            root = remove(root,key);
+
+            Value value = valueDelete;
+            valueDelete = null;
+
+            return value;
         }
 
         private Node remove(Node node, Key key) {
@@ -158,6 +160,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                     node.right = remove(node.right, key);
                 }
             } else {
+                valueDelete = node.value;
                 if (isRed(node.left)) node = rotateRight(node);
                 if (node.right == null) {
                     if(node.left != null) return node.left;
@@ -172,16 +175,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return fixUp(node);
             }
 
-            private void deleteMin() {
-                root = deleteMin(root);
-                root.color = BLACK;
-                }
-
-            void deleteMax() {
-                root = deleteMax(root);
-                root.color = BLACK;
-                }
-
                 private Node moveRedLeft(Node x) {
                     flipColors(x);
                     if ((x.right != null) && (isRed(x.right.left))) {
@@ -190,7 +183,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                         flipColors(x);
                     }
                     return x;
-                    }
+                }
                 private Node moveRedRight(Node x) {
                     flipColors(x);
                     if (isRed(x.left.left)) {
@@ -198,7 +191,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                         flipColors(x);
                     }
                     return x;
-                    }
+                }
 
                 private Node deleteMin(Node x) {
                     if (x.left == null)
@@ -207,16 +200,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                         x = moveRedLeft(x);
                     x.left = deleteMin(x.left);
                     return fixUp(x);
-                    }
-
-                private Node deleteMax(Node x) {
-                        if (isRed(x.left)) x = rotateRight(x);
-                        if (x.right == null) return null;
-                        if (!isRed(x.right) &&!isRed(x.right.left))
-                            x = moveRedRight(x);
-                        x.right = deleteMax(x.right);
-                        return fixUp(x);
-                    }
+                }
 
     // Search min
     private Node min(Node node) {
