@@ -1,14 +1,11 @@
 package ru.mail.polis.ads.bst;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-/**
- * Basic binary search tree invariants.
- */
 class RedBlackBstTest {
 
     private RedBlackBst<String, String> bst;
@@ -21,7 +18,7 @@ class RedBlackBstTest {
         }
 
         blackHeight = -1;
-        assertEquals(bst.top.color, RedBlackBst.Color.BLACK);
+        assertEquals(bst.top.color, RedBlackBst.BLACK);
         checkInvariants(bst.top, 0);
     }
 
@@ -34,12 +31,12 @@ class RedBlackBstTest {
             }
             return;
         }
-        if (node.color == RedBlackBst.Color.RED) {
+        if (node.color == RedBlackBst.RED) {
             if (node.left != null) {
-                assertEquals(node.left.color, RedBlackBst.Color.BLACK);
+                assertEquals(node.left.color, RedBlackBst.BLACK);
             }
             if (node.right != null) {
-                assertEquals(node.right.color, RedBlackBst.Color.BLACK);
+                assertEquals(node.right.color, RedBlackBst.BLACK);
             }
         } else {
             blackHeight++;
@@ -64,8 +61,6 @@ class RedBlackBstTest {
 
     @Test
     void orderedOnEmpty() {
-        assertNull(bst.ceil("some key"));
-        assertNull(bst.floor("some key"));
 
         assertNull(bst.min());
         assertNull(bst.max());
@@ -138,15 +133,16 @@ class RedBlackBstTest {
         assertEquals(1, bst.size());
     }
 
-    @Disabled
     @Test
     void remove() {
         assertNull(bst.remove("non-existent"));
+        checkInvariants();
 
         bst.put("key1", "value1");
         bst.put("key2", "value2");
 
         assertEquals("value2", bst.remove("key2"));
+        checkInvariants();
         assertEquals(1, bst.size());
         assertNull(bst.get("key2"));
         assertEquals("value1", bst.get("key1"));
@@ -154,22 +150,26 @@ class RedBlackBstTest {
         bst.put("key2", "value2");
 
         assertEquals("value1", bst.remove("key1"));
+        checkInvariants();
         assertEquals(1, bst.size());
         assertNull(bst.get("key1"));
         assertEquals("value2", bst.get("key2"));
 
         assertEquals("value2", bst.remove("key2"));
+        checkInvariants();
         assertEquals(0, bst.size());
 
         bst.put("key2", "value2");
         bst.put("key1", "value1");
 
         assertEquals("value2", bst.remove("key2"));
+        checkInvariants();
         assertEquals(1, bst.size());
         assertNull(bst.get("key2"));
         assertEquals("value1", bst.get("key1"));
 
         assertEquals("value1", bst.remove("key1"));
+        checkInvariants();
         assertEquals(0, bst.size());
         assertNull(bst.get("key1"));
 
@@ -213,29 +213,5 @@ class RedBlackBstTest {
 
         assertEquals("key3", bst.max());
         assertEquals("value3", bst.maxValue());
-    }
-
-    @Test
-    void floor() {
-        assertNull(bst.floor("key"));
-
-        bst.put("key1", "value1");
-        bst.put("key2", "value2");
-
-        assertNull(bst.floor("key0"));
-        assertEquals("key1", bst.floor("key1"));
-        assertEquals("key2", bst.floor("key3"));
-    }
-
-    @Test
-    void ceil() {
-        assertNull(bst.ceil("key"));
-
-        bst.put("key1", "value1");
-        bst.put("key2", "value2");
-
-        assertNull(bst.ceil("key3"));
-        assertEquals("key2", bst.ceil("key2"));
-        assertEquals("key1", bst.ceil("key0"));
     }
 }
