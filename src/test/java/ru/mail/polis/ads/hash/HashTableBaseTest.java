@@ -1,5 +1,6 @@
 package ru.mail.polis.ads.hash;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,14 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class HashTableBaseTest {
 
-    HashTable<String, String> newTable() {
-        // Use implementation
-        return null;
+    private HashTable<String, String> table;
+
+    @BeforeEach
+    void newTable() {
+        table = new HashTableImpl<>();
     }
 
     @Test
     void emptyTable() {
-        HashTable<String, String> table = newTable();
         assertNull(table.get(""));
         assertNull(table.get("some key"));
         assertEquals(0, table.size());
@@ -28,8 +30,6 @@ class HashTableBaseTest {
 
     @Test
     void put() {
-        HashTable<String, String> table = newTable();
-
         int size = 0;
         assertEquals(table.size(), size);
         assertNull(table.get("testStringKey1"));
@@ -61,8 +61,19 @@ class HashTableBaseTest {
     }
 
     @Test
+    void put_WithResize() {
+        for (int i = 0; i < 26; i++) {
+            table.put("key" + i, "value" + i);
+            assertEquals(i + 1, table.size());
+        }
+
+        for (int i = 0; i < 26; i++) {
+         assertEquals(table.get("key" + i), "value" + i);
+        }
+    }
+
+    @Test
     void remove() {
-        HashTable<String, String> table = newTable();
         assertNull(table.remove("case when HashTable is empty"));
         assertTrue(table.isEmpty());
 
@@ -110,8 +121,6 @@ class HashTableBaseTest {
 
     @Test
     void contains() {
-        HashTable<String, String> table = newTable();
-
         assertFalse(table.containsKey("testStringKey"));
         assertFalse(table.containsKey("testStringKey1"));
 
@@ -134,8 +143,6 @@ class HashTableBaseTest {
 
     @Test
     void empty() {
-        HashTable<String, String> table = newTable();
-
         assertTrue(table.isEmpty());
 
         table.put("testStringKey", "testStringValue");
@@ -153,8 +160,6 @@ class HashTableBaseTest {
 
     @Test
     void replace() {
-        HashTable<String, String> table = newTable();
-
         assertNull(table.get("1"));
 
         table.put("1", "testStringValue3");
