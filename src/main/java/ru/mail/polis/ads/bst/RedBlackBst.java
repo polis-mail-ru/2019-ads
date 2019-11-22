@@ -72,13 +72,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         if (compRes < 0) {
             node.left = put(node.left, key, value);
-        }
-
-        if (compRes > 0) {
+        } else if (compRes > 0) {
             node.right = put(node.right, key, value);
+        } else {
+            node.value = value;
         }
-
-        node.value = value;
 
         node = balance(node);
         updateHeight(node);
