@@ -124,11 +124,15 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public int height() {
-        return 0;
+        return height(root);
+    }
+
+    private int height(Node node) {
+        return node == null ? 0 : node.height;
     }
 }
