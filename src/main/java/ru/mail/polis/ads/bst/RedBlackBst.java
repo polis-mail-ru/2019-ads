@@ -273,12 +273,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         if (left) {
             tmp = node.right;
-            node.right = node.left;
-            node.left = node;
+            node.right = tmp.left;
+            tmp.left = node;
         } else {
             tmp = node.left;
-            node.left = node.right;
-            node.right = node;
+            node.left = tmp.right;
+            tmp.right = node;
         }
 
         tmp.color = node.color;
