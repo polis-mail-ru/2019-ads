@@ -5,6 +5,9 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
     private Node root;
     private int size;
 
+    public AvlBst() {
+    }
+
     private class Node {
         Key key;
         Value value;
@@ -17,6 +20,10 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
             this.value = value;
             size++;
         }
+    }
+
+    public AvlBst newBst() {
+        return new AvlBst();
     }
 
     // Main methods
