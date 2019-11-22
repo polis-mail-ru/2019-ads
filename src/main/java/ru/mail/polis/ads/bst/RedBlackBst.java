@@ -44,11 +44,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        if (key.compareTo(node.key) < 0) {
+        int compRes = key.compareTo(node.key);
+
+        if (compRes < 0) {
             return get(node.left, key);
         }
 
-        if (key.compareTo(node.key) > 0) {
+        if (compRes > 0) {
             return get(node.right, key);
         }
 
@@ -306,7 +308,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             node = rotate(node, LEFT);
         }
 
-        if (isRed(node.left) && isRed(node.left.left)) {
+        if (isRed(node.left) && !isRed(node.left.left)) {
             node = rotate(node, RIGHT);
         }
 
