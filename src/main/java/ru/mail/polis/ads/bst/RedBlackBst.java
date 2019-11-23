@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * AVL implementation of binary search tree.
+ * LLRB implementation of binary search tree.
  */
 public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value>  {
@@ -280,8 +280,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (key.compareTo(x.key) < 0) {
             return floor(x.left, key);
         }
-        Key rslt = floor(x.right, key);
-        return (rslt == null) ? x.key : rslt;
+        Key result = floor(x.right, key);
+        return (result == null) ? x.key : result;
 
 
     }
@@ -304,8 +304,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (key.compareTo(x.key) > 0) {
             return ceil(x.right, key);
         }
-        Key rslt = ceil(x.left, key);
-        return (rslt == null) ? x.key : rslt;
+        Key result = ceil(x.left, key);
+        return (result == null) ? x.key : result;
 
     }
 
