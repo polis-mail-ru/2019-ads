@@ -127,15 +127,92 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key)  {
+        if (root == null) {
+            return null;
+        }
         Value res = this.get(key);
         if (res == null){
             return null;
         }
-        remove(root, key);
+        root =remove(root, key);
+        n-=1;
         return res;
     }
     Node remove(Node x, Key key)  {
-        return null;
+        if (x == null){
+            return null;
+        }
+        int comp = key.compareTo(x.key);
+        if (comp > 0){
+            if (x.right != null){
+                if (isRed(x.left))
+                    x = rotateRight(x);
+                if (!isRed(x.right) && !isRed(x.right.left))
+                    x = moveRedRight(x);
+                x.right = remove(x.right, key);
+            }
+        }
+        else if (comp < 0){
+            if (x.left != null){
+                if (!isRed(x.left) && !isRed(x.left.left) )
+                    x = moveRedLeft(x);
+                x.left = remove(x.left, key);
+            }
+        }
+        else{
+            System.out.println(x.key+" "+key);
+            if (isRed(x.left))
+                x = rotateRight(x);
+            if (x.right == null)
+                return null;
+            System.out.println(x.key+" "+key);
+            x.key = min(x.right).key;
+            x.value = get(x.right, x.key);
+            x.right = deleteMin(x.right);
+            System.out.println(x.key);
+
+        }
+        return fixUp(x);
+    }
+
+    Node moveRedLeft(Node x) {
+        flipColors(x);
+        if (isRed(x.right.left)) {
+            x.right = rotateRight(x.right);
+            x = rotateLeft(x);
+            flipColors(x);
+        }
+        return x;
+    }
+    Node deleteMin(Node x){
+        if (x.left == null){
+            return null;
+        }
+        if (!isRed(x.left) && !isRed(x.left.left)){
+            x = moveRedLeft(x);
+        }
+        x.left = deleteMin(x.left);
+        return fixUp(x);
+    }
+
+    Node moveRedRight(Node x) {
+        flipColors(x);
+        if (isRed(x.left.left)) {
+            x = rotateRight(x);
+            flipColors(x);
+        }
+        return x;
+    }
+
+    Node deleteMax(Node x){
+        if (isRed(x.left))
+            x = rotateRight(x);
+        if (x.right == null)
+            return null;
+        if (!isRed(x.right) && !isRed(x.right.left))
+            x = moveRedRight(x);
+        x.right = deleteMax(x.right);
+        return fixUp(x);
     }
 
     @Override
