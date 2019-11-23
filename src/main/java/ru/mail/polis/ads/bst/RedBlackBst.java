@@ -18,25 +18,59 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private int size;
     
     private class Node {
-        Key key;
-        Value value;
-        Node left;
-        Node right;
+        @NotNull Key key;
+        @NotNull Value value;
+        @Nullable Node left;
+        @Nullable Node right;
         boolean color;
         int height;
 
-        Node(Key key, Value value) {
+        Node(@NotNull Key key, @NotNull Value value) {
             this.key = key;
             this.value = value;
             this.color = RED;
             this.height = 1;
         }
+    }
 
+    private RedBlackNodeForRemoveTask nil = new RedBlackNodeForRemoveTask();
+    private RedBlackNodeForRemoveTask rmRoot = nil;
+
+    class RedBlackNodeForRemoveTask {
+        static final int rmBLACK = 0;
+        static final int rmRED = 1;
+        Key key;
+        Value value;
+
+        RedBlackNodeForRemoveTask rmParent;
+        RedBlackNodeForRemoveTask rmLeft;
+        RedBlackNodeForRemoveTask rmRight;
+        int numLeft;
+        int numRight;
+        int color;
+
+        RedBlackNodeForRemoveTask() {
+            color = rmBLACK;
+            numLeft = 0;
+            numRight = 0;
+            rmParent = null;
+            rmLeft = null;
+            rmRight = null;
+        }
+
+        RedBlackNodeForRemoveTask(Key key, Value value) {
+            this();
+            this.key = key;
+            this.value = value;
+        }
     }
 
     public RedBlackBst() {
         this.root = null;
         this.size = 0;
+        rmRoot.rmLeft = nil;
+        rmRoot.rmRight = nil;
+        rmRoot.rmParent = nil;
     }
 
     public RedBlackBst(Node root) {
@@ -72,6 +106,24 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
         else if (key == node.key) {
             return node.value;
+        }
+
+        return null;
+    }
+
+    private RedBlackNodeForRemoveTask findNode(Key key) {
+        RedBlackNodeForRemoveTask current = rmRoot;
+
+        while (current != nil) {
+            if (current.key.equals(key)) {
+                return current;
+            }
+            else if (current.key.compareTo(key) < 0) {
+                current = current.rmRight;
+            }
+            else {
+                current = current.rmLeft;
+            }
         }
 
         return null;
@@ -181,7 +233,290 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
+        RedBlackNodeForRemoveTask z = findNode(key);
+
+        RedBlackNodeForRemoveTask x = nil;
+        RedBlackNodeForRemoveTask y = nil;
+
+        if (z != null) {
+            if ((z.rmLeft == nil) || (z.rmRight == nil)) {
+                y = z;
+            }
+            else {
+                y = treeSuccessor(z);
+            }
+        }
+
+        if (y.rmParent != nil) {
+            x = y.rmLeft;
+        }
+        else {
+            x = y.rmRight;
+        }
+
+        x.rmParent = y.rmParent;
+
+        if (y.rmParent == nil) {
+            rmRoot = x;
+        }
+        else if ((y.rmParent.rmLeft != nil) && (y.rmParent.rmLeft == y)) {
+            y.rmParent.rmLeft = x;
+        }
+        else if (y != z) {
+            if (z != null) {
+                z.key = y.key;
+            }
+        }
+
+        fixNodeData(x, y);
+
+        if (y.color == RedBlackNodeForRemoveTask.rmBLACK) {
+            removeFixup(x);
+        }
+
+        if (z != null) {
+            return z.value;
+        }
         return null;
+    }
+
+    private RedBlackNodeForRemoveTask treeSuccessor(RedBlackNodeForRemoveTask x) {
+        if (x.rmLeft != nil) {
+            return findMin(x.rmRight);
+        }
+
+        RedBlackNodeForRemoveTask y = x.rmParent;
+
+        while ((y != nil) && (x == y.rmRight)) {
+            x = y;
+            y = y.rmParent;
+        }
+
+        return y;
+    }
+
+    private void fixNodeData(RedBlackNodeForRemoveTask x, RedBlackNodeForRemoveTask y) {
+        RedBlackNodeForRemoveTask current = nil;
+        RedBlackNodeForRemoveTask track = nil;
+
+        if (x == nil) {
+            current = y.rmParent;
+            track = y;
+        }
+        else {
+            current = x.rmParent;
+            track = x;
+        }
+
+        while (current != nil) {
+            if (y.key != current.key) {
+                if (y.key.compareTo(current.key) > 0) {
+                    current.numRight--;
+                }
+
+                if (y.key.compareTo(current.key) < 0) {
+                    current.numLeft--;
+                }
+            }
+            else {
+                if (current.rmLeft == nil) {
+                    current.numLeft--;
+                }
+                else if (current.rmRight == nil) {
+                    current.numRight--;
+                }
+                else if (track == current.rmRight) {
+                    current.numRight--;
+                }
+                else if (track == current.rmLeft) {
+                    current.numLeft--;
+                }
+            }
+        }
+
+        track = current;
+        current = current.rmParent;
+    }
+
+    private void removeFixup(RedBlackNodeForRemoveTask x) {
+        RedBlackNodeForRemoveTask w;
+
+        while ((x != rmRoot) && (x.color == RedBlackNodeForRemoveTask.rmBLACK)) {
+            if (x == x.rmParent.rmLeft) {
+                w = x.rmParent.rmRight;
+
+                if (w.color == RedBlackNodeForRemoveTask.rmRED) {
+                    w.color = RedBlackNodeForRemoveTask.rmBLACK;
+                    x.rmParent.color = RedBlackNodeForRemoveTask.rmRED;
+
+                    rmLeftRotate(x.rmParent);
+
+                    w = x.rmParent.rmRight;
+                }
+
+                if ((w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK) && (w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK)) {
+                    w.color = RedBlackNodeForRemoveTask.rmRED;
+                    x = x.rmParent;
+                }
+                else {
+                    if (w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK) {
+                        w.rmLeft.color = RedBlackNodeForRemoveTask.rmBLACK;
+                        w.color = RedBlackNodeForRemoveTask.rmRED;
+
+                        rmRightRotate(w);
+                        w = x.rmParent.rmRight;
+                    }
+
+                    w.color = x.rmParent.color;
+                    x.rmParent.color = RedBlackNodeForRemoveTask.rmBLACK;
+                    w.rmRight.color = RedBlackNodeForRemoveTask.rmBLACK;
+
+                    rmLeftRotate(x.rmParent);
+                    x = rmRoot;
+                }
+            }
+            else {
+                w = x.rmParent.rmLeft;
+
+                if (w.color == RedBlackNodeForRemoveTask.rmRED) {
+                    w.color = RedBlackNodeForRemoveTask.rmBLACK;
+                    x.rmParent.color = RedBlackNodeForRemoveTask.rmRED;
+
+                    rmRightRotate(x.rmParent);
+                    w = x.rmParent.rmLeft;
+                }
+
+                if ((w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK) && (w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK)) {
+                    w.color = RedBlackNodeForRemoveTask.rmRED;
+                    x = x.rmParent;
+                }
+                else {
+                    if (w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK) {
+                        w.rmRight.color = RedBlackNodeForRemoveTask.rmBLACK;
+                        w.color = RedBlackNodeForRemoveTask.rmRED;
+
+                        rmLeftRotate(w);
+                        w = x.rmParent.rmLeft;
+                    }
+
+                    w.color = x.rmParent.color;
+                    x.rmParent.color = RedBlackNodeForRemoveTask.rmBLACK;
+                    w.rmLeft.color = RedBlackNodeForRemoveTask.rmBLACK;
+
+                    rmRightRotate(x.rmParent);
+                    x = rmRoot;
+                }
+            }
+        }
+
+        x.color = RedBlackNodeForRemoveTask.rmBLACK;
+    }
+
+    private void rmLeftRotate(RedBlackNodeForRemoveTask x) {
+        rmLeftRotateFixup(x);
+
+        RedBlackNodeForRemoveTask y;
+
+        y = x.rmRight;
+        x.rmRight = y.rmLeft;
+
+        if (y.rmLeft != nil) {
+            y.rmLeft.rmParent = x;
+        }
+
+        y.rmParent = x.rmParent;
+
+        if (x.rmParent == nil) {
+            rmRoot = y;
+        } else if (x.rmParent.rmLeft == x) {
+            x.rmParent.rmLeft = y;
+        } else {
+            x.rmParent.rmRight = y;
+        }
+
+        y.rmLeft = x;
+        x.rmParent = y;
+    }
+
+    private void rmLeftRotateFixup(RedBlackNodeForRemoveTask x){
+        if ((x.rmLeft == nil) && (x.rmRight.rmLeft == nil)) {
+            x.numLeft = 0;
+            x.numRight = 0;
+
+            x.rmRight.numLeft = 1;
+        }
+        else if (x.rmLeft == nil && (x.rmRight.rmLeft != nil)) {
+            x.numLeft = 0;
+            x.numRight = 1 + x.rmRight.rmLeft.numLeft +
+                    x.rmRight.rmLeft.numRight;
+            x.rmRight.numLeft = 2 + x.rmRight.rmLeft.numLeft +
+                    x.rmRight.rmLeft.numRight;
+        }
+        else if ((x.rmLeft != nil) && (x.rmRight.rmLeft == nil)) {
+            x.numRight = 0;
+            x.rmRight.numLeft = 2 + x.rmLeft.numLeft + x.rmLeft.numRight;
+
+        }
+         {
+            x.numRight = 1 + x.rmLeft.rmLeft.numLeft +
+                    x.rmRight.rmLeft.numRight;
+            x.rmRight.numLeft = 3 + x.rmLeft.numLeft + x.rmLeft.numRight +
+                    x.rmLeft.rmLeft.numLeft + x.rmLeft.rmLeft.numRight;
+        }
+    }
+
+    private void rmRightRotate(RedBlackNodeForRemoveTask y) {
+        rmRightRotateFixup(y);
+
+        RedBlackNodeForRemoveTask x = y.rmLeft;
+        y.rmLeft = x.rmRight;
+
+        if (x.rmRight != nil) {
+            x.rmRight.rmParent = y;
+        }
+
+        x.rmParent = y.rmParent;
+
+        if (y.rmParent == nil) {
+            rmRoot = x;
+        }
+        else if (y.rmParent.rmRight == y) {
+            y.rmParent.rmRight = x;
+        }
+        else {
+            y.rmParent.rmLeft = x;
+        }
+
+        x.rmRight = y;
+        y.rmParent = x;
+    }
+
+    private void rmRightRotateFixup(RedBlackNodeForRemoveTask y) {
+        if ((y.rmRight == nil) && (y.rmLeft.rmRight == nil)) {
+            y.numRight = 0;
+            y.numLeft = 0;
+
+            y.rmLeft.numRight = 1;
+        }
+        else if ((y.rmRight == nil) && (y.rmLeft.rmRight != nil)) {
+            y.numRight = 0;
+            y.numLeft = 1 + y.rmLeft.rmRight.numRight +
+                    y.rmLeft.rmRight.numLeft;
+            y.rmLeft.numRight = 2 + y.rmLeft.rmRight.numRight +
+                    y.rmLeft.rmRight.numLeft;
+        }
+        else if ((y.rmRight != nil) && (y.rmLeft.rmRight == nil)) {
+            y.numLeft = 0;
+            y.rmLeft.numRight = 2 + y.rmRight.numRight +y.rmRight.numLeft;
+
+        }
+        else {
+            y.numLeft = 1 + y.rmLeft.rmRight.numRight +
+                    y.rmLeft.rmRight.numLeft;
+            y.rmLeft.numRight = 3 + y.rmRight.numRight +
+                    y.rmRight.numLeft +
+                    y.rmLeft.rmRight.numRight + y.rmLeft.rmRight.numLeft;
+        }
     }
 
     @Nullable
@@ -193,6 +528,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node findMin(Node node) {
         if (node.left != null) {
             return findMin(node.left);
+        }
+        return node;
+    }
+
+    private RedBlackNodeForRemoveTask findMin(RedBlackNodeForRemoveTask node) {
+        if (node.rmLeft != null) {
+            return findMin(node.rmLeft);
         }
         return node;
     }
