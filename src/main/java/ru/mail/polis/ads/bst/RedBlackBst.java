@@ -187,37 +187,109 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key min() {
-        return null;
+        return root != null ? findMin(root).key : null;
+    }
+
+    private Node findMin(Node node) {
+        if (node.left != null) {
+            return findMin(node.left);
+        }
+        return node;
     }
 
     @Nullable
     @Override
     public Value minValue() {
-        return null;
+        return root != null ? findMin(root).value : null;
     }
 
     @Nullable
     @Override
     public Key max() {
-        return null;
+        return root != null ? findMax(root).key : null;
+    }
+
+    private Node findMax(Node node) {
+        if (node.right != null) {
+            return findMax(node.right);
+        }
+        return node;
     }
 
     @Nullable
     @Override
     public Value maxValue() {
-        return null;
+        return root != null ? findMax(root).value : null;
     }
 
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        return null;
+        return root!= null ? findFloor(key, root) : null;
+    }
+
+    private Key findFloor(Key key, Node node) {
+        if (key.compareTo(node.key) < 0) {
+            if (node.right != null) {
+                return findCeil(key, node.left);
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            if (node.right != null) {
+                if (key.compareTo(node.right.key) < 0) {
+                    if (node.right.left != null) {
+                        return findCeil(key, node.right.left);
+                    }
+                    else {
+                        return node.key;
+                    }
+                }
+                else {
+                    return findCeil(key, node.right);
+                }
+            }
+            else {
+                return node.key;
+            }
+        }
     }
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        return null;
+        return root != null ? findCeil(key, root) : null;
+    }
+
+    private Key findCeil(Key key, Node node) {
+       if (key.compareTo(node.key) > 0) {
+           if (node.right != null) {
+               return findCeil(key, node.right);
+           }
+           else {
+               return null;
+           }
+       }
+       else {
+           if (node.left != null) {
+               if (key.compareTo(node.left.key) > 0) {
+                   if (node.left.right != null) {
+                       return findCeil(key, node.left.right);
+                   }
+                   else {
+                       return node.key;
+                   }
+               }
+               else {
+                   return findCeil(key, node.left);
+               }
+           }
+           else {
+               return node.key;
+           }
+       }
     }
 
     @Override
