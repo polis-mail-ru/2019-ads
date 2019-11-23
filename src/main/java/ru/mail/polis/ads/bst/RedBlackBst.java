@@ -435,13 +435,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        return root!= null ? findFloor(key, root) : null;
+        return root != null ? findFloor(key, root) : null;
     }
 
     private Key findFloor(Key key, Node node) {
         if (key.compareTo(node.key) < 0) {
-            if (node.right != null) {
-                return findCeil(key, node.left);
+            if (node.left != null) {
+                return findFloor(key, node.left);
             }
             else {
                 return null;
@@ -451,14 +451,14 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             if (node.right != null) {
                 if (key.compareTo(node.right.key) < 0) {
                     if (node.right.left != null) {
-                        return findCeil(key, node.right.left);
+                        return findFloor(key, node.right.left);
                     }
                     else {
                         return node.key;
                     }
                 }
                 else {
-                    return findCeil(key, node.right);
+                    return findFloor(key, node.right);
                 }
             }
             else {
