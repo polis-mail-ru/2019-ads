@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * LLRB implementation of binary search tree.
@@ -25,42 +26,42 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         boolean color;
         int height;
 
-        Node(@NotNull Key key, @NotNull Value value) {
+        Node(Key key, Value value) {
             this.key = key;
             this.value = value;
             this.color = RED;
             this.height = 1;
         }
-    }
 
-    private RedBlackNodeForRemoveTask nil = new RedBlackNodeForRemoveTask();
-    private RedBlackNodeForRemoveTask rmRoot = nil;
+        // https://www.javaworld.com/article/3305792/comparing-java-objects-with-equals-and-hashcode.html
+        // https://www.geeksforgeeks.org/overriding-equals-method-in-java/
+        @Override
+        public boolean equals(Object object) {
+            if (this == object) {
+                return true;
+            }
 
-    class RedBlackNodeForRemoveTask {
-        static final int rmBLACK = 0;
-        static final int rmRED = 1;
-        Key key;
-        Value value;
+            if (object == null || getClass() != object.getClass()) {
+                return false;
+            }
 
-        RedBlackNodeForRemoveTask rmParent;
-        RedBlackNodeForRemoveTask rmLeft;
-        RedBlackNodeForRemoveTask rmRight;
-        int numLeft;
-        int numRight;
-        int color;
+            Node node = (Node) object;
 
-        RedBlackNodeForRemoveTask() {
-            color = rmBLACK;
-            numLeft = 0;
-            numRight = 0;
-            rmParent = null;
-            rmLeft = null;
-            rmRight = null;
+            return (key.equals(node.key) && value.equals(node.key));
         }
 
-        RedBlackNodeForRemoveTask(Key key, Value value) {
-            this();
-            this.key = key;
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, value);
+        }
+    }
+
+    private class TreeSuccessor {
+        Node node;
+        Value value;
+
+        TreeSuccessor(Node node, Value value) {
+            this.node = node;
             this.value = value;
         }
     }
@@ -68,9 +69,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     public RedBlackBst() {
         this.root = null;
         this.size = 0;
-        rmRoot.rmLeft = nil;
-        rmRoot.rmRight = nil;
-        rmRoot.rmParent = nil;
     }
 
     public RedBlackBst(Node root) {
@@ -106,24 +104,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
         else if (key == node.key) {
             return node.value;
-        }
-
-        return null;
-    }
-
-    private RedBlackNodeForRemoveTask findNode(Key key) {
-        RedBlackNodeForRemoveTask current = rmRoot;
-
-        while (current != nil) {
-            if (current.key.equals(key)) {
-                return current;
-            }
-            else if (current.key.compareTo(key) < 0) {
-                current = current.rmRight;
-            }
-            else {
-                current = current.rmLeft;
-            }
         }
 
         return null;
@@ -233,290 +213,185 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        RedBlackNodeForRemoveTask z = findNode(key);
+        TreeSuccessor redBlackTree = newRedBlackTree(key, new TreeSuccessor(root, null));
 
-        RedBlackNodeForRemoveTask x = nil;
-        RedBlackNodeForRemoveTask y = nil;
+        root = redBlackTree.node;
 
-        if (z != null) {
-            if ((z.rmLeft == nil) || (z.rmRight == nil)) {
-                y = z;
-            }
-            else {
-                y = treeSuccessor(z);
-            }
+        if (redBlackTree.value != null) {
+            size--;
         }
 
-        if (y.rmParent != nil) {
-            x = y.rmLeft;
+        if (root != null) {
+            root.color = BLACK;
+        }
+
+        return redBlackTree.value;
+    }
+
+    private TreeSuccessor newRedBlackTree(Key key, TreeSuccessor treeSuccessor) {
+        if (treeSuccessor.node == null) {
+            return treeSuccessor;
+        }
+
+        int matching = key.compareTo(treeSuccessor.node.key);
+        if (matching < 0) {
+            if (treeSuccessor.node.left != null) {
+                if (!isRED(treeSuccessor.node.left) && !isRED(treeSuccessor.node.left.left)) {
+                    treeSuccessor.node = REDtoLeft(treeSuccessor.node);
+                }
+
+                TreeSuccessor temp = new TreeSuccessor(treeSuccessor.node.left,treeSuccessor.value);
+
+                newRedBlackTree(key, temp);
+
+                treeSuccessor.node.left = temp.node;
+                treeSuccessor.value = temp.value;
+            }
+        }
+        else if (matching > 0) {
+            if (treeSuccessor.node.right != null) {
+                if (isRED(treeSuccessor.node.left)) {
+                    treeSuccessor.node = rightRotate(treeSuccessor.node);
+                }
+
+                if (!isRED(treeSuccessor.node.right) && !isRED(treeSuccessor.node.right.left)) {
+                    treeSuccessor.node = REDtoRight(treeSuccessor.node);
+                }
+
+                TreeSuccessor temp = new TreeSuccessor(treeSuccessor.node.right, treeSuccessor.value);
+
+                newRedBlackTree(key, temp);
+
+                treeSuccessor.node.right = temp.node;
+                treeSuccessor.value = temp.value;
+            }
         }
         else {
-            x = y.rmRight;
-        }
+            if (isRED(treeSuccessor.node.left)) {
+                treeSuccessor.node = rightRotate(treeSuccessor.node);
 
-        x.rmParent = y.rmParent;
+                if (treeSuccessor.node.right != null) {
+                    Node temp = treeSuccessor.node.right;
 
-        if (y.rmParent == nil) {
-            rmRoot = x;
-        }
-        else if ((y.rmParent.rmLeft != nil) && (y.rmParent.rmLeft == y)) {
-            y.rmParent.rmLeft = x;
-        }
-        else if (y != z) {
-            if (z != null) {
-                z.key = y.key;
-            }
-        }
+                    treeSuccessor.value = temp.value;
 
-        fixNodeData(x, y);
+                    if (temp.right == null) {
+                        treeSuccessor.node.right = treeSuccessor.node.right.left;
+                    }
+                    else {
+                        treeSuccessor.node.right.key = findMin(temp.right).key;
 
-        if (y.color == RedBlackNodeForRemoveTask.rmBLACK) {
-            removeFixup(x);
-        }
+                        treeSuccessor.node.right.value = findValue(treeSuccessor.node.right.key, treeSuccessor.node.right.right);
 
-        if (z != null) {
-            return z.value;
-        }
-        return null;
-    }
+                        treeSuccessor.node.right.right = deleteMin(temp.right);
 
-    private RedBlackNodeForRemoveTask treeSuccessor(RedBlackNodeForRemoveTask x) {
-        if (x.rmLeft != nil) {
-            return findMin(x.rmRight);
-        }
-
-        RedBlackNodeForRemoveTask y = x.rmParent;
-
-        while ((y != nil) && (x == y.rmRight)) {
-            x = y;
-            y = y.rmParent;
-        }
-
-        return y;
-    }
-
-    private void fixNodeData(RedBlackNodeForRemoveTask x, RedBlackNodeForRemoveTask y) {
-        RedBlackNodeForRemoveTask current = nil;
-        RedBlackNodeForRemoveTask track = nil;
-
-        if (x == nil) {
-            current = y.rmParent;
-            track = y;
-        }
-        else {
-            current = x.rmParent;
-            track = x;
-        }
-
-        while (current != nil) {
-            if (y.key != current.key) {
-                if (y.key.compareTo(current.key) > 0) {
-                    current.numRight--;
-                }
-
-                if (y.key.compareTo(current.key) < 0) {
-                    current.numLeft--;
-                }
-            }
-            else {
-                if (current.rmLeft == nil) {
-                    current.numLeft--;
-                }
-                else if (current.rmRight == nil) {
-                    current.numRight--;
-                }
-                else if (track == current.rmRight) {
-                    current.numRight--;
-                }
-                else if (track == current.rmLeft) {
-                    current.numLeft--;
-                }
-            }
-        }
-
-        track = current;
-        current = current.rmParent;
-    }
-
-    private void removeFixup(RedBlackNodeForRemoveTask x) {
-        RedBlackNodeForRemoveTask w;
-
-        while ((x != rmRoot) && (x.color == RedBlackNodeForRemoveTask.rmBLACK)) {
-            if (x == x.rmParent.rmLeft) {
-                w = x.rmParent.rmRight;
-
-                if (w.color == RedBlackNodeForRemoveTask.rmRED) {
-                    w.color = RedBlackNodeForRemoveTask.rmBLACK;
-                    x.rmParent.color = RedBlackNodeForRemoveTask.rmRED;
-
-                    rmLeftRotate(x.rmParent);
-
-                    w = x.rmParent.rmRight;
-                }
-
-                if ((w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK) && (w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK)) {
-                    w.color = RedBlackNodeForRemoveTask.rmRED;
-                    x = x.rmParent;
-                }
-                else {
-                    if (w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK) {
-                        w.rmLeft.color = RedBlackNodeForRemoveTask.rmBLACK;
-                        w.color = RedBlackNodeForRemoveTask.rmRED;
-
-                        rmRightRotate(w);
-                        w = x.rmParent.rmRight;
+                        if (treeSuccessor.node.right.right == null && treeSuccessor.node.right.left != null && !isRED(treeSuccessor.node.right.left)) {
+                            treeSuccessor.node.right.left.color = RED;
+                            treeSuccessor.node.right.color = BLACK;
+                        }
                     }
 
-                    w.color = x.rmParent.color;
-                    x.rmParent.color = RedBlackNodeForRemoveTask.rmBLACK;
-                    w.rmRight.color = RedBlackNodeForRemoveTask.rmBLACK;
+                    treeSuccessor.node = checkColor(treeSuccessor.node);
 
-                    rmLeftRotate(x.rmParent);
-                    x = rmRoot;
+                    treeSuccessor.node.height = newHeight(treeSuccessor.node);
+
+                    return treeSuccessor;
                 }
             }
-            else {
-                w = x.rmParent.rmLeft;
 
-                if (w.color == RedBlackNodeForRemoveTask.rmRED) {
-                    w.color = RedBlackNodeForRemoveTask.rmBLACK;
-                    x.rmParent.color = RedBlackNodeForRemoveTask.rmRED;
+            if (treeSuccessor.node.right == null) {
+                treeSuccessor.value = treeSuccessor.node.value;
+                treeSuccessor.node = null;
 
-                    rmRightRotate(x.rmParent);
-                    w = x.rmParent.rmLeft;
-                }
+                return treeSuccessor;
+            }
 
-                if ((w.rmRight.color == RedBlackNodeForRemoveTask.rmBLACK) && (w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK)) {
-                    w.color = RedBlackNodeForRemoveTask.rmRED;
-                    x = x.rmParent;
-                }
-                else {
-                    if (w.rmLeft.color == RedBlackNodeForRemoveTask.rmBLACK) {
-                        w.rmRight.color = RedBlackNodeForRemoveTask.rmBLACK;
-                        w.color = RedBlackNodeForRemoveTask.rmRED;
+            if (treeSuccessor.node.left != null && !isRED(treeSuccessor.node) && !isRED(treeSuccessor.node.right) && !isRED(treeSuccessor.node.left)) {
+                swap(treeSuccessor.node);
 
-                        rmLeftRotate(w);
-                        w = x.rmParent.rmLeft;
-                    }
+                treeSuccessor.node.color = BLACK;
+            }
 
-                    w.color = x.rmParent.color;
-                    x.rmParent.color = RedBlackNodeForRemoveTask.rmBLACK;
-                    w.rmLeft.color = RedBlackNodeForRemoveTask.rmBLACK;
+            Node temp = treeSuccessor.node;
 
-                    rmRightRotate(x.rmParent);
-                    x = rmRoot;
-                }
+            treeSuccessor.value = temp.value;
+
+            treeSuccessor.node.key = findMin(temp.right).key;
+
+            treeSuccessor.node.value = findValue(treeSuccessor.node.key, treeSuccessor.node.right);
+
+            treeSuccessor.node.right = deleteMin (temp.right);
+
+            if (treeSuccessor.node.right == null && treeSuccessor.node.left != null && !isRED(treeSuccessor.node.left)) {
+                treeSuccessor.node.left.color = RED;
+                treeSuccessor.node.color = BLACK;
             }
         }
 
-        x.color = RedBlackNodeForRemoveTask.rmBLACK;
+        treeSuccessor.node = checkColor(treeSuccessor.node);
+
+        treeSuccessor.node.height = newHeight(treeSuccessor.node);
+
+        return treeSuccessor;
     }
 
-    private void rmLeftRotate(RedBlackNodeForRemoveTask x) {
-        rmLeftRotateFixup(x);
-
-        RedBlackNodeForRemoveTask y;
-
-        y = x.rmRight;
-        x.rmRight = y.rmLeft;
-
-        if (y.rmLeft != nil) {
-            y.rmLeft.rmParent = x;
+    private Node deleteMin(Node node) {
+        if (node.left == null) {
+            return null;
         }
 
-        y.rmParent = x.rmParent;
-
-        if (x.rmParent == nil) {
-            rmRoot = y;
-        } else if (x.rmParent.rmLeft == x) {
-            x.rmParent.rmLeft = y;
-        } else {
-            x.rmParent.rmRight = y;
+        if (!isRED(node.left) && !isRED(node.left.left)) {
+            node = REDtoLeft(node);
         }
 
-        y.rmLeft = x;
-        x.rmParent = y;
+        node.left = deleteMin(node.left);
+
+        node = checkColor(node);
+
+        node.height = newHeight(node);
+
+        return node;
     }
 
-    private void rmLeftRotateFixup(RedBlackNodeForRemoveTask x){
-        if ((x.rmLeft == nil) && (x.rmRight.rmLeft == nil)) {
-            x.numLeft = 0;
-            x.numRight = 0;
+    private Value findValue(Key key, Node node) {
+        if (node == null) {
+            return null;
+        }
 
-            x.rmRight.numLeft = 1;
+        if (key.compareTo(node.key) > 0) {
+            return findValue(key, node.right);
         }
-        else if (x.rmLeft == nil && (x.rmRight.rmLeft != nil)) {
-            x.numLeft = 0;
-            x.numRight = 1 + x.rmRight.rmLeft.numLeft +
-                    x.rmRight.rmLeft.numRight;
-            x.rmRight.numLeft = 2 + x.rmRight.rmLeft.numLeft +
-                    x.rmRight.rmLeft.numRight;
+        else if (key.compareTo(node.key) < 0) {
+            return findValue(key, node.left);
         }
-        else if ((x.rmLeft != nil) && (x.rmRight.rmLeft == nil)) {
-            x.numRight = 0;
-            x.rmRight.numLeft = 2 + x.rmLeft.numLeft + x.rmLeft.numRight;
 
-        }
-         {
-            x.numRight = 1 + x.rmLeft.rmLeft.numLeft +
-                    x.rmRight.rmLeft.numRight;
-            x.rmRight.numLeft = 3 + x.rmLeft.numLeft + x.rmLeft.numRight +
-                    x.rmLeft.rmLeft.numLeft + x.rmLeft.rmLeft.numRight;
-        }
+        return node.value;
     }
 
-    private void rmRightRotate(RedBlackNodeForRemoveTask y) {
-        rmRightRotateFixup(y);
+    private Node REDtoLeft(Node node) {
+        swap(node);
 
-        RedBlackNodeForRemoveTask x = y.rmLeft;
-        y.rmLeft = x.rmRight;
+        if (isRED(node.right.left)) {
+            node.right = rightRotate((node.right));
 
-        if (x.rmRight != nil) {
-            x.rmRight.rmParent = y;
+            node = leftRotate(node.right);
+
+            swap(node);
         }
 
-        x.rmParent = y.rmParent;
-
-        if (y.rmParent == nil) {
-            rmRoot = x;
-        }
-        else if (y.rmParent.rmRight == y) {
-            y.rmParent.rmRight = x;
-        }
-        else {
-            y.rmParent.rmLeft = x;
-        }
-
-        x.rmRight = y;
-        y.rmParent = x;
+        return node;
     }
 
-    private void rmRightRotateFixup(RedBlackNodeForRemoveTask y) {
-        if ((y.rmRight == nil) && (y.rmLeft.rmRight == nil)) {
-            y.numRight = 0;
-            y.numLeft = 0;
+    private Node REDtoRight(Node node) {
+        swap(node);
 
-            y.rmLeft.numRight = 1;
-        }
-        else if ((y.rmRight == nil) && (y.rmLeft.rmRight != nil)) {
-            y.numRight = 0;
-            y.numLeft = 1 + y.rmLeft.rmRight.numRight +
-                    y.rmLeft.rmRight.numLeft;
-            y.rmLeft.numRight = 2 + y.rmLeft.rmRight.numRight +
-                    y.rmLeft.rmRight.numLeft;
-        }
-        else if ((y.rmRight != nil) && (y.rmLeft.rmRight == nil)) {
-            y.numLeft = 0;
-            y.rmLeft.numRight = 2 + y.rmRight.numRight +y.rmRight.numLeft;
+        if (isRED(node.left.left)) {
+            node = rightRotate(node);
 
+            swap(node);
         }
-        else {
-            y.numLeft = 1 + y.rmLeft.rmRight.numRight +
-                    y.rmLeft.rmRight.numLeft;
-            y.rmLeft.numRight = 3 + y.rmRight.numRight +
-                    y.rmRight.numLeft +
-                    y.rmLeft.rmRight.numRight + y.rmLeft.rmRight.numLeft;
-        }
+
+        return node;
     }
 
     @Nullable
@@ -528,13 +403,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node findMin(Node node) {
         if (node.left != null) {
             return findMin(node.left);
-        }
-        return node;
-    }
-
-    private RedBlackNodeForRemoveTask findMin(RedBlackNodeForRemoveTask node) {
-        if (node.rmLeft != null) {
-            return findMin(node.rmLeft);
         }
         return node;
     }
