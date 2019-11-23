@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RedBlackBst<Key extends Comparable<Key>, Value>
-        implements Bst<Key, Value>  {
-
+        implements Bst<Key, Value> {
     private class Node {
         Key key;
         Value value;
