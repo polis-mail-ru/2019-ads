@@ -7,7 +7,54 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
+ * Made by БорискинМА
+ * inspired by lectures & Stephen Hall's 2017 Red Black Tree implementation in Java:
+ * https://github.com/halls7588/Data_Structures_in_15_Languages/blob/master/Java/Trees/RedBlackTree/RedBlackTree.java
+ * 23.11.19
+ * gr. Java-10, Технополис
+ * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
  * LLRB implementation of binary search tree.
+ */
+/**
+ * К-ч деревья (left-learning red-black tree):
+ * В каждый узел, кроме корневого, входит ровно один линк.
+ * Все следует из эквивалентности 2-3 деревьям.
+ * Максимальная высота: 2*log2(n): 3-узлы - на пути к минимальному ключу; 2-узлы - все остальные).
+ * Сложность всех операций - O(log(n)).
+ * Каждый узел либо красный, либо черный: каждый узел либо 3-узел, либо 2-узел. Красный узел - это левая часть 3-узла.
+ * Корень черный: в него ничего не входит. Корень не может быть левой частью 3-узла.
+ * У красного узла только черные дети: потому что нет 4-узла.
+ * Идеальная черная высота - количество черных узлов в любом пути от корня до листа одинаково:
+ * 2-3 дерево идеально сбалансировано. Черные линки - линки между узлами в 2-3 дереве.
+ *
+ * Сохранить заданное значение по указанному ключу:
+ * Добавление: в 2-3 дерево с учетом представления через цвет линка (повороты и смена цвета).
+ * Вставка в к-ч дерево из одного узла: новый ключ добавляется с красным линком.
+ * Если новый ключ добавляется справа: нужно повернуть - красный линк должен быть левым.
+ * Вставка в любое двоичное дерево поиска происходит на дне. Новый узел добавляется с красным линком: 2-узел до 3-узла.
+ * Если новый узел добавляется справа, то нужно повернуть - красный линк должен быть левым.
+ * Два узла, связанные красным линком - одинокий 3-узел. Новый ключ может быть меньше, больше или находиться между существующими.
+ * В таком случае: swap(). Корень покраснел - это сигнал о том, что высота дерева увеличилась на 1. Цвет корня: сбрасываем в черный.
+ * 1) Ключ больше: swap();
+ * 2) Ключ меньше: rightRotate(), swap();
+ * 3) Ключ между: leftRotate(), rightRotate(), swap().
+ * В случае вставки в 3-узел на дне: аналогично + входящий линк краснеет - нужно восстановить инвариант в родителе:
+ * 1) Правый сын красный: leftRotate();
+ * 2) Левый сын красный && его левый сын тоже красный: rightRotate();
+ * 3) Оба сына черные: swap().
+ * + Повторяем те же действия на выходе из рекурсивного put().
+ *
+ * Удалить по заданному ключу:
+ * Узел с минимальным ключом всегда на дне дерева (легко удалять из не 2-узла на дне в 2-3 дереве):
+ * Нужно обеспечить, чтобы узел с минимальным ключом был не 2-узлом.
+ * deleteMin(): спускаясь вниз влево, поддерживаем текущий узел в 2-3 дереве не 2-узлом.
+ * deleteMax(): спускаясь вниз вправо, поддреживаем текущий узел в 2-3 дереве не 2-узлом.
+ * Удаление произвольного элемента:
+ * Все как в обычных бинарных деревьях поиска + поддерживаем инвариант: текущий узел - не 2-узел.
+ * При поиска слева: REDtoLeft().
+ * При поиске справа: REDtoRight().
+ * Если нашли node - замещаем его ключ и значение через deleteMin(node.right).
+ * Разворачиваем правые красные линки и удаляем временные 4-узлы на выходе из рекурсии - checkColor().
  */
 public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
@@ -19,10 +66,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private int size;
     
     private class Node {
-        @NotNull Key key;
-        @NotNull Value value;
-        @Nullable Node left;
-        @Nullable Node right;
+        Key key;
+        Value value;
+        Node left;
+        Node right;
         boolean color;
         int height;
 
@@ -515,4 +562,69 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private int height(Node node) {
         return node == null ? 0 : node.height;
     }
+
+    private TreeSuccessor deleteMin(TreeSuccessor treeSuccessor) {
+        if (treeSuccessor.node == null) {
+            return treeSuccessor;
+        }
+
+        if (treeSuccessor.node.left == null) {
+            treeSuccessor.value = treeSuccessor.node.value;
+
+            treeSuccessor.node = null;
+
+            return treeSuccessor;
+        }
+
+        if (!isRED(treeSuccessor.node.left) && !isRED(treeSuccessor.node.left.left)) {
+            treeSuccessor.node = REDtoLeft(treeSuccessor.node);
+        }
+
+        TreeSuccessor tempTreeWithoutValue = new TreeSuccessor(treeSuccessor.node.left, treeSuccessor.value);
+
+        deleteMin(tempTreeWithoutValue);
+
+        treeSuccessor.node.left = tempTreeWithoutValue.node;
+        treeSuccessor.value = tempTreeWithoutValue.value;
+        treeSuccessor.node = checkColor(treeSuccessor.node);
+        treeSuccessor.node.height = newHeight(treeSuccessor.node);
+
+        return treeSuccessor;
+    }
+
+    private TreeSuccessor deleteMax(TreeSuccessor treeSuccessor) {
+        if (treeSuccessor.node == null) {
+            return treeSuccessor;
+        }
+
+        if (isRED(treeSuccessor.node.left)) {
+            treeSuccessor.node = rightRotate(treeSuccessor.node);
+        }
+
+        if (treeSuccessor.node.right == null) {
+            treeSuccessor.value = treeSuccessor.node.value;
+
+            treeSuccessor.node = null;
+
+            return treeSuccessor;
+        }
+
+        if (!isRED(treeSuccessor.node.right) && !isRED(treeSuccessor.node.right.right)) {
+            treeSuccessor.node = REDtoRight(treeSuccessor.node);
+        }
+
+        TreeSuccessor tempTreeWithoutValue = new TreeSuccessor(treeSuccessor.node.right, treeSuccessor.value);
+
+        deleteMax(tempTreeWithoutValue);
+
+        treeSuccessor.node.right = tempTreeWithoutValue.node;
+        treeSuccessor.value = tempTreeWithoutValue.value;
+        treeSuccessor.node = checkColor(treeSuccessor.node);
+
+        treeSuccessor.node.height = newHeight(treeSuccessor.node);
+
+        return treeSuccessor;
+    }
+
+
 }
