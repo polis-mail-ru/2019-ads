@@ -356,4 +356,76 @@ class BstBaseTest {
         assertEquals(bst.get("7"), "testStringValue5");
         assertEquals(bst.get("1"), "testStringValue2");
     }
+
+    @Test
+    void deleteMin() {
+      RedBlackBst<String, String> bst = new RedBlackBst<>();
+      assertNull(bst.remove("case when bst is empty"));
+      assertTrue(bst.isEmpty());
+
+      bst.put("3", "3");
+      bst.put("4", "4");
+      bst.put("2", "2");
+      bst.put("5", "5");
+      bst.put("1", "1");
+      bst.put("0", "0");
+
+      int size = bst.size();
+
+      bst.deleteMin();
+      assertFalse(bst.containsKey("0"));
+      assertEquals(bst.size(), --size);
+      bst.deleteMin();
+      assertFalse(bst.containsKey("1"));
+      assertEquals(bst.size(), --size);
+      bst.deleteMin();
+      assertFalse(bst.containsKey("2"));
+      assertEquals(bst.size(), --size);
+      bst.deleteMin();
+      assertFalse(bst.containsKey("3"));
+      assertEquals(bst.size(), --size);
+      bst.deleteMin();
+      assertFalse(bst.containsKey("4"));
+      assertEquals(bst.size(), --size);
+      bst.deleteMin();
+      assertFalse(bst.containsKey("5"));
+      assertEquals(bst.size(), --size);
+      assertTrue(bst.isEmpty());
+    }
+
+  @Test
+  void deleteMax() {
+    RedBlackBst<String, String> bst = new RedBlackBst<>();
+    assertNull(bst.remove("case when bst is empty"));
+    assertTrue(bst.isEmpty());
+
+    bst.put("3", "3");
+    bst.put("4", "4");
+    bst.put("2", "2");
+    bst.put("5", "5");
+    bst.put("1", "1");
+    bst.put("0", "0");
+
+    int size = bst.size();
+
+    bst.deleteMax();
+    assertFalse(bst.containsKey("5"));
+    assertEquals(bst.size(), --size);
+    bst.deleteMax();
+    assertFalse(bst.containsKey("4"));
+    assertEquals(bst.size(), --size);
+    bst.deleteMax();
+    assertFalse(bst.containsKey("3"));
+    assertEquals(bst.size(), --size);
+    bst.deleteMax();
+    assertFalse(bst.containsKey("2"));
+    assertEquals(bst.size(), --size);
+    bst.deleteMax();
+    assertFalse(bst.containsKey("1"));
+    assertEquals(bst.size(), --size);
+    bst.deleteMax();
+    assertFalse(bst.containsKey("0"));
+    assertEquals(bst.size(), --size);
+    assertTrue(bst.isEmpty());
+  }
 }
