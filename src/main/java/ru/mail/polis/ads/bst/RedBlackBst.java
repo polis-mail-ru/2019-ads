@@ -132,6 +132,107 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         throw new UnsupportedOperationException("Implement me");
     }
 
+    private Node delete(Node element, Key key) {
+        if (element == null) {
+            return null;
+        }
+        int comparatorResult = key.compareTo(element.key);
+        if (comparatorResult < 0) {
+
+            if (element.left != null) {
+                if (!isRed(element.left) && !isRed(element.left.left)) {
+                    element = moveRedLeft(element);
+                }
+
+                element.left = delete(element.left, key);
+            }
+
+        }
+        else if (comparatorResult > 0) {
+
+            if (element.right != null) {
+                if (isRed(element.left)) {
+                    element = rightRotate(element);
+                }
+
+                if (!isRed(element.right) && !isRed(element.right.left)) {
+                    element = moveRedRight(element);
+                }
+
+                element.right = delete(element.right, key);
+            }
+        }
+        else {
+
+            if (isRed(element.left)) {
+                element = rightRotate(element);
+            }
+
+            if (element.right == null) {
+                return null;
+            }
+
+            element = getMin(element.right);
+            element.right = deleteMin(element.right);
+
+        }
+
+        return fixUp(element);
+    }
+
+    private Node moveRedLeft(Node element) {
+        flipColors(element);
+
+        if (isRed(element.right.left)) {
+            element.right = rightRotate(element.right);
+            element = leftRotate(element);
+            flipColors(element);
+        }
+
+        return element;
+    }
+
+    private Node moveRedRight(Node element) {
+        flipColors(element);
+
+        if (isRed(element.left.left)) {
+            element = rightRotate(element);
+            flipColors(element);
+        }
+
+        return element;
+    }
+
+    private Node deleteMax(Node element) {
+        if (isRed(element.left)) {
+            element = rightRotate(element);
+        }
+
+        if (element.right == null) {
+            return null;
+        }
+
+        if (!isRed(element.right) && !isRed(element.right.left)) {
+            element = moveRedRight(element);
+        }
+
+        element.right = deleteMax(element.right);
+        return fixUp(element);
+    }
+
+    private Node deleteMin(Node element) {
+        if (element.left == null) {
+            return null;
+        }
+
+        if (!isRed(element.left) && !isRed(element.left.left)) {
+            element = moveRedLeft(element);
+        }
+
+        element.left = deleteMin(element.left);
+        return fixUp(element);
+    }
+
     @Nullable
     @Override
     public Key min() {
