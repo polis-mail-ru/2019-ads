@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
-    private static final int[] CAPACITY_LIST = {17, 31, 61,	127, 227, 347, 433, 617, 859, 1153, 1669, 1153};
+    private static final int[] CAPACITY_LIST = {17, 31, 61, 127, 227, 347, 433, 617, 859, 1153, 1669, 1153};
     private static final int DEFAULT_CAPACITY = CAPACITY_LIST[0];
     private static final int NOT_FOUND = -1;
 
