@@ -129,7 +129,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        Value value = get(key);
+        delete(root, key);
+        size--;
+        return value;
     }
 
     private Node delete(Node element, Key key) {
