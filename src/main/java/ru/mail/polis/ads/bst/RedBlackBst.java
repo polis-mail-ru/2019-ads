@@ -54,7 +54,84 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Not today");
+        Value result = get(key);
+        if (result == null) {
+            return null;
+        } else {
+            --size;
+            root = delete(root, key);
+            if (root != null) {
+                root.color = BLACK;
+            }
+            return result;
+        }
+    }
+
+    private Node delete(Node current, Key key) {
+        if (current == null) {
+            return null;
+        }
+
+        final int comp = current.key.compareTo(key);
+        if (comp > 0) {
+            if (current.left != null) {
+                if (!isRed(current.left) && !isRed(leftOrNull(current.left))) {
+                    current = moveRedLeft(current);
+                }
+                current.left = delete(current.left, key);
+            }
+        } else {
+            if (isRed(current.left)) {
+                current = rotateRight(current);
+                current.right = delete(current.right, key);
+            } else {
+                if (comp == 0 && (current.right == null)) {
+                    return null;
+                }
+                if (!isRed(current.right) && !isRed(leftOrNull(current.right))) {
+                    // moveRedRight
+                    flipColors(current);
+                    if (isRed(leftOrNull(current.left))) {
+                        current = rotateRight(current);
+                        flipColors(current);
+                        current.right = delete(current.right, key);
+                        updateHeight(current);
+                        return fixUp(current);
+                    }
+                }
+                if (comp == 0) {
+                    final Node minNode = minNode(current.right);
+                    current.key = minNode.key;
+                    current.value = minNode.value;
+                    current.right = deleteMin(current.right);
+                } else {
+                    current.right = delete(current.right, key);
+                }
+            }
+        }
+        updateHeight(current);
+        return fixUp(current);
+    }
+
+    private Node moveRedLeft(Node current) {
+        flipColors(current);
+        if (isRed(leftOrNull(current.right))) {
+            current.right = rotateRight(current.right);
+            current = rotateLeft(current);
+            flipColors(current);
+        }
+        return current;
+    }
+
+    private Node deleteMin(Node current) {
+        if (current.left == null) {
+            return null;
+        }
+        if (!isRed(current.left) && !isRed(leftOrNull(current.left))) {
+            current = moveRedLeft(current);
+        }
+        current.left = deleteMin(current.left);
+        return fixUp(current);
     }
 
     @Nullable
@@ -176,8 +253,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             current.value = value;
         }
 
-        updateHeight(current);
         current = fixUp(current);
+        updateHeight(current);
         return current;
     }
 
@@ -261,13 +338,17 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Contract(value = "null -> false", pure = true)
     private boolean isRed(Node node) {
-        return node != null && node.color;
+        return node != null && node.color == RED;
     }
 
     private void flipColors(@NotNull Node node) {
         node.color = !node.color;
-        node.left.color = !node.left.color;
-        node.right.color = !node.right.color;
+        if (node.left != null) {
+            node.left.color = !node.left.color;
+        }
+        if (node.right != null) {
+            node.right.color = !node.right.color;
+        }
     }
 
 }
