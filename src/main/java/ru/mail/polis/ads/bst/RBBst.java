@@ -6,26 +6,9 @@ import org.jetbrains.annotations.Nullable;
 public class RBBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
-    Node root;
-
     static final boolean RED = true;
     static final boolean BLACK = false;
-
-    private class Node {
-        Key key;
-        Value value;
-        Node left;
-        Node right;
-        int height;
-        boolean color;
-
-        Node(@NotNull Key key, @NotNull Value value, int height, boolean color) {
-            this.key = key;
-            this.value = value;
-            this.height = height;
-            this.color = color;
-        }
-    }
+    Node root;
 
     @Nullable
     @Override
@@ -48,7 +31,7 @@ public class RBBst<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        put(root, key, value);
+        root = put(root, key, value);
         root.color = BLACK;
     }
 
@@ -67,17 +50,12 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
-    Node moveRedLeft(Node node) {
-        flipColors(node);
-        if (isRed(node.right.left)) {
-            node.right = rotateRight(node.right);
-            node = rotateLeft(node);
-            flipColors(node);
-        }
-        return node;
+    void deleteMin() {
+        root = deleteMin(root);
+        root.color = BLACK;
     }
 
-    Node deleteMin(Node node) {
+    private Node deleteMin(Node node) {
         if (node.left == null) {
             return null;
         }
@@ -88,21 +66,12 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return fixUp(node);
     }
 
-    void deleteMin() {
-        root = deleteMin(root);
+    void deleteMax() {
+        root = deleteMax(root);
         root.color = BLACK;
     }
 
-    Node moveRedRight(Node node) {
-        flipColors(node);
-        if (isRed(node.left.left)) {
-            node = rotateRight(node);
-            flipColors(node);
-        }
-        return node;
-    }
-
-    Node deleteMax(Node node) {
+    private Node deleteMax(Node node) {
         if (isRed(node.left)) {
             node = rotateRight(node);
         }
@@ -116,12 +85,13 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return fixUp(node);
     }
 
-    void deleteMax() {
-        root = deleteMax(root);
-        root.color = BLACK;
+    @Nullable
+    @Override
+    public Value remove(@NotNull Key key) {
+        return remove(root, key).value;
     }
 
-    Node delete(Node node, Key key) {
+    private Node remove(Node node, Key key) {
         if (node == null) {
             return null;
         }
@@ -130,7 +100,7 @@ public class RBBst<Key extends Comparable<Key>, Value>
                 if (!isRed(node.left) && !isRed(node.left.left)) {
                     node = moveRedLeft(node);
                 }
-                node.left = delete(node.left, key);
+                node.left = remove(node.left, key);
             }
         } else if (key.compareTo(node.key) > 0) {
             if (node.right != null) {
@@ -140,7 +110,7 @@ public class RBBst<Key extends Comparable<Key>, Value>
                 if (!isRed(node.right.left) && !isRed(node.right.left)) {
                     node = moveRedRight(node);
                 }
-                node.right = delete(node.right, key);
+                node.right = remove(node.right, key);
             }
         } else {
             if (isRed(node.left)) {
@@ -158,8 +128,9 @@ public class RBBst<Key extends Comparable<Key>, Value>
 
     @Nullable
     @Override
-    public Value remove(@NotNull Key key) {
-        return delete(root, key).value;
+    public Value minValue() {
+        Node minNode = min(root);
+        return minNode == null ? null : minNode.value;
     }
 
     @Nullable
@@ -179,12 +150,11 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return min(node.left);
     }
 
-
     @Nullable
     @Override
-    public Value minValue() {
-        Node minNode = min(root);
-        return minNode == null ? null : minNode.value;
+    public Value maxValue() {
+        Node maxNode = max(root);
+        return maxNode == null ? null : maxNode.value;
     }
 
     @Nullable
@@ -202,12 +172,6 @@ public class RBBst<Key extends Comparable<Key>, Value>
             return node;
         }
         return max(node);
-    }
-
-    @Nullable
-    @Override
-    public Value maxValue() {
-        return null;
     }
 
     @Nullable
@@ -306,7 +270,42 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
+    private Node moveRedLeft(Node node) {
+        flipColors(node);
+        if (isRed(node.right.left)) {
+            node.right = rotateRight(node.right);
+            node = rotateLeft(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
+    private Node moveRedRight(Node node) {
+        flipColors(node);
+        if (isRed(node.left.left)) {
+            node = rotateRight(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
     private boolean isRed(Node x) {
         return x != null && x.color == RED;
+    }
+
+    private class Node {
+        Key key;
+        Value value;
+        Node left;
+        Node right;
+        int height;
+        boolean color;
+
+        Node(@NotNull Key key, @NotNull Value value, int height, boolean color) {
+            this.key = key;
+            this.value = value;
+            this.height = height;
+            this.color = color;
+        }
     }
 }
