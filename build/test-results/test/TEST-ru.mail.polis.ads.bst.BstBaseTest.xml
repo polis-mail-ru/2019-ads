@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.mail.polis.ads.bst.BstBaseTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2019-11-25T21:16:28" hostname="LAPTOP-3SP12CO3" time="0.02">
+<testsuite name="ru.mail.polis.ads.bst.BstBaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-11-25T22:27:32" hostname="LAPTOP-3SP12CO3" time="0.013">
   <properties/>
-  <testcase name="orderedOnEmpty()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.012"/>
-  <testcase name="put()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.004"/>
-  <testcase name="replace()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
-  <testcase name="emptyBst()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="remove()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.013"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

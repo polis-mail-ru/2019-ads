@@ -30,8 +30,6 @@ public interface Bst<Key extends Comparable<Key>, Value> {
     @Nullable Key ceil(@NotNull Key key);
 
     int size();
-
-    int height();
     
     default boolean isEmpty() {
         return size() == 0;
