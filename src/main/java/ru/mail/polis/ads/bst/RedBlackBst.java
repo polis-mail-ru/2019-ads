@@ -3,7 +3,7 @@ package ru.mail.polis.ads.bst;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class RBBst<Key extends Comparable<Key>, Value>
+public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
     static final boolean RED = true;
@@ -20,9 +20,11 @@ public class RBBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) > 0) {
+        int comparing = key.compareTo(node.key);
+
+        if (comparing > 0) {
             return get(node.right, key);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (comparing < 0) {
             return get(node.left, key);
         } else {
             return node.value;
@@ -39,9 +41,10 @@ public class RBBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return new Node(key, value, 1, RED);
         }
-        if (key.compareTo(node.key) < 0) {
+        int comparing = key.compareTo(node.key);
+        if (comparing < 0) {
             node.left = put(node.left, key, value);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (comparing > 0) {
             node.right = put(node.right, key, value);
         } else {
             node.value = value;
@@ -50,7 +53,7 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
-    void deleteMin() {
+    public void deleteMin() {
         root = deleteMin(root);
         root.color = BLACK;
     }
@@ -66,7 +69,7 @@ public class RBBst<Key extends Comparable<Key>, Value>
         return fixUp(node);
     }
 
-    void deleteMax() {
+    public void deleteMax() {
         root = deleteMax(root);
         root.color = BLACK;
     }
@@ -88,21 +91,23 @@ public class RBBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        return remove(root, key).value;
+        Node removing = remove(root, key);
+        return removing == null ? null : removing.value;
     }
 
     private Node remove(Node node, Key key) {
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) {
+        int comparing = key.compareTo(node.key);
+        if (comparing < 0) {
             if (node.left != null) {
                 if (!isRed(node.left) && !isRed(node.left.left)) {
                     node = moveRedLeft(node);
                 }
                 node.left = remove(node.left, key);
             }
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (comparing > 0) {
             if (node.right != null) {
                 if (isRed(node.left)) {
                     node = rotateRight(node);
@@ -203,10 +208,11 @@ public class RBBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) > 0) {
+        int comparing = key.compareTo(node.key);
+        if (comparing > 0) {
             return ceil(node.right, key);
         }
-        if (key.compareTo(node.left.key) < 0) {
+        if (comparing < 0) {
             return ceil(node.left, key);
         }
         return node.key;
