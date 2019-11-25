@@ -3,275 +3,254 @@ package ru.mail.polis.ads.bst;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.NoSuchElementException;
+
 /**
  * LLRB implementation of binary search tree.
  */
 public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-    private Node root;
-
-    class Node {
-=======
     private static final boolean BLACK = false;
     private static final boolean RED = true;
-    
+
+    private Node root;
     private class Node {
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
         Key key;
         Value value;
-        Node left;
-        Node right;
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-        int height;
+        Node left, right;
+        boolean color;
         int size;
 
-        Node(Key key, Value value, int height, int size) {
+        Node(Key key, Value value, boolean color, int size) {
             this.key = key;
             this.value = value;
-            this.height = height;
+            this.color = color;
             this.size = size;
         }
-=======
-        boolean color;
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+    }
+
+    private boolean isRed(Node x){
+        return x != null && x.color == RED;
     }
 
     @Nullable
     @Override
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-    public Value get(Key key) {
-        if (key == null) throw new IllegalArgumentException("Input key is null");
-        Node x = get(root, key);
-        if (x == null) return null;
-        return x.value;
-    }
-
-    private Node get(Node node, Key key) {
-        if (node == null) return null;
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) return get(node.left, key);
-        else if (cmp > 0) return get(node.right, key);
-        else return node;
-    }
-
-    @Override
-    public void put(Key key, Value value) {
-        if (key == null) throw new IllegalArgumentException("Input key is null");
-        if (value == null) {
-            remove(key);
-            return;
-        }
-        root = put(root, key, value);
-    }
-
-    private Node put(Node node, Key key, Value value){
-        if (node == null) return new Node(key, value, 1, 1);
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) node.left = put(node.left, key, value);
-        else if (cmp > 0) node.right = put(node.right, key, value);
-        else {
-            node.value = value;
-            return node;
-        }
-        node.size = 1 + size(node.left) + size(node.right);
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-        return balance(node);
-    }
-
-    private Node balance(Node node){
-        if (balanceValue(node) < -1){
-            if (balanceValue(node.right) > 0) node.right = rotateRight(node.right);
-            node = rotateLeft(node);
-        }
-        else if (balanceValue(node) > 1){
-            if (balanceValue(node.left) < 0) node.left = rotateLeft(node.left);
-            node = rotateRight(node);
-        }
-        return node;
-    }
-
-    private int balanceValue(Node node){
-        return height(node.left) - height(node.right);
-    }
-
-    private Node rotateRight(Node node) {
-        Node tmp = node.left;
-        node.left = tmp.right;
-        tmp.right = node;
-        rotate(node, tmp);
-        return tmp;
-    }
-
-    private Node rotateLeft(Node node) {
-        Node tmp = node.right;
-        node.right = tmp.left;
-        tmp.left = node;
-        rotate(node, tmp);
-        return tmp;
-    }
-
-    private void rotate(Node x, Node y){
-        x.size = 1 + size(x.left) + size(x.right);
-        x.height = 1 + Math.max(height(x.left), height(x.right));
-        y.height = 1 + Math.max(height(y.left), height(y.right));
-=======
     public Value get(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        return get(root, key);
+    }
+
+    private Value get(Node x, Key key) {
+        while (x != null) {
+            int cmp = key.compareTo(x.key);
+            if (cmp < 0) x = x.left;
+            else if (cmp > 0) x = x.right;
+            else return x.value;
+        }
+        return null;
     }
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        throw new UnsupportedOperationException("Implement me");
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+        root = put(root, key, value);
+        root.color = BLACK;
+    }
+
+    private Node put(Node x, Key key, Value val) {
+        if (x == null) return new Node(key, val, RED, 1);
+
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0) x.left  = put(x.left,  key, val);
+        else if (cmp > 0) x.right = put(x.right, key, val);
+        else x.value = val;
+
+        if (isRed(x.right) && !isRed(x.left)) x = rotateLeft(x);
+        if (isRed(x.left)  &&  isRed(x.left.left)) x = rotateRight(x);
+        if (isRed(x.left)  &&  isRed(x.right)) flipColors(x);
+        x.size = size(x.left) + size(x.right) + 1;
+
+        return x;
+    }
+
+    private Node rotateRight(Node h) {
+        Node x = h.left;
+        h.left = x.right;
+        x.right = h;
+        x.color = x.right.color;
+        x.right.color = RED;
+        x.size = h.size;
+        h.size = size(h.left) + size(h.right) + 1;
+        return x;
+    }
+
+    private Node rotateLeft(Node h) {
+        Node x = h.right;
+        h.right = x.left;
+        x.left = h;
+        x.color = x.left.color;
+        x.left.color = RED;
+        x.size = h.size;
+        h.size = size(h.left) + size(h.right) + 1;
+        return x;
+    }
+
+    private void flipColors(Node x) {
+        x.color = !x.color;
+        x.left.color = !x.left.color;
+        x.right.color = !x.right.color;
+    }
+
+    private Node moveRedLeft(Node x) {
+        flipColors(x);
+        if (isRed(x.right.left)) {
+            x.right = rotateRight(x.right);
+            x = rotateLeft(x);
+            flipColors(x);
+        }
+        return x;
+    }
+
+    private Node moveRedRight(Node x) {
+        flipColors(x);
+        if (isRed(x.left.left)) {
+            x = rotateRight(x);
+            flipColors(x);
+        }
+        return x;
+    }
+
+    private Node balance(Node x) {
+        if (isRed(x.right)) x = rotateLeft(x);
+        if (isRed(x.left) && isRed(x.left.left)) x = rotateRight(x);
+        if (isRed(x.left) && isRed(x.right)) flipColors(x);
+
+        x.size = size(x.left) + size(x.right) + 1;
+        return x;
     }
 
     @Nullable
     @Override
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-    public Value remove(Key key) {
-        if (key == null) throw new IllegalArgumentException("Input key is null");
-        if (!containsKey(key)) return null;
-        return remove(root, key).value;
-    }
-
-    private Node remove(Node node, Key key){
-        int cmp = key.compareTo(node.key);
-        if (cmp < 0) node.left = remove(node.left, key);
-        else if (cmp > 0) node.right = remove(node.right, key);
-        else {
-            if (node.left == null) return node.right;
-            else if (node.right == null) return node.left;
-            else {
-                Node tmp = node;
-                node = min(tmp.right);
-                node.right = removeMin(tmp.right);
-                node.left = tmp.left;
-            }
-        }
-        node.size = 1 + size(node.left) + size(node.right);
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-        return balance(node);
-    }
-
-    private boolean containsKey(Key key) {
-        return get(key) != null;
-=======
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+        if (!containsKey(key)) return null;
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+        root = remove(root, key);
+        if (!isEmpty()) root.color = BLACK;
+        return root.value;
+    }
+
+    private Node remove(Node h, Key key) {
+        if (key.compareTo(h.key) < 0)  {
+            if (!isRed(h.left) && !isRed(h.left.left))
+                h = moveRedLeft(h);
+            h.left = remove(h.left, key);
+        }
+        else {
+            if (isRed(h.left))
+                h = rotateRight(h);
+            if (key.compareTo(h.key) == 0 && (h.right == null))
+                return null;
+            if (!isRed(h.right) && !isRed(h.right.left))
+                h = moveRedRight(h);
+            if (key.compareTo(h.key) == 0) {
+                Node x = min(h.right);
+                h.key = x.key;
+                h.value = x.value;
+                h.right = deleteMin(h.right);
+            }
+            else h.right = remove(h.right, key);
+        }
+        return balance(h);
     }
 
     @Nullable
     @Override
     public Key min() {
-        if (root == null) return null;
-        return min(root).key;
+        return isEmpty() ? null : min(root).key;
+    }
+    private Node min(Node x) {
+        return x.left == null ? x : min(x.left);
     }
 
     @Nullable
     @Override
     public Value minValue() {
-        if (root == null) return null;
-        return min(root).value;
+        return isEmpty() ? null : min(root).value;
     }
 
-    private Node min(Node node){
-        if (node.left == null) return node;
-        return min(node.left);
-    }
+    private Node deleteMin(Node h) {
+        if (h.left == null)
+            return null;
 
-    private Node removeMin(Node node){
-        if (node.left == null) return node.right;
-        node.left = removeMin(node.left);
-        node.size = 1 + size(node.left) + size(node.right);
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-        return balance(node);
+        if (!isRed(h.left) && !isRed(h.left.left))
+            h = moveRedLeft(h);
+
+        h.left = deleteMin(h.left);
+        return balance(h);
     }
 
     @Nullable
     @Override
     public Key max() {
-        if (root == null) return null;
-        return max(root).key;
+        return isEmpty() ? null : max(root).key;
+    }
+    private Node max(Node x) {
+        return x.right == null ? x : max(x.right);
     }
 
     @Nullable
     @Override
     public Value maxValue() {
-        if (root == null) return null;
-        return max(root).value;
-    }
-
-    private Node max(Node node){
-        if (node.right == null) return node;
-        return min(node.right);
+        return isEmpty() ? null : max(root).value;
     }
 
     @Nullable
     @Override
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-    public Key floor(Key key) {
-        if (key == null) throw new IllegalArgumentException("Input key is null");
-        if (root == null) return null;
-        Node fl = floor(root, key);
-        return fl == null ? null : fl.key;
-    }
-
-    private Node floor(Node node, Key key){
-        if (key == null) return null;
-        int cmp = key.compareTo(node.key);
-        if (cmp == 0) return node;
-        else if (cmp < 0) return floor(node.left, key);
-        Node y = floor(node.right, key);
-        return y != null ? y : node;
-=======
     public Key floor(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+        if (isEmpty()) return null;
+        Node x = floor(root, key);
+        return x == null ? null : x.key;
+    }
+
+    private Node floor(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp < 0) return floor(x.left, key);
+        Node f = floor(x.right, key);
+        return f != null ? f : x;
     }
 
     @Nullable
     @Override
-<<<<<<< HEAD:src/main/java/ru/mail/polis/ads/bst/AvlBst.java
-    public Key ceil(Key key) {
-        if (key == null) throw new IllegalArgumentException("Input key is null");
-        if (root == null) return null;
-        Node cl = ceil(root, key);
-        return cl == null ? null : cl.key;
+    public Key ceil(@NotNull Key key) {
+        if (isEmpty()) return null;
+        Node x = ceiling(root, key);
+        return x == null ? null : x.key;
     }
 
-    private Node ceil(Node node, Key key){
-        if (key == null) return null;
-        int cmp = key.compareTo(node.key);
-        if (cmp == 0) return node;
-        else if (cmp > 0) return ceil(node.right, key);
-        Node y = ceil(node.left, key);
-        return y != null ? y : node;
-=======
-    public Key ceil(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
->>>>>>> c77ac6fc4f9181d7099d8fee560ec5294cf49776:src/main/java/ru/mail/polis/ads/bst/RedBlackBst.java
+    private Node ceiling(Node x, Key key) {
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp == 0) return x;
+        if (cmp > 0)  return ceiling(x.right, key);
+        Node c = ceiling(x.left, key);
+        return c != null ? c : x;
     }
 
     @Override
     public int size() {
         return size(root);
     }
-
-    private int size(Node node) {
-        if (node == null) return 0;
-        return node.size;
+    private int size(Node x) {
+        return x == null ? 0 : x.size;
     }
 
     @Override
     public int height() {
         return height(root);
     }
-
-    private int height(Node node) {
-        if (node == null) return 0;
-        return node.height;
+    private int height(Node x) {
+        return x == null ? 0 : 1 + Math.max(height(x.left), height(x.right));
     }
 }
