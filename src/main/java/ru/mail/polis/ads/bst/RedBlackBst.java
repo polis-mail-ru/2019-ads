@@ -89,10 +89,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     public Value remove(@NotNull Key key) {
         Value value = get(node, key);
 
-        node = remove(node, key);
+        if (value != null) {
+            node = remove(node, key);
 
-        if (node != null) {
-            node.color = BLACK;
+            if (node != null) {
+                node.color = BLACK;
+            }
         }
 
         return value;
@@ -103,7 +105,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        Value value = null;
         int compRes = key.compareTo(node.key);
 
         if (compRes < 0) {
