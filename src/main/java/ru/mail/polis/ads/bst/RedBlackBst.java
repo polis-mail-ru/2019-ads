@@ -91,10 +91,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         if (value != null) {
             node = remove(node, key);
-
-            if (node != null) {
-                node.color = BLACK;
-            }
         }
 
         return value;
