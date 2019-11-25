@@ -61,7 +61,7 @@ class BstBaseTest {
     @Test
     void morePut() {
         Bst<String, String> bst = newBst();
-
+      
         int size = 0;
         assertEquals(bst.size(), size);
         assertNull(bst.max());
