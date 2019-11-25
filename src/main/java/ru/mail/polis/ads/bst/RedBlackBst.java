@@ -87,13 +87,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        Value value = remove(node, key);
-        node.color = BLACK;
+        Value value = get(node, key);
+
+        node = remove(node, key);
+
+        if (node != null) {
+            node.color = BLACK;
+        }
 
         return value;
     }
 
-    private Value remove(Node node, Key key) {
+    private Node remove(Node node, Key key) {
         if (node == null) {
             return null;
         }
@@ -107,7 +112,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                     node = moveRed(node, LEFT);
                 }
 
-                value = remove(node.left, key);
+                node.left = remove(node.left, key);
             }
         } else if (compRes > 0) {
             if (node.right != null) {
@@ -119,11 +124,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                     node = moveRed(node, RIGHT);
                 }
 
-                value = remove(node.right, key);
+                node.right = remove(node.right, key);
             }
         } else {
-            value = node.value;
-
             if (isRed(node.left)) {
                 node = rotate(node, RIGHT);
             }
@@ -139,7 +142,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         updateHeight(node);
 
-        return value;
+        return balance(node);
     }
 
     @Nullable
