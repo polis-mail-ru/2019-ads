@@ -29,6 +29,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         size = 0;
     }
     private Node topNode;
+    private Value deletedValue;
     private int size;
     private static final boolean RED = true;
     private static final boolean BLACK = false;
@@ -89,7 +90,74 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        deletedValue = null;
+
+        if (topNode != null)
+            topNode = delete(topNode, key);
+        else
+            return null;
+
+        return deletedValue;
+    }
+
+    private Node delete(Node node, Key key) {
+        if (node == null) return null;
+
+        if (key.compareTo(node.key) < 0) {
+            if (node.left != null) {
+                if (!isRed(node.left) && !isRed(node.left.left))
+                    node = moveRedLeft(node);
+                node.left = delete(node.left, key);
+            }
+        } else if (key.compareTo(node.key) > 0) {
+            if (node.right != null) {
+                if (isRed(node.left))
+                    node = rotateRight(node);
+                if (!isRed(node.right) && !isRed(node.right.left))
+                    node = moveRedRight(node);
+                node.right = delete(node.right, key);
+            }
+        } else {
+            if (isRed(node.left))
+                node = rotateRight(node);
+            if (node.right == null)
+                return null;
+            deletedValue = node.value;
+
+            Node minNode = min(node.right);
+            node.key = minNode.key;
+            node.value = minNode.value;
+            node.right = deleteMin(node.right);
+        }
+        return fixUp(node);
+    }
+
+    private Node moveRedRight(Node x) {
+        flipColors(x);
+        if (isRed(x.left.left)) {
+            x = rotateRight(x);
+            flipColors(x);
+        }
+        return x;
+    }
+
+    private Node moveRedLeft(Node node) {
+        flipColors(node);
+        if (isRed(node.right.left)) {
+            node.right = rotateRight(node.right);
+            node = rotateLeft(node);
+            flipColors(node);
+        }
+        return node;
+    }
+
+    private Node deleteMin(Node node) {
+        if (node.left == null)
+            return null;
+        if (!isRed(node.left) && !isRed(node.left.left))
+            node = moveRedLeft(node);
+        node.left = deleteMin(node.left);
+        return fixUp(node);
     }
 
     @Nullable
