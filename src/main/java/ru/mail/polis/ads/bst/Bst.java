@@ -8,7 +8,7 @@ public interface Bst<Key extends Comparable<Key>, Value> {
 
     void put(Key key, Value value);
 
-    void remove(Key key);
+    Value remove(Key key);
 
     Key min();
 
@@ -21,8 +21,8 @@ public interface Bst<Key extends Comparable<Key>, Value> {
     Key floor(Key key);
 
     Key ceil(Key key);
-    
+
     int size();
-    
+
     int height();
 }
