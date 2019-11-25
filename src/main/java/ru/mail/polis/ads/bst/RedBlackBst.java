@@ -32,6 +32,16 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node node;
+    private int size;
+
+    public RedBlackBst() {
+        this.size = 0;
+    }
+
+    public RedBlackBst(Node node) {
+        this.node = node;
+        this.size = 1;
+    }
 
     @Nullable
     @Override
@@ -65,6 +75,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private Node put(Node node, Key key, Value value) {
         if (node == null) {
+            ++size;
             return new Node(key, value, RED, 1);
         }
 
@@ -91,6 +102,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         if (value != null) {
             node = remove(node, key);
+            --size;
         }
 
         return value;
@@ -248,11 +260,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     @Override
     public int size() {
-        return size(node);
-    }
-
-    private int size(Node node) {
-        return node == null ? 0 : size(node.left) + size(node.right) + 1;
+        return size;
     }
 
     @Override
