@@ -326,7 +326,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node moveRed(Node node, boolean left) {
-        colorFlip(node);
+        if (node.left != null && node.right != null) {
+            colorFlip(node);
+        }
 
         Node toMove = left ? node.right : node.left;
 
