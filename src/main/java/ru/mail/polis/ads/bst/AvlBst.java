@@ -103,13 +103,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node delete(Node node, Key key) {
         if (node == null) return null;
 
-        if (key.compareTo(node.key) < 0) {
+        int cmp = key.compareTo(node.key);
+
+        if (cmp < 0) {
             if (node.left != null) {
                 if (!isRed(node.left) && !isRed(node.left.left))
                     node = moveRedLeft(node);
                 node.left = delete(node.left, key);
             }
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (cmp > 0) {
             if (node.right != null) {
                 if (isRed(node.left))
                     node = rotateRight(node);
