@@ -136,20 +136,20 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 node.right = remove(node.right, key);
             }
         } else {
+            Node toDelete = node;
             if (isRed(node.left)) {
                 node = rotate(node, RIGHT);
+                toDelete = node.right;
             }
 
-            if (node.right == null) {
-                return null;
+            if (toDelete.right == null) {
+                return toDelete.left == null ? null : toDelete.left;
             }
 
-            node.key = min(node.right).key;
-            node.value = get(node.right, node.key);
-            node.right = removeMin(node.right);
+            toDelete.key = min(toDelete.right).key;
+            toDelete.value = get(toDelete.right, toDelete.key);
+            toDelete.right = removeMin(toDelete.right);
         }
-
-        updateHeight(node);
 
         return balance(node);
     }
