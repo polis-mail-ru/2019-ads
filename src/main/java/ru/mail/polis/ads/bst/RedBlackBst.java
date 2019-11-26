@@ -11,7 +11,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     private static final boolean BLACK = false;
     private static final boolean RED = true;
     private Node node;
-    
+
     private class Node {
         Key key;
         Value value;
@@ -99,11 +99,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
             int compare = key.compareTo(x.key);
             if (compare < 0) {
                 return get(x.left, key);
-            }
-            else if (compare > 0) {
+            } else if (compare > 0) {
                 return get(x.right, key);
-            }
-            else {
+            } else {
                 return x.value;
             }
         }
@@ -115,11 +113,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
             int compare = key.compareTo(x.key);
             if (compare < 0) {
                 x.left = put(x.left, key, value);
-            }
-            else if (compare > 0) {
+            } else if (compare > 0) {
                 x.right = put(x.right, key, value);
-            }
-            else {
+            } else {
                 x.value = value;
             }
             setNewHeight(x);
