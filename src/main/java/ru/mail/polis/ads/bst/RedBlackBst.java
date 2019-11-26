@@ -328,13 +328,17 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node moveRed(Node node, boolean left) {
         colorFlip(node);
 
-        if (isRed((left ? node.right : node.left).left)) {
-            if (left) {
-                node.right = rotate(node.right, RIGHT);
-            }
+        Node toMove = left ? node.right : node.left;
 
-            node = rotate(node, left ? LEFT : RIGHT); //Ternary just for better code readability.
-            colorFlip(node);
+        if (toMove != null) {
+            if (isRed(toMove.left)) {
+                if (left) {
+                    node.right = rotate(node.right, RIGHT);
+                }
+
+                node = rotate(node, left ? LEFT : RIGHT); //Ternary just for better code readability.
+                colorFlip(node);
+            }
         }
 
         return node;
