@@ -97,7 +97,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         int cmp = key.compareTo(node.key);
 
         if (cmp < 0) {
-            if (!isRed(node.left) || !isRed(node.left.left)) {
+            if (!isRed(node.left) && node.left != null && !isRed(node.left.left)) {
                 node = moveRedLeft(node);
             }
             node.left = remove(node.left, key);
