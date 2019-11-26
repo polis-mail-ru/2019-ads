@@ -306,29 +306,23 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
           x = moveRedLeft(x);
         x.left = remove(x.left, key);
       }
-    } else if (compareResult > 0) {
-      if (x.right != null) {
-        if (isRed(x.left))
-          x = rotateRight(x);
-        if (!isRed(x.right) && !isRed(x.right.left))
-          x = moveRedRight(x);
-        x.right = remove(x.right, key);
-      }
     } else {
-      Node forDelete = x;
       if (isRed(x.left)) {
         x = rotateRight(x);
-        forDelete = x.right;
+        x.right = remove(x.right, key);
+      } else if (compareResult == 0 && x.right == null)
+        return null;
+      else {
+        if (x.right != null && !isRed(x.right) && !isRed(x.right.left))
+          x = moveRedRight(x);
+        if (key.compareTo(x.key) == 0) {
+          Node min = min(x.right);
+          x.key = min.key;
+          x.value = min.value;
+          x.right = deleteMin(x.right);
+        } else
+          x.right = remove(x.right, key);
       }
-      if (forDelete.right == null) {
-        if (forDelete.left != null)
-          return forDelete.left;
-        else
-          return null;
-      }
-      forDelete.key = min(forDelete.right).key;
-      forDelete.value = get(forDelete.right, forDelete.key).value;
-      forDelete.right = deleteMin(forDelete.right);
     }
     return fixUp(x);
   }
