@@ -45,7 +45,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException("Implement me");
+        if (root == null) return null;
+
+        Value removed = get(key);
+        root = remove(root, key);
+
+        return removed;
     }
 
     @Nullable
@@ -115,8 +120,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private Node put(Node node, Key key, Value value) {
         if (node == null) return new Node(key, value, 1, RED);
-        if (key.compareTo(node.key) < 0) node.left = put(node.left, key, value);
-        else if (key.compareTo(node.key) > 0) node.right = put(node.right, key, value);
+
+        int compare = key.compareTo(node.key);
+
+        if (compare < 0) node.left = put(node.left, key, value);
+        else if (compare > 0) node.right = put(node.right, key, value);
         else node.value = value;
 
         node = fixUp(node);
@@ -223,7 +231,59 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return root == null ? 0 : root.height;
     }
 
-    public Node getRoot() {
+    private Node remove(Node node, Key key) {
+        int compare = key.compareTo(node.key);
+
+        if (compare < 0) {
+            if (node.left != null) {
+                if (!isRed(node.left) && !isRed(node.left.left)) node = moveRedLeft(node);
+                node.left = remove(node.left, key);
+            }
+        } else {
+            if (isRed(node.left)) node = rotateRight(node);
+            if (node.right == null && compare == 0) return null;
+            if (node.right != null && !isRed(node.right) && !isRed(node.right.left)) node = moveRedRight(node);
+
+            if (key.compareTo(node.key) == 0) {
+                Node min = min(node.right);
+                node.key = min.key;
+                node.value = min.value;
+                node.right = deleteMin(node.right);
+            } else if (node.right != null) node.right = remove(node.right, key);
+        }
+
+        return fixUp(node);
+    }
+
+    private Node moveRedLeft(Node root) {
+        flipColor(root);
+
+        if (isRed(root.right.left)) {
+            root.right = rotateRight(root.right);
+            root = rotateLeft(root);
+            flipColor(root);
+        }
+
         return root;
+    }
+
+    private Node moveRedRight(Node root) {
+        flipColor(root);
+
+        if (isRed(root.left.left)) {
+            root = rotateRight(root);
+            flipColor(root);
+        }
+
+        return root;
+    }
+
+    private Node deleteMin(Node root) {
+        if (root == null || root.left == null) return null;
+        if (!isRed(root.left) && !isRed(root.left.left)) root = moveRedLeft(root);
+
+        root.left = deleteMin(root.left);
+
+        return fixUp(root);
     }
 }
