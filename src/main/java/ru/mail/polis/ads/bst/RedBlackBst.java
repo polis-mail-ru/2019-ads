@@ -228,7 +228,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
 
         if (compRes > 0) {
-            return floor(node.right, key);
+            Key res = floor(node.right, key);
+            return res == null ? node.key : res;
         }
 
         return node.key;
@@ -248,11 +249,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         int compRes = key.compareTo(node.key);
 
         if (compRes > 0) {
-            return floor(node.right, key);
+            return ceil(node.right, key);
         }
 
         if (compRes < 0) {
-            return floor(node.left, key);
+            Key res = ceil(node.left, key);
+            return res == null ? node.key : res;
         }
 
         return node.key;
