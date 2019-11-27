@@ -27,6 +27,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return x.value;
     }
 
+    public Node getNode(@NotNull Key key) {
+        return getNode(root, key);
+    }
+
     private Node getNode(Node x, Key key) {
         if (x == null) return null;
         int comp = key.compareTo(x.key);
@@ -51,16 +55,90 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             x.right = put(x.right, key, value);
         else
             x.value = value;
-
-        fixHeight(x);
         x = fixUp(x);
+        fixHeight(x);
         return x;
     }
 
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        throw new UnsupportedOperationException();
+        return remove(root, key).value;
+    }
+
+    private Node remove(Node x, Key key) {
+        if (x == null) return null;
+        int comp = key.compareTo(x.key);
+        if (comp < 0) {
+            if (x.left != null) {
+                if (!isRed(x.left) && !isRed(x.left.left))
+                    x = moveRedLeft(x);
+                x.left = remove(x.left, key);
+            }
+        } else {
+            if (isRed(x.left)) {
+                x = rotateRight(x);
+                x.right = remove(x.right, key);
+            } else if (comp == 0 && x.right == null)
+                return null;
+            else {
+                if (x.right != null && !isRed(x.right) && !isRed(x.right.left))
+                    x = moveRedRight(x);
+                if (key.compareTo(x.key) == 0) {
+                    Node min = getNode(min(x.right));
+                    x.key = min.key;
+                    x.value = min.value;
+                    x.right = deleteMin(x.right);
+                } else
+                    x.right = remove(x.right, key);
+            }
+        }
+        fixHeight(x);
+        return fixUp(x);
+    }
+
+    void deleteMin() {
+        root = deleteMin(root);
+        root.color = BLACK;
+    }
+
+    void deleteMax() {
+        root = deleteMax(root);
+        root.color = BLACK;
+    }
+
+    private Node deleteMax(Node x) {
+        if (isRed(x.left)) x = rotateRight(x);
+        if (x.right == null) return null;
+        if (!isRed(x.right) && !isRed(x.right.left)) x = moveRedRight(x);
+        x.right = deleteMax(x.right);
+        return fixUp(x);
+    }
+
+    private Node deleteMin(Node x) {
+        if (x.left == null) return null;
+        if (!isRed(x.left) && !isRed(x.left.left)) x = moveRedLeft(x);
+        x.left = deleteMin(x.left);
+        return fixUp(x);
+    }
+
+    private Node moveRedLeft(Node x) {
+        flipColors(x);
+        if (isRed(x.right.left)) {
+            x.right = rotateRight(x.right);
+            x = rotateLeft(x);
+            flipColors(x);
+        }
+        return x;
+    }
+
+    private Node moveRedRight(Node x) {
+        flipColors(x);
+        if (isRed(x.left.left)) {
+            x = rotateRight(x);
+            flipColors(x);
+        }
+        return x;
     }
 
     @Nullable
@@ -174,6 +252,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         right.left = x;
         right.color = x.color;
         x.color = RED;
+        fixHeight(x);
         return right;
     }
 
@@ -183,6 +262,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         left.right = x;
         left.color = x.color;
         x.color = RED;
+        fixHeight(x);
         return left;
     }
 
