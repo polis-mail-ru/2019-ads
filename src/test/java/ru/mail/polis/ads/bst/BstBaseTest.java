@@ -19,6 +19,7 @@ class BstBaseTest {
         assertNull(bst.get(""));
         assertNull(bst.get("some key"));
         assertEquals(0, bst.size());
+        assertEquals(0, bst.height());
     }
 
     @Test
@@ -42,6 +43,7 @@ class BstBaseTest {
         assertEquals("bar", bst.get("foo"));
         
         assertEquals(1, bst.size());
+        assertEquals(1, bst.height());
     }
 
     @Test
@@ -53,6 +55,7 @@ class BstBaseTest {
         assertEquals("bee", bst.get("foo"));
 
         assertEquals(1, bst.size());
+        assertEquals(1, bst.height());
     }
 
     @Test

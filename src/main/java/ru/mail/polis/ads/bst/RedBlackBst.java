@@ -18,12 +18,14 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         Node left;
         Node right;
         Color color;
+        int height;
         public Node(Key key, Value value, Color color, Node left, Node right){
             this.key = key;
             this.value = value;
             this.color = color;
             this.left = left;
             this.right = right;
+            height = 1;
         }
         public  Node(Key key, Value value){
             this(key,value, Color.RED, null, null);
@@ -168,26 +170,32 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (node == null){
             return null;
         }
-        if (key.compareTo(rootNode.key) == 0){
+        if (key.compareTo(node.key) == 0){
             return node.key;
         }
-        if (rootNode.key.compareTo(key) < 0){
+        if (node.key.compareTo(key) < 0){
             return ceil(node.right, key);
         }
         Key ceilValue = ceil(node.left, key);
+        if (ceilValue == null){
+            return node.key;
+        }
         return (ceilValue.compareTo(key) >= 0) ? ceilValue : node.key;
     }
     private Key floor(Node node, Key key){
         if (node == null){
             return null;
         }
-        if (key.compareTo(rootNode.key) == 0){
+        if (key.compareTo(node.key) == 0){
             return node.key;
         }
-        if (rootNode.key.compareTo(key) > 0){
-            return ceil(node.left, key);
+        if (node.key.compareTo(key) > 0){
+            return floor(node.left, key);
         }
-        Key ceilValue = ceil(node.right, key);
+        Key ceilValue = floor(node.right, key);
+        if (ceilValue == null){
+            return node.key;
+        }
         return (ceilValue.compareTo(key) <= 0) ? ceilValue : node.key;
     }
     private int size(Node node){
@@ -196,6 +204,14 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
         else {
             return(size(node.left) + 1 + size(node.right));
+        }
+    }
+    public int height() {
+        if (rootNode == null){
+            return 0;
+        }
+        else {
+            return rootNode.height;
         }
     }
     private Node put(Key key, Value value, Node node){
@@ -212,6 +228,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         else {
             node.value = value;
         }
+        recalcHeight(node);
         return balanceTree(node);
     }
     private Node remove(Key key, Node node, Node found) {
@@ -243,6 +260,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 node.right = remove(key, node.right, found);
             }
         }
+        recalcHeight(node);
         return balanceTree(node);
     }
     private Node deleteMin(Node node, Node min){
@@ -275,6 +293,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         child.left = node;
         child.color = node.color;
         node.color = Color.RED;
+        recalcHeight(node);
+        recalcHeight(child);
         return child;
     }
     private Node pivotRight(Node node) {
@@ -283,6 +303,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         child.right = node;
         child.color = node.color;
         node.color = Color.RED;
+        recalcHeight(node);
+        recalcHeight(child);
         return child;
     }
     private boolean isRed(Node node){
@@ -320,5 +342,9 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             node = pivotRight(node);
         }
         return node;
+    }
+    private void recalcHeight(Node node) {
+        node.height = 1 + Math.max(node.left == null ? 0 : (node.left).height,
+                node.right == null ? 0 : (node.right).height);
     }
 }

@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ru.mail.polis.ads.bst.BstBaseTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-11-25T22:27:32" hostname="LAPTOP-3SP12CO3" time="0.013">
+<testsuite name="ru.mail.polis.ads.bst.BstBaseTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2019-11-27T21:31:26" hostname="LAPTOP-3SP12CO3" time="0.034">
   <properties/>
-  <testcase name="remove()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.013"/>
+  <testcase name="remove()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.014"/>
+  <testcase name="orderedOnEmpty()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="contains()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
+  <testcase name="moreReplace()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="max()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="min()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="put()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
+  <testcase name="ceil()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
+  <testcase name="empty()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="floor()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
+  <testcase name="replace()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.0"/>
+  <testcase name="emptyBst()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
+  <testcase name="morePut()" classname="ru.mail.polis.ads.bst.BstBaseTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
