@@ -13,10 +13,6 @@ public interface Bst<Key extends Comparable<Key>, Value> {
         return get(key) != null;
     }
     
-    default boolean containsKey(@NotNull Key key) {
-        return get(key) != null;
-    }
-    
     void put(@NotNull Key key, @NotNull Value value);
 
     @Nullable Value remove(@NotNull Key key);
@@ -37,11 +33,6 @@ public interface Bst<Key extends Comparable<Key>, Value> {
 
     int height();
 
-    default boolean isEmpty() {
-        return size() == 0;
-    }
-}
-    
     default boolean isEmpty() {
         return size() == 0;
     }
