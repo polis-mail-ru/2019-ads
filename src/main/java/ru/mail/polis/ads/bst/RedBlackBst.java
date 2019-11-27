@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * LLRB implementation of binary search tree.
@@ -64,20 +65,15 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         else if (cmp > 0) x.right = put(x.right, key, val);
         else x.value = val;
 
-        if (isRed(x.right) && !isRed(x.left)) x = rotateLeft(x);
-        if (isRed(x.left)  &&  isRed(x.left.left)) x = rotateRight(x);
-        if (isRed(x.left)  &&  isRed(x.right)) flipColors(x);
-        x.size = size(x.left) + size(x.right) + 1;
-
-        return x;
+        return balance(x);
     }
 
     private Node rotateRight(Node h) {
         Node x = h.left;
         h.left = x.right;
         x.right = h;
-        x.color = x.right.color;
-        x.right.color = RED;
+        x.color = h.color;
+        h.color = RED;
         x.size = h.size;
         h.size = size(h.left) + size(h.right) + 1;
         return x;
@@ -87,8 +83,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         Node x = h.right;
         h.right = x.left;
         x.left = h;
-        x.color = x.left.color;
-        x.left.color = RED;
+        x.color = h.color;
+        h.color = RED;
         x.size = h.size;
         h.size = size(h.left) + size(h.right) + 1;
         return x;
@@ -120,7 +116,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node balance(Node x) {
-        if (isRed(x.right)) x = rotateLeft(x);
+        if (isRed(x.right) && !isRed(x.left)) x = rotateLeft(x);
         if (isRed(x.left) && isRed(x.left.left)) x = rotateRight(x);
         if (isRed(x.left) && isRed(x.right)) flipColors(x);
 
@@ -140,23 +136,29 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node remove(Node h, Key key) {
+        if (h == null) return null;
         if (key.compareTo(h.key) < 0)  {
-            if (!isRed(h.left) && !isRed(h.left.left))
-                h = moveRedLeft(h);
-            h.left = remove(h.left, key);
+            if (h.left != null) {
+                if (!isRed(h.left) && !isRed(h.left.left))
+                    h = moveRedLeft(h);
+                h.left = remove(h.left, key);
+            }
         }
         else {
-            if (isRed(h.left))
+            if (isRed(h.left)) {
                 h = rotateRight(h);
+                h.right = remove(h.right, key);
+            }
             if (key.compareTo(h.key) == 0 && (h.right == null))
                 return null;
-            if (!isRed(h.right) && !isRed(h.right.left))
+            if (h.right != null && !isRed(h.right) && !isRed(h.right.left))
                 h = moveRedRight(h);
             if (key.compareTo(h.key) == 0) {
                 Node x = min(h.right);
+                Node removeMin = deleteMin(h.right);
                 h.key = x.key;
                 h.value = x.value;
-                h.right = deleteMin(h.right);
+                h.right = removeMin;
             }
             else h.right = remove(h.right, key);
         }
@@ -176,6 +178,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Override
     public Value minValue() {
         return isEmpty() ? null : min(root).value;
+    }
+
+    public void deleteMin(){
+        root = deleteMin(root);
+        Objects.requireNonNull(root).color = BLACK;
     }
 
     private Node deleteMin(Node h) {
@@ -202,6 +209,19 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Override
     public Value maxValue() {
         return isEmpty() ? null : max(root).value;
+    }
+
+    public void deleteMax(){
+        root = deleteMax(root);
+        Objects.requireNonNull(root).color = BLACK;
+    }
+
+    private Node deleteMax(Node h) {
+        if (isRed(h.left)) h = rotateRight(h);
+        if (h.right == null) return null;
+        if (!isRed(h.right) && !isRed(h.right.left)) h = moveRedRight(h);
+        h.right = deleteMax(h.right);
+        return balance(h);
     }
 
     @Nullable
