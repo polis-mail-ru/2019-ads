@@ -27,7 +27,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return x.value;
     }
 
-    public Node getNode(@NotNull Key key) {
+    private Node getNode(@NotNull Key key) {
         return getNode(root, key);
     }
 
@@ -63,7 +63,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        return remove(root, key).value;
+        return root == null ? null : remove(root, key).value;
     }
 
     private Node remove(Node x, Key key) {

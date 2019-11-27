@@ -46,4 +46,31 @@ class BstBaseTest {
         assertEquals(1, bst.height());
     }
 
+    @Test
+    void replace() {
+        Bst<String, String> bst = newBst();
+        bst.put("foo", "bar");
+        bst.put("foo", "bee");
+
+        assertEquals("bee", bst.get("foo"));
+
+        assertEquals(1, bst.size());
+        assertEquals(1, bst.height());
+    }
+
+    @Test
+    void remove() {
+        Bst<String, String> bst = newBst();
+        bst.put("foo", "bar");
+        bst.put("foo1", "bar");
+        bst.put("foo3", "bar");
+        bst.put("foo2", "bar");
+        bst.put("foo4", "bar");
+        bst.put("foo5", "bar");
+
+        bst.remove("foo");
+        assertEquals(5,bst.size());
+    }
+
+
 }
