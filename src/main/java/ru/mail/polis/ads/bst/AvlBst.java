@@ -111,25 +111,30 @@ public class AvlBst<Key extends Comparable<Key>, Value>
                     node = moveRedLeft(node);
                 node.left = delete(node.left, key);
             }
-        } else if (cmp > 0) {
-            if (node.right != null) {
-                if (isRed(node.left))
-                    node = rotateRight(node);
-                if (!isRed(node.right) && !isRed(node.right.left))
-                    node = moveRedRight(node);
+        } else {
+            if (isRed(node.left)) {
+                node = rotateRight(node);
+            }
+
+            if (cmp == 0 && (node.right == null)) {
+                deletedValue = node.value;
+                return null;
+            }
+
+            if (!isRed(node.right) && !isRed(node.right.left)) {
+                node = moveRedRight(node);
+            }
+
+            if (cmp == 0) {
+                deletedValue = node.value;
+
+                Node minNode = min(node.right);
+                node.key = minNode.key;
+                node.value = minNode.value;
+                node.right = deleteMin(node.right);
+            } else {
                 node.right = delete(node.right, key);
             }
-        } else {
-            if (isRed(node.left))
-                node = rotateRight(node);
-            if (node.right == null)
-                return null;
-            deletedValue = node.value;
-
-            Node minNode = min(node.right);
-            node.key = minNode.key;
-            node.value = minNode.value;
-            node.right = deleteMin(node.right);
         }
         return fixUp(node);
     }
