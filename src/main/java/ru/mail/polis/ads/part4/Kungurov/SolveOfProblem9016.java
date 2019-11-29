@@ -3,6 +3,9 @@ package ru.mail.polis.ads.part4.Kungurov;
 import java.io.*;
 import java.util.StringTokenizer;
 
+/**
+ * https://www.e-olymp.com/ru/submissions/6234299
+ */
 public class SolveOfProblem9016 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
@@ -12,28 +15,26 @@ public class SolveOfProblem9016 {
         for (int i = 0; i < n; i++) {
             arr[i] = in.nextInt();
         }
+        int[] qst = new int[q];
         for (int i = 0; i < q; i++) {
-            int x = in.nextInt();
+            qst[i] = in.nextInt();
+        }
+        for (int x : qst) {
             out.println(binarySearch(arr, x) ? "YES" : "NO");
         }
 
     }
 
     private static boolean binarySearch(int[] arr, int x) {
-        int left = 0;
-        int right = arr.length - 1;
-
-
-        while (left <= right) {
-            int m = (left + right) / 2;
-            if (arr[m] == x) {
+        int l = 0, r = arr.length - 1;
+        while (l <= r) {
+            int m = l + (r - l) / 2;
+            if (arr[m] == x)
                 return true;
-            }
-            if (arr[m] > x) {
-                right = m;
-            } else {
-                left = m;
-            }
+            if (arr[m] < x)
+                l = m + 1;
+            else
+                r = m - 1;
         }
         return false;
     }
