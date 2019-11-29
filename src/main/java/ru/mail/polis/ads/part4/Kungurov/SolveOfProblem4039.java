@@ -2,7 +2,10 @@ package ru.mail.polis.ads.part4.Kungurov;
 
 import java.io.*;
 import java.util.StringTokenizer;
-
+/**
+ * created by Kirill Kungurov on 26.10.2019
+ * https://www.e-olymp.com/ru/submissions/5957033
+ */
 public class SolveOfProblem4039 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
