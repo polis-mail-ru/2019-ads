@@ -148,47 +148,42 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     public Node delete(Node x, Key key){
+
         if (x == null){
             return null;
         }
 
-        int cmp = key.compareTo(x.key);
-
-        if (cmp < 0){
-            if (x.left != null){
-                if (!isRed(x.left) && !isRed(x.left.left)){
-                    x = moveRedLeft(x);
-                }
-                x.left = delete(x.left, key);
+        if (key.compareTo(x.key) < 0) {
+            if (!isRed(x.left) && !isRed(x.left.left)) {
+                x = moveRedLeft(x);
             }
+            x.left = delete(x.left, key);
         }
 
         else {
-            if(isRed(x.left)){
+            if (isRed(x.left)) {
                 x = rotateRight(x);
+            }
+
+            if ((x.right == null) && key.compareTo(x.key) == 0) {
+                return null;
+            }
+
+            if (!isRed(x.right) && !isRed(x.right.left)) {
+                x = moveRedRight(x);
+            }
+            if
+            (key.compareTo(x.key) == 0) {
+                Node min = min(x.right);
+                x.key = min.key;
+                x.value = min.value;
+                x.right = deleteMin(x.right);
+            }
+
+            else {
                 x.right = delete(x.right, key);
             }
-            else {
-                if (x.right == null && cmp == 0){
-                    return  null;
-                }
-                if ((x.right != null) && (!isRed(x.right) && !isRed(x.right.left))){
-                    x = moveRedRight(x);
-                }
-            }
         }
-
-        if(cmp == 0){
-            Node min = min(x.right);
-            x.key = min.key;
-            x.value = min.value;
-            x.right = deleteMin(x.right);
-        }
-
-        else {
-            x.right = delete(x.right, key);
-        }
-
         return fixUp(x);
     }
 
@@ -248,22 +243,23 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             root.color = BLACK;
         }
 
-        if (get(root, key) == null){
-            return null;
-        }
-
-        root = delete(root, key);
-        size--;
-
         if (!containsKey(key)){
             return null;
         }
+
+        Value value = get(key);
 
         if (!isRed(root.left) && !isRed(root.right)) {
             root.color = RED;
         }
 
-        return root.value;
+        root = delete(root, key);
+        size--;
+
+        if (root != null) {
+            root.color = BLACK;
+        }
+        return value;
     }
 
     @Override
