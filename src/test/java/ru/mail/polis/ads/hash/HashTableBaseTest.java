@@ -13,8 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class HashTableBaseTest {
 
     HashTable<String, String> newTable() {
-        // Use implementation
-        return null;
+        return new MyHashTable<>();
     }
 
     @Test
@@ -169,5 +168,31 @@ class HashTableBaseTest {
         table.put("7", "testStringValue5");
         assertEquals(table.get("7"), "testStringValue5");
         assertEquals(table.get("1"), "testStringValue2");
+    }
+
+    @Test
+    void rehash() {
+        HashTable<String, String> table = newTable();
+
+        int size = 0;
+        assertEquals(table.size(), size);
+
+        table.put("testStringKey1", "testStringValue1");
+        table.put("testStringKey2", "testStringValue2");
+        table.put("testStringKey3", "testStringValue3");
+        table.put("testStringKey4", "testStringValue4");
+        table.put("testStringKey5", "testStringValue5");
+        table.put("testStringKey6", "testStringValue6");
+        table.put("testStringKey7", "testStringValue7");
+        table.put("testStringKey8", "testStringValue8");
+        table.put("testStringKey9", "testStringValue9");
+        table.put("testStringKey10", "testStringValue10");
+        table.put("testStringKey11", "testStringValue11");
+        table.put("testStringKey12", "testStringValue12");
+        table.put("testStringKey13", "testStringValue13");
+        table.put("testStringKey14", "testStringValue14");
+        table.put("testStringKey15", "testStringValue15");
+
+        assertEquals(table.len(), 32);
     }
 }
