@@ -15,8 +15,8 @@ public class FirstTask {
         private int id;
         private List<Node> links;
 
-        Node(int color, int id) {
-            this.color = color;
+        Node(int id) {
+            this.color = 0;
             this.id = id;
             this.links = new ArrayList<>();
         }
@@ -33,7 +33,7 @@ public class FirstTask {
         final int m = Integer.parseInt(numbersNodesAndLinks[1]);
         nodes = new Node[n + 1];
         for (int i = 1; i <= n; i++) {
-            nodes[i] = new Node(0, i);
+            nodes[i] = new Node(i);
         }
 
         for (int i = 0; i < m; i++) {
@@ -45,33 +45,27 @@ public class FirstTask {
         }
 
         sort();
-        if (stack.isEmpty()) {
-            System.out.print(-1);
-            return;
-        }
         stack.forEach(num -> System.out.print(num + " "));
-        System.out.println();
     }
 
     private static void sort() {
         for (int i = 1; i < nodes.length; i++) {
-            if (nodes[i].color == 0) {
-                dfs(nodes[i]);
-            }
+            dfs(nodes[i]);
         }
     }
 
     private static void dfs(Node node) {
+        if (node.color == 2) {
+            return;
+        }
+        if (node.color == 1) {
+            System.out.println(-1);
+            System.exit(0);
+        }
         node.color = 1;
-        node.links.forEach(tempNode -> {
-            if (tempNode.color == 1) {
-                System.out.println(-1);
-                System.exit(0);
-            }
-            if (tempNode.color == 0) {
-                dfs(tempNode);
-            }
-        });
+        for (Node tempNode : node.links) {
+            dfs(tempNode);
+        }
         node.color = 2;
         stack.push(node.id);
     }
