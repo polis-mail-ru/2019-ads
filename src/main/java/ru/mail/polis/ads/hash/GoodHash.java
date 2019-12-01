@@ -2,8 +2,14 @@ package ru.mail.polis.ads.hash;
 
 import java.util.Objects;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+/**
+ * Made by БорискинМА
+ * inspired by lectures and https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/
+ * 01.12.19
+ * gr. Java-10, Технополис
+ * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
+ * Реализация HashTable с разрешением коллизий методом цепочек.
+ */
 
 public class GoodHash <K, V> implements HashTable<K, V> {
 
@@ -52,15 +58,14 @@ public class GoodHash <K, V> implements HashTable<K, V> {
     }
 
     // имплементация хэш-функции для нахождения индекса по ключу
-    static int hash(Object key) {
+    private static int hash(Object key) {
         int h;
 
         return key == null ? 0 : (h = key.hashCode()) ^ h >>> 16;
     }
 
-    @Nullable
     @Override
-    public V get(@NotNull K key) {
+    public V get(K key) {
         // голова цепочки по ключу
         int bucketIndex = hash(key);
         int box = bucketIndex % hashTable.length;
@@ -81,7 +86,7 @@ public class GoodHash <K, V> implements HashTable<K, V> {
     }
 
     @Override
-    public void put(@NotNull K key, @NotNull V value) {
+    public void put(K key, V value) {
         put(new HashNode<K, V>(key, value, hash(key)));
     }
 
@@ -141,10 +146,43 @@ public class GoodHash <K, V> implements HashTable<K, V> {
         }
     }
 
-    @Nullable
     @Override
-    public V remove(@NotNull K key) {
-        //
+    public V remove(K key) {
+        // находим индекс по заданному ключу
+        int bucketIndex = hash(key);
+
+        int box = bucketIndex % hashTable.length;
+        // голова цепочки
+        HashNode<K, V> head = hashTable[box];
+        // ищем ключ вего цепочке
+        HashNode<K, V> prev = null;
+
+        while (head != null) {
+
+            if (key.equals(head.key)) {
+                size--;
+
+                if (prev == null) {
+                    hashTable[box] = head.next;
+
+                    if (hashTable[box] == null) {
+                        counter--;
+                    }
+
+                    return head.value;
+                }
+                else {
+                    // иначе удаляем ключ
+                    prev.next = head.next;
+
+                    return head.value;
+                }
+            }
+            // продолжаем движение по цепочке
+            prev = head;
+            head = head.next;
+        }
+
         return null;
     }
 
@@ -157,6 +195,4 @@ public class GoodHash <K, V> implements HashTable<K, V> {
     public boolean isEmpty() {
         return size == 0;
     }
-
-    // https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/
 }

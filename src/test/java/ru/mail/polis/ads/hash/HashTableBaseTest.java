@@ -14,7 +14,7 @@ class HashTableBaseTest {
 
     HashTable<String, String> newTable() {
         HashTable<String, String> hashTable = new GoodHash<>();
-        return null;
+        return hashTable;
     }
 
     @Test
