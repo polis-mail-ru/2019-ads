@@ -20,7 +20,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     final LinkedList<HashTableItem> items = buckets[getBucketIndex(key.hashCode())];
     if (!containsKey(key)) {
       ++size;
-      if ((double) size / primes[currentPrimeIndex] > LOAD_FACTOR && currentPrimeIndex + 1 < primes.length)
+      if ((double) size / primes[currentPrimeIndex] > LOAD_FACTOR && currentPrimeIndex + 1 < MAX_DEGREE)
         rehash();
     }
     for (HashTableItem item : items)
@@ -33,6 +33,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
   private void rehash() {
     LinkedList<HashTableItem>[] currentBuckets = buckets;
+    getNextPrime();
     buckets = new LinkedList[primes[++currentPrimeIndex]];
     for (int i = 0; i < currentBuckets.length; ++i) {
       LinkedList<HashTableItem> bucket = currentBuckets[i];
@@ -81,21 +82,21 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     }
   }
 
-  private final double LOAD_FACTOR = 0.75;
-  private final int INITIAL_CAPACITY = 16;
-  public static int[] getPrimes(final int fromDegree, final int amount) {
-    int currentNum;
-    int[] primes = new int[amount];
-    for (int i = 0; i < amount; ++i) {
-      currentNum = (int) Math.pow(2, fromDegree + i) + 1;
+  private static final double LOAD_FACTOR = 0.75;
+  private static final int INITIAL_DEGREE = 4;
+  private static final int MAX_DEGREE = 28;
+  private void getNextPrime() {
+    //test for 0 added to escape recalculation for each object of class if it have already been initialized
+    if (primes[currentPrimeIndex] == 0 && currentPrimeIndex <= MAX_DEGREE) {
+      int currentNum;
+      currentNum = (int) Math.pow(2, INITIAL_DEGREE + currentPrimeIndex) + 1;
       while (!isPrime(currentNum))
         ++currentNum;
-      primes[i] = currentNum;
+      primes[currentPrimeIndex] = currentNum;
     }
-    return primes;
   }
 
-  public static boolean isPrime(int n) {
+  private static boolean isPrime(int n) {
     if (n <= 1)
       return false;
     int limit = (int) Math.sqrt(n);
@@ -109,14 +110,17 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     return (hash & 0x7fffffff) % primes[currentPrimeIndex];
   }
 
-  private final static int[] primes = getPrimes(4, 28);
+  private final static int[] primes = new int[MAX_DEGREE];
   private int size;
   private int currentPrimeIndex;
   private LinkedList<HashTableItem>[] buckets;
 
   public HashTableImpl() {
-    buckets = new LinkedList[INITIAL_CAPACITY];
     currentPrimeIndex = 0;
     size = 0;
+    getNextPrime();
+    buckets = new LinkedList[primes[currentPrimeIndex]];
+    for (int i = 0; i < buckets.length; ++i)
+      buckets[i] = new LinkedList<>();
   }
 }
