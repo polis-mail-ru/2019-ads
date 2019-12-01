@@ -8,6 +8,11 @@ import org.jetbrains.annotations.Nullable;
 public class GoodHash <K, V> implements HashTable<K, V> {
 
     private static final int CAPACITY = 16;
+    private static final double LOAD_FACTOR = 0.75;
+
+    private int capacity = 16;
+
+    private int counter = 0;
 
     private HashNode<K, V>[] hashTable;
 
@@ -55,7 +60,7 @@ public class GoodHash <K, V> implements HashTable<K, V> {
 
     @Nullable
     @Override
-    public V get(K key) {
+    public V get(@NotNull K key) {
         // голова цепочки по ключу
         int bucketIndex = hash(key);
         int box = bucketIndex % hashTable.length;
@@ -76,13 +81,69 @@ public class GoodHash <K, V> implements HashTable<K, V> {
     }
 
     @Override
-    public void put(K key, V value) {
-        //
+    public void put(@NotNull K key, @NotNull V value) {
+        put(new HashNode<K, V>(key, value, hash(key)));
+    }
+
+    private void put(HashNode<K, V> x) {
+        int box = x.hash % hashTable.length;
+
+        HashNode<K, V> node = hashTable[box];
+
+        if (node == null) {
+            hashTable[box] = x;
+
+            size++;
+
+            counter++;
+        }
+        else {
+            HashNode<K, V> tail = node;
+
+            do {
+                if (x.key.equals(node.key)) {
+                    node.value = x.value;
+                    return;
+                }
+
+                tail = node;
+                node = node.next;
+
+            } while (node != null); // может быть, ключ уже здесь?
+
+            tail.next = x;
+
+            // добавляем ключ в цепочку
+            size++;
+        }
+
+        // Если load factor превышает порог, то увеличиваем вдвое размер таблицы
+        if (capacity * LOAD_FACTOR < counter) {
+            capacity *= 2;
+
+            counter = 0;
+
+            HashNode<K, V>[] temp = hashTable;
+
+            hashTable = new HashNode[capacity];
+
+            for (HashNode<K, V> headNode : temp) {
+
+                while (headNode != null) {
+                    HashNode<K, V> next = headNode.next;
+
+                    put(headNode);
+
+                    headNode = next;
+                }
+
+            }
+        }
     }
 
     @Nullable
     @Override
-    public V remove(K key) {
+    public V remove(@NotNull K key) {
         //
         return null;
     }
@@ -97,12 +158,5 @@ public class GoodHash <K, V> implements HashTable<K, V> {
         return size == 0;
     }
 
-
-
-
-
-
-
     // https://www.geeksforgeeks.org/implementing-our-own-hash-table-with-separate-chaining-in-java/
-
 }
