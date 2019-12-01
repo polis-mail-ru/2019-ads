@@ -1,25 +1,24 @@
 package ru.mail.polis.ads.hash;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Basic tests on {@link HashTable}.
  */
 class HashTableBaseTest {
 
-    HashTable<String, String> newTable() {
-        // Use implementation
-        return null;
+    private HashTable<String, String> table;
+
+    @BeforeEach
+    void newTable() {
+        table = new HashTableImpl<>();
     }
 
     @Test
     void emptyTable() {
-        HashTable<String, String> table = newTable();
         assertNull(table.get(""));
         assertNull(table.get("some key"));
         assertEquals(0, table.size());
@@ -28,7 +27,6 @@ class HashTableBaseTest {
 
     @Test
     void put() {
-        HashTable<String, String> table = newTable();
 
         int size = 0;
         assertEquals(table.size(), size);
@@ -62,7 +60,6 @@ class HashTableBaseTest {
 
     @Test
     void remove() {
-        HashTable<String, String> table = newTable();
         assertNull(table.remove("case when HashTable is empty"));
         assertTrue(table.isEmpty());
 
@@ -110,7 +107,6 @@ class HashTableBaseTest {
 
     @Test
     void contains() {
-        HashTable<String, String> table = newTable();
 
         assertFalse(table.containsKey("testStringKey"));
         assertFalse(table.containsKey("testStringKey1"));
@@ -134,7 +130,6 @@ class HashTableBaseTest {
 
     @Test
     void empty() {
-        HashTable<String, String> table = newTable();
 
         assertTrue(table.isEmpty());
 
@@ -153,7 +148,6 @@ class HashTableBaseTest {
 
     @Test
     void replace() {
-        HashTable<String, String> table = newTable();
 
         assertNull(table.get("1"));
 
