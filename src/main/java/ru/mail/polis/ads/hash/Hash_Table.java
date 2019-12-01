@@ -3,44 +3,37 @@ package ru.mail.polis.ads.hash;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-
-public class Hash_Table<Key extends Comparable<Key>, Value>
+public class Hash_Table<Key, Value>
         implements HashTable<Key, Value> {
 
-    private final int INITIAL_CAPACITY = 16;
-    private ArrayList<HashNode> buckets;
-    private int size;
+    private int INITIAL_CAPACITY = 16;
+    private HashNode<Key, Value>[] buckets = new HashNode[INITIAL_CAPACITY];
+    private int size = 0;
 
-    private class HashNode{
-        Key key;
-        Value value;
+    private static class HashNode<K, V>{
+        K key;
+        V value;
 
-        HashNode next;
+        HashNode<K, V> next;
 
-        public HashNode(Key key, Value value, HashNode next) {
+        public HashNode(K key, V value, HashNode<K, V> next) {
             this.key = key;
             this.value = value;
             this.next = next;
         }
     }
 
-    public Hash_Table(){
-        this.size = 0;
-        this.buckets = new ArrayList<>(INITIAL_CAPACITY);
-        for (int i = 0; i < INITIAL_CAPACITY; i++)
-            buckets.add(null);
-    }
+    public Hash_Table(){ }
 
     private int getBucketIndex(Key key)
     {
-        return Math.abs(key.hashCode() % buckets.size());
+        return Math.abs(key.hashCode() % buckets.length);
     }
 
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        HashNode bucket = buckets.get(getBucketIndex(key));
+        HashNode<Key, Value> bucket = buckets[getBucketIndex(key)];
         while (bucket != null) {
             if (bucket.key.equals(key)) {
                 return bucket.value;
@@ -52,12 +45,11 @@ public class Hash_Table<Key extends Comparable<Key>, Value>
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        HashNode entry = new HashNode(key, value, null);
         int bucket = getBucketIndex(key);
-        HashNode existing = buckets.get(bucket);
-
+        HashNode<Key, Value> existing = buckets[bucket];
+        HashNode<Key, Value> entry = new HashNode<>(key, value, null);
         if (existing == null) {
-            buckets.set(bucket, entry);
+            buckets[bucket] = entry;
             size++;
         } else {
             while (existing.next != null) {
@@ -74,33 +66,45 @@ public class Hash_Table<Key extends Comparable<Key>, Value>
                 size++;
             }
         }
+        if ((1.0 * size) / INITIAL_CAPACITY >= 0.7)
+        {
+            HashNode<Key, Value>[] temp = buckets;
+            INITIAL_CAPACITY *= 2;
+            size = 0;
+            buckets = new HashNode[INITIAL_CAPACITY];
+
+            for (HashNode<Key, Value> headNode : temp)
+            {
+                while (headNode != null)
+                {
+                    put(headNode.key, headNode.value);
+                    headNode = headNode.next;
+                }
+            }
+        }
     }
 
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
         int bucketIndex = getBucketIndex(key);
-        HashNode head = buckets.get(bucketIndex);
-        HashNode prev = null;
-
+        HashNode<Key, Value> head = buckets[bucketIndex];
+        HashNode<Key, Value> prev = null;
         while (head != null)
         {
             if (head.key.equals(key))
                 break;
-
             prev = head;
             head = head.next;
         }
 
         if (head == null)
             return null;
-
         size--;
         if (prev != null)
             prev.next = head.next;
         else
-            buckets.set(bucketIndex, head.next);
-
+            buckets[bucketIndex] = head.next;
         return head.value;
     }
 
