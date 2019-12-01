@@ -18,7 +18,6 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         }
     }
 
-    private float minFactor = 0.25f;
     private float maxFactor = 0.75f;
     private int size;
     private int capacity;
@@ -34,7 +33,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         this.size = 0;
 
         for (int i = 0; i < capacity; i++) {
-            array.set(i, new LinkedList<>());
+            array.add(i, new LinkedList<>());
         }
     }
 
@@ -140,15 +139,6 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
     private int nextPrimeNumber() {
         int v = capacity << 1;
-        while (isNotPrime(v)) {
-            v++;
-        }
-        return v;
-    }
-
-    private int prevPrimeNumber() {
-        int v = capacity >> 1;
-        v = Math.max(v, 11);
         while (isNotPrime(v)) {
             v++;
         }
