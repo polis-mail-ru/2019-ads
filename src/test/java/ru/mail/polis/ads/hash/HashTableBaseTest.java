@@ -17,7 +17,7 @@ class HashTableBaseTest {
     }
 
     @Test
-    void SemptyTable() {
+    void emptyTable() {
         HashTable<String, String> table = newTable();
         assertNull(table.get(""));
         assertNull(table.get("some key"));
