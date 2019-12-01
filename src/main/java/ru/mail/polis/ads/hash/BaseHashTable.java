@@ -10,10 +10,10 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
     private int size = 0;
 
     private static class Entry<Key, Value> {
-        Key key;
-        Value value;
+        private Key key;
+        private Value value;
 
-        Entry(Key key, Value value) {
+        private Entry(Key key, Value value) {
             this.key = key;
             this.value = value;
         }
@@ -46,10 +46,6 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
         size++;
     }
 
-    private int hash(Key key) {
-        return key.hashCode() % buckets.length;
-    }
-
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
@@ -57,11 +53,12 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
         Entry<Key, Value> entry = buckets[hash];
 
         if (entry != null && entry.key == key) {
-            for (int i = hash; i < buckets.length - 1; i++) {
-                buckets[hash] = buckets[hash + 1];
+            for (int i = hash; buckets[i] != null && buckets[i].key != null; i = (i + 1) % size) {
+                buckets[i] = buckets[(i + 1) % size];
             }
-            buckets[buckets.length - 1] = null;
+
             size--;
+
             return entry.value;
         }
 
@@ -76,5 +73,9 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
     @Override
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    private int hash(Key key) {
+        return key.hashCode() % buckets.length;
     }
 }
