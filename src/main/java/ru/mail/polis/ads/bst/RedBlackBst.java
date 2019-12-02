@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * LLRB implementation of binary search tree.
  */
-public class RedBlackTree<Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
+public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
 
     private static final boolean BLACK = false;
     private static final boolean RED = true;
