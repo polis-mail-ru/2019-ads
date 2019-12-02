@@ -299,8 +299,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
 
     private Node invertColor(Node x) {
         x.color = !x.color;
-        x.left.color = !x.left.color;
-        x.right.color = !x.right.color;
+        if (x.left != null ) {
+            x.left.color = !x.left.color;
+        }
+        if (x.right != null) {
+            x.right.color = !x.right.color;
+        }
         return x;
     }
 }
