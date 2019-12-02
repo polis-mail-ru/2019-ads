@@ -18,23 +18,21 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     class Pair{
         Key key;
         Value value;
-        int h;
         Pair(Key key, Value value){
             this.key = key;
             this.value = value;
-            h = key.hashCode();
         }
     }
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        int h = key.hashCode();
-        ArrayList<Pair> lst = arr.get(hash(h) & (capacity-1));
+
+        ArrayList<Pair> lst = arr.get(hash(key.hashCode()) & (capacity-1));
         if (lst == null){
             return null;
         }
         for (Pair pair : lst) {
-            if (pair != null && pair.h == h) {
+            if (pair != null && pair.equals(key)) {
                 return pair.value;
             }
         }
@@ -43,17 +41,16 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        int h = key.hashCode();
-        ArrayList<Pair> lst= arr.get(hash(h)& (capacity-1));
+        ArrayList<Pair> lst= arr.get(hash(key.hashCode())& (capacity-1));
 
         for (int i = 0; i < lst.size(); i++){
-            if (lst.get(i).h == h){
-                arr.get(hash(h)& (capacity-1)).set(i, new Pair(key, value));
+            if (lst.get(i).equals(key)){
+                arr.get(hash(key.hashCode())& (capacity-1)).set(i, new Pair(key, value));
                 return;
             }
 
         }
-        arr.get(hash(h)& (capacity-1)).add(new Pair(key, value));
+        arr.get(hash(key.hashCode())& (capacity-1)).add(new Pair(key, value));
         n+=1;
 
         loadFactor = (double)n/capacity;
@@ -73,8 +70,8 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         }
         for (ArrayList<Pair> pairs : arr) {
             for (Pair j : pairs) {
-                int h = j.key.hashCode();
-                arr_new.get(hash(h) & (capacity - 1)).add(j);
+
+                arr_new.get(hash(j.key.hashCode()) & (capacity - 1)).add(j);
             }
         }
         loadFactor = (double)n/capacity;
@@ -85,15 +82,15 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        int h = key.hashCode();
-        ArrayList<Pair> lst = arr.get(hash(h) & (capacity-1));
+
+        ArrayList<Pair> lst = arr.get(hash(key.hashCode()) & (capacity-1));
         if (lst == null){
             return null;
         }
         for (int i = 0; i < lst.size(); i++) {
-            if (lst.get(i).h == h){
+            if (lst.get(i).equals(key)){
                 Value res = lst.get(i).value;
-                arr.get(hash(h) & (capacity-1)).remove(i);
+                arr.get(hash(key.hashCode()) & (capacity-1)).remove(i);
                 n-=1;
                 return res;
             }
