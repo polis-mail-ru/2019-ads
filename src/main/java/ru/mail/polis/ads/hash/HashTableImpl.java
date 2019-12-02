@@ -3,15 +3,14 @@ package ru.mail.polis.ads.hash;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
-    private class Node {
+    private class Node<Key, Value> {
         Key key;
         Value value;
         int hash;
+
+        Node next;
 
         public Node(Key key, Value value, int hash) {
             this.key = key;
@@ -22,27 +21,28 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
     private final static float LOAD_FACTOR = 0.75f;
     private final static int[] CAPACITY_LIST = {17, 31, 61, 127, 251, 509, 1021, 2039};
-    List<Node>[] nodes = new LinkedList[CAPACITY_LIST[0]]; // При создании размер будет 17
+    private Node<Key, Value>[] nodes = new Node[CAPACITY_LIST[0]]; // При создании размер будет 17
     private int currentCapacity = CAPACITY_LIST[0];
     private int indexInCapacityList = 0; // Текущий индекс в CAPACITY_LIST
     private int amountOfElements = 0; // Количество элементов
-    private int amountOfKeys = 0; // Количество созданных List (количество ключей)
+    private int amountOfKeys = 0; // Количество цепочек
 
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
         int hash = key.hashCode();
-        List<Node> list = nodes[hash % currentCapacity];
+        Node<Key, Value> current = nodes[hash % currentCapacity];
 
-        if (list == null) {
+        if (current == null) {
             return null; // Ничего не нашли, по такому хешкоду вообще ни одного элемента
         }
 
-        for (int i = list.size() - 1; i >= 0; i--) {
-            Node temp = list.get(i);
-            if (temp.key == key) {
-                return temp.value; // Нашли, возвращаем value
+        while (current != null) {
+            if (current.hash == hash && key.equals(current.key)) {
+                return current.value;
             }
+
+            current = current.next; // Если значение ещё не нашлось, идём к следующем элементу
         }
 
         return null; // Если ничего не нашли, вернём null
@@ -51,20 +51,21 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     @Override
     public boolean containsKey(@NotNull Key key) {
         int hash = key.hashCode();
-        List<Node> list = nodes[hash % currentCapacity];
+        Node<Key, Value> current = nodes[hash % currentCapacity];
 
-        if (list == null) {
+        if (current == null) {
             return false; // Ничего не нашли, по такому хешкоду вообще ни одного элемента
         }
 
-        for (int i = list.size() - 1; i >= 0; i--) {
-            Node temp = list.get(i);
-            if (temp.key == key) {
-                return true; // Нашли
+        while (current != null) {
+            if (current.hash == hash && key.equals(current.key)) {
+                return true; // Если нашли, то возвращаем true
             }
+
+            current = current.next;
         }
 
-        return false;
+        return false; // Если до этой строки дошло, значит ничего не нашлось, вернём false
     }
 
     @Override
@@ -72,29 +73,49 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         put(new Node(key, value, key.hashCode()));
     }
 
-    private void put(Node node) {
-        int index = node.hash % currentCapacity;
-
-        if (nodes[index] == null) {
-            nodes[index] = new LinkedList<>();
-            amountOfKeys++;
-        }
-        nodes[index].add(node);
-        amountOfElements++;
-
+    private void put(Node<Key, Value> node) {
+        // Проверяем загруженность, если надо - увеличиваем массив
         if (amountOfElements / currentCapacity > LOAD_FACTOR) {
             resize();
         }
+
+        int index = node.hash % currentCapacity;
+        Node<Key, Value> current = nodes[index];
+        Node<Key, Value> prev = null;
+
+        if (current == null) {
+            nodes[index] = node;
+            amountOfKeys++;
+            amountOfElements++;
+            return;
+        }
+
+        while (current != null) {
+            if (current.hash == node.hash && current.key.equals(node.key)) {
+                current.value = node.value;
+                return;
+            }
+
+            prev = current;
+            current = current.next;
+        }
+
+        prev.next = node;
+        amountOfElements++;
     }
 
+    // Метод, увеличивающий размер массива nodes
     private void resize() {
-        List<Node>[] temp = nodes; // Сохраняем значения, чтобы можно было их перенести в новый увеличенный nodes
-        nodes = new LinkedList[CAPACITY_LIST[++indexInCapacityList]]; // Делаем новый LinkedList больше старого (увеличиваем размер nodes);
+        Node<Key, Value>[] temp = nodes; // Сохраняем значения, чтобы можно было их перенести в новый увеличенный nodes
+        nodes = new Node[CAPACITY_LIST[++indexInCapacityList]]; // Делаем новый массив больше старого (увеличиваем размер nodes);
         amountOfKeys = 0;
 
-        for (List<Node> a : temp) {
-            for (Node b : a) {
-                put(b); // Переписываем значения в новый увеличенный list
+        // Перекладываем элементы в новый увеличенный массив
+        for (int i = 0; i < temp.length; i++) {
+            Node<Key, Value> current = temp[i];
+            while (current != null) {
+                put(current);
+                current = current.next;
             }
         }
     }
@@ -103,26 +124,34 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     @Override
     public Value remove(@NotNull Key key) {
         int hash = key.hashCode();
-        List<Node> list = nodes[hash % currentCapacity];
+        int index = hash % currentCapacity;
+        Node<Key, Value> current = nodes[index];
+        // Будем хранить ссылку на предыдущий элемент, поскольку при удалении элемента n нужно элементу n-1 присвоить ссылку на n+1
+        Node<Key, Value> prev = null;
 
-        if (list == null) {
+        if (current == null) {
             return null; // Ничего не нашли, по такому хешкоду вообще ни одного элемента
         }
 
-        for (int i = list.size() - 1; i >= 0; i--) {
-            Node temp = list.get(i);
-            if (temp.key == key) {
-                list.remove(i); // Нашли, удаляем
-                amountOfElements--; // Количество элементов стало на 1 меньше
+        while (current != null) {
+            if (current.hash == hash && key.equals(current.key)) {
+                if (prev == null) {
+                    nodes[index] = current.next;
+                    amountOfElements--;
 
-                // Если по данному ключу нет других элементов, то присваиваем null списку этого ключа и количество ключей стало на 1 меньше
-                if (list.isEmpty()) {
-                    amountOfKeys--;
-                    nodes[hash % currentCapacity] = null;
+                    if (nodes[index] == null) {
+                        amountOfKeys--;
+                    }
+                } else {
+                    prev.next = current.next; // элементу n-1 присвоили ссылку на n+1 (элемент n удалили)
                 }
 
-                return temp.value; // Возвращаем удалённое значение
+                return current.value;
             }
+
+            // Если элемент ещё не нашёлся, продолжим двигаться по списку
+            prev = current;
+            current = current.next;
         }
 
         return null; // Если ничего не нашли, вернём null
@@ -130,7 +159,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public int size() {
-        return amountOfKeys;
+        return amountOfElements;
     }
 
     @Override
