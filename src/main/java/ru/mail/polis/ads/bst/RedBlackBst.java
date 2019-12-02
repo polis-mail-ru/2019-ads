@@ -82,10 +82,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         if (isRed(x.right) && !isRed(x.left)) {
             x = rotateLeft(x);
         }
-        if (x.left != null) {
-            if (isRed(x.left) && isRed(x.left.left)) {
-                x = rotateRight(x);
-            }
+        if (isRed(x.left) && isRed(x.left.left)) {
+            x = rotateRight(x);
         }
         if (isRed(x.left) && isRed(x.right)) {
             flipColor(x);
