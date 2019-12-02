@@ -25,15 +25,12 @@ public class SecondTask {
 
     private static Node[] nodes;
     private static boolean isCyclic;
-    private static boolean isFirstNode;
     private static int idFirstCyclicNode;
     private static Deque<Integer> stack;
 
     private static void solve() throws IOException {
         int minCyclicNode = 0;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        isCyclic = false;
-        isFirstNode = false;
         stack = new ArrayDeque<>();
         minCyclicNode = Integer.MAX_VALUE;
         String[] numbersNodesAndLinks = br.readLine().split(" ");
@@ -54,14 +51,14 @@ public class SecondTask {
         }
 
         sort();
-        if (isCyclic) {
+        if (!stack.isEmpty()) {
             int index;
-            do {
+            while (!stack.isEmpty()) {
                 index = stack.pop();
                 if (minCyclicNode > index) {
                     minCyclicNode = index;
                 }
-            } while (index != idFirstCyclicNode);
+            }
             System.out.println("Yes");
             System.out.println(minCyclicNode);
             return;
@@ -70,32 +67,33 @@ public class SecondTask {
     }
 
     private static void sort() {
-        for (int i = 1; i < nodes.length; i++) {
-            if (nodes[i].color == 0) {
-                dfs(nodes[i], 0);
-            }
+        for (int i = nodes.length - 1; i > 0; i--) {
+            dfs(nodes[i], 0);
         }
     }
 
     private static void dfs(Node node, int idLastNode) {
+        if (node.color == 2 || isCyclic) {
+            return;
+        }
+        if (node.color == 1) {
+            idFirstCyclicNode = node.id;
+            isCyclic = true;
+            return;
+        }
         stack.push(node.id);
         node.color = 1;
         for (Node tempNode : node.links) {
-            if (tempNode.color == 1 && tempNode.id != idLastNode) {
-                isCyclic = true;
-                isFirstNode = true;
-                idFirstCyclicNode = tempNode.id;
-                break;
-            }
-            if (tempNode.color == 0) {
+            if (tempNode.id != idLastNode) {
                 dfs(tempNode, node.id);
             }
         }
-        if (!isFirstNode) {
-            stack.pop();
+        if (!isCyclic) {
+            stack.remove(node.id);
         }
-        if (node.id == idFirstCyclicNode) {
-            isFirstNode = false;
+
+        if (idFirstCyclicNode == node.id) {
+            isCyclic = false;
         }
         node.color = 2;
     }
