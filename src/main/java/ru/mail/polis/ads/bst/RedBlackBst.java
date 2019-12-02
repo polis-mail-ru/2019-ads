@@ -122,9 +122,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
         return findNode(root, key);
     }
 
@@ -144,9 +141,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
 
     @Override
     public void put(@NotNull Key key,@NotNull Value value){
-        if (key == null) {
-            throw new NullPointerException();
-        }
         root = put(root, key, value);
         root.color = BLACK;
     }
@@ -170,10 +164,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-      
+
         if (!containsKey(key)) {
             return null;
         }
@@ -271,9 +262,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
         Node result = floor(root, key);
         return (result == null) ? null : result.key;
     }
@@ -296,9 +284,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
         Node result= ceil(root, key);
 
         return (result == null) ? null : result.key;
@@ -342,5 +327,4 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         return node.height;
     }
 }
-
 
