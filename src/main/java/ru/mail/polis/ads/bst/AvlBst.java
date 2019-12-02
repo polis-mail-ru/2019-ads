@@ -31,13 +31,14 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) == 0) {
-            return node.value;
-        }
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             return get(node.right, key);
-        } else {
+        } else if (cmp < 0) {
             return get(node.left, key);
+        } else {
+            return node.value;
+
         }
     }
 
@@ -50,13 +51,13 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return new Node(key, value, 1);
         }
-        if (key.compareTo(node.key) == 0) {
-            node.value = value;
-        }
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             node.right = put(node.right, key, value);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (cmp < 0) {
             node.left = put(node.left, key, value);
+        } else {
+            node.value = value;
         }
         fixHeight(node);
         node = balance(node);
@@ -72,9 +73,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             node.right = remove(node.right, key);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (cmp < 0) {
             node.left = remove(node.left, key);
         } else if (node.left != null && node.right != null) {
             node.key = min(node).key;
@@ -156,9 +158,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             return floor(node.right, key);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (cmp < 0) {
             return floor(node.left, key);
         } else {
             return node.key;
@@ -174,9 +177,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
             return ceil(node.right, key);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (cmp > 0) {
             return ceil(node.left, key);
         } else {
             return node.key;
