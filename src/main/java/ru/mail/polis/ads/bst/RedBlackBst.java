@@ -39,9 +39,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Value get(Node x, Key key){
         if (x == null)
             return null;
-        if (key.compareTo(x.key) > 0)
+        int compare = key.compareTo(x.key);
+        if (compare > 0)
             return get(x.right, key);
-        if (key.compareTo(x.key) < 0)
+        if (compare < 0)
             return get(x.left, key);
         return x.value;
     }
@@ -53,13 +54,14 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node put(Node x, Key key, Value value){
-        size++;
         if (x == null) {
+            size++;
             return new Node(key, value, 1, RED);
         }
-        if (key.compareTo(x.key) < 0) {
+        int compare = key.compareTo(x.key);
+        if (compare < 0) {
             x.left = put(x.left, key, value);
-        } else if (key.compareTo(x.key)>0) {
+        } else if (compare > 0) {
             x.right = put(x.right,key,value);
         } else {
             x.value = value;
@@ -116,15 +118,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key min() {
-        return  (min(root)==null) ? null : min(root).key;
+        return  root == null ? null : min(root).key;
     }
 
     private Node min(Node x){
-        if (x == null)
-            return null;
-        if (x.left == null)
-            return x;
-        return min(x.left);
+        if (x.left != null)
+            return min(x.left);
+        return x;
     }
 
     @Nullable
@@ -136,15 +136,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key max() {
-        return (max(root) == null) ? null : max(root).key;
+        return root == null ? null : max(root).key;
     }
 
     private Node max(Node x) {
-        if (x == null)
-            return null;
-        if (x.right == null)
-            return x;
-        return max(x.right);
+        if (x.right != null)
+            return max(x.right);
+        return x;
     }
 
     @Nullable
@@ -163,9 +161,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node floor(Node x, Key key){
         if (x == null)
             return null;
-        if (key.compareTo(x.key) < 0)
+        int compare = key.compareTo(x.key);
+        if (compare < 0)
             return floor(x.left, key);
-        if (key.compareTo(x.key) == 0)
+        if (compare == 0)
             return x;
         return floor(x.right, key) != null ? floor(x.right, key) : x;
     }
@@ -180,9 +179,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node ceil(Node x, Key key) {
         if (x == null)
             return null;
-        if (key.compareTo(x.key) == 0)
+        int compare = key.compareTo(x.key);
+        if (compare == 0)
             return x;
-        if (key.compareTo(x.key) > 0)
+        if (compare > 0)
             return ceil(x.right, key);
         Node node = ceil(x.left, key);
         return node != null ? node : x;
