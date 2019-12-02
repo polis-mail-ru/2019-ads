@@ -124,7 +124,7 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> implements Bst<Key
     public Value get(@NotNull Key key) {
         return findNode(root, key);
     }
-    
+
     private Value findNode(Node node, Key key) {
         if (node == null) {
             return null;
@@ -330,3 +330,4 @@ public class RedBlackTree<Key extends Comparable<Key>, Value> implements Bst<Key
         return node.height;
     }
 }
+
