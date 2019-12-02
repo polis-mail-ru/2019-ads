@@ -6,8 +6,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * AVL implementation of binary search tree.
  */
-public class AvlBst<Key extends Comparable<Key>, Value>
-        implements Bst<Key, Value> {
+public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
 
     private class Node {
         Key key;
@@ -25,7 +24,7 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
     }
 
-    AvlBst() {
+    RedBlackBst() {
         size = 0;
     }
     private Node topNode;
@@ -37,15 +36,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        return topNode != null ? get(topNode, key).value : null;
+        if (topNode == null) return null;
+        Node n = get(topNode, key);
+        return n != null ? n.value : null;
     }
 
     private Node get(Node node, Key key) {
         if (node == null) return null;
 
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             return get(node.right, key);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (cmp < 0) {
             return get(node.left, key);
         } else {
             return node;
@@ -64,9 +66,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return new Node(key, value, 1, RED);
         }
 
-        if (key.compareTo(node.key) > 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
             node.right = put(node.right, key, value);
-        } else if (key.compareTo(node.key) < 0) {
+        } else if (cmp < 0) {
             node.left = put(node.left, key, value);
         } else {
             node.value = value;
@@ -93,14 +96,15 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         deletedValue = null;
 
         if (topNode != null)
-            topNode = delete(topNode, key);
+            topNode = remove(topNode, key);
         else
             return null;
 
+        if (deletedValue != null) size--;
         return deletedValue;
     }
 
-    private Node delete(Node node, Key key) {
+    private Node remove(Node node, Key key) {
         if (node == null) return null;
 
         int cmp = key.compareTo(node.key);
@@ -109,48 +113,52 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             if (node.left != null) {
                 if (!isRed(node.left) && !isRed(node.left.left))
                     node = moveRedLeft(node);
-                node.left = delete(node.left, key);
+                node.left = remove(node.left, key);
             }
-        } else {
+        } else if (cmp > 0) {
             if (isRed(node.left)) {
                 node = rotateRight(node);
             }
 
-            if (cmp == 0 && (node.right == null)) {
-                deletedValue = node.value;
-                return null;
+            if (node.right != null) {
+                if (!isRed(node.right) && !isRed(node.right.left)) {
+                    node = moveRedRight(node);
+                }
+                node.right = remove(node.right, key);
             }
 
-            if (!isRed(node.right) && !isRed(node.right.left)) {
-                node = moveRedRight(node);
-            }
+        } else {
+            deletedValue = node.value;
 
-            if (cmp == 0) {
-                deletedValue = node.value;
-
+            if (node.right != null) {
                 Node minNode = min(node.right);
                 node.key = minNode.key;
                 node.value = minNode.value;
                 node.right = deleteMin(node.right);
+            } else if (node.left != null) {
+                Node maxNode = max(node.left);
+                node.key = maxNode.key;
+                node.value = maxNode.value;
+                node.left = deleteMax(node.left);
             } else {
-                node.right = delete(node.right, key);
+                return null;
             }
         }
         return fixUp(node);
     }
 
-    private Node moveRedRight(Node x) {
-        flipColors(x);
-        if (isRed(x.left.left)) {
-            x = rotateRight(x);
-            flipColors(x);
+    private Node moveRedRight(Node node) {
+        flipColors(node);
+        if (node.left != null && isRed(node.left.left)) {
+            node = rotateRight(node);
+            flipColors(node);
         }
-        return x;
+        return node;
     }
 
     private Node moveRedLeft(Node node) {
         flipColors(node);
-        if (isRed(node.right.left)) {
+        if (node.right != null && isRed(node.right.left)) {
             node.right = rotateRight(node.right);
             node = rotateLeft(node);
             flipColors(node);
@@ -164,6 +172,18 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (!isRed(node.left) && !isRed(node.left.left))
             node = moveRedLeft(node);
         node.left = deleteMin(node.left);
+        return fixUp(node);
+    }
+
+    private Node deleteMax(Node node) {
+        if (node.right == null)
+            return null;
+        if (isRed(node.left)) {
+            node = rotateRight(node);
+        }
+        if (!isRed(node.right) && !isRed(node.right.right))
+            node = moveRedRight(node);
+        node.right = deleteMin(node.right);
         return fixUp(node);
     }
 
@@ -213,16 +233,56 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     @Override
     public Key floor(@NotNull Key key) {
         if (topNode == null) return null;
-        Node node = get(topNode, key);
-        return node != null ? max(node.left).key : null;
+        return findFloor(topNode, key);
+    }
+
+    private Key findFloor(Node node, Key key) {
+        int cmp = key.compareTo(node.key);
+
+        if (cmp > 0) {
+            if (node.right == null)
+                return node.key;
+            else {
+                // Если ключ, который мы ищем меньше минимального у правого сына текущего нода, то
+                // 1) такого ключа в дереве нет.
+                // 2) ключ текущего нода есть ближайший меньший к тому, которого мы ищем
+                return min(node.right).key.compareTo(key) > 0 ? node.key : findFloor(node.right, key);
+            }
+
+        } else if (cmp < 0) {
+            if (node.left == null)
+                return null;
+            else
+                return findFloor(node.left, key);
+        } else {
+            return node.left != null ? node.left.key : node.key;
+        }
     }
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
         if (topNode == null) return null;
-        Node node = get(topNode, key);
-        return node != null ? min(node.right).key : null;
+        return findCeil(topNode, key);
+    }
+
+    private Key findCeil(Node node, Key key) {
+        int cmp = key.compareTo(node.key);
+
+        if (cmp > 0) {
+            if (node.right == null)
+                return null;
+            else
+                return max(node.left).key.compareTo(key) < 0 ? node.key : findCeil(node.right, key);
+        } else if (cmp < 0) {
+            //
+            if (node.left == null)
+                return node.key;
+            else
+                return findCeil(node.left, key);
+        } else {
+            return node.right != null ? node.right.key : node.key;
+        }
     }
 
     @Override
@@ -259,8 +319,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private void flipColors(Node node) {
         node.color = !node.color;
-        node.right.color = !node.right.color;
-        node.left.color = !node.left.color;
+        if (node.right != null)
+            node.right.color = !node.right.color;
+        if (node.left != null)
+            node.left.color = !node.left.color;
     }
 
     private Node fixUp(Node node) {
@@ -275,5 +337,4 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         return node;
     }
-
 }
