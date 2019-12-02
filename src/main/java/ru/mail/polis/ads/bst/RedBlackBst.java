@@ -6,20 +6,19 @@ import org.jetbrains.annotations.Nullable;
 /**
  * LLRB implementation of binary search tree.
  */
-
-public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
+public class RedBlackTree<Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
 
     private static final boolean BLACK = false;
     private static final boolean RED = true;
-
+    private int size = 0;
 
     private class Node {
-        private Key key;
-        private Value value;
-        private Node left;
-        private Node right;
+        Key key;
+        Value value;
+        Node left;
+        Node right;
         boolean color;
-        private int height;
+        int height;
 
         private Node(Key key, Value value) {
             this.key = key;
@@ -30,7 +29,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     }
 
     private Node root;
-//    private Node removed;
 
     private boolean isRed(Node node)
     {
@@ -64,14 +62,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         node.right.color = !node.right.color;
     }
 
-    private int getHeight(Node node) {
-        if (node == null) {
-            return 0;
-        }
-
-        return node.height;
-    }
-
     private Node fixUp(Node node) {
         if (isRed(node.right) && !isRed(node.left)) {
             node = rotateLeft(node);
@@ -82,7 +72,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         if (isRed(node.left) && isRed(node.right)) {
             flipColors(node);
         }
-        node.height = getHeight(node.left) + getHeight(node.right) + 1;
+        node.height = 1 + Math.max(node.left == null ? 0 : (node.left).height,
+            node.right == null ? 0 : (node.right).height);
         return node;
     }
 
@@ -120,6 +111,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         if (node.left == null) {
             return null;
         }
+        --size;
         if (!isRed(node.left) && !isRed(node.left.left)) {
             node = moveRedLeft(node);
         }
@@ -130,20 +122,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-//        Node node = findNode(root, key);
-        if (key == null) {
-            return null;
-        }
         return findNode(root, key);
     }
+    
     private Value findNode(Node node, Key key) {
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
             return findNode(node.left, key);
 
-        } if (key.compareTo(node.key) > 0) {
+        } if (cmp > 0) {
             return findNode(node.right, key);
         }
         return node.value;
@@ -151,15 +141,13 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
 
     @Override
     public void put(@NotNull Key key,@NotNull Value value){
-       if (key == null) {
-           throw new NullPointerException();
-       }
         root = put(root, key, value);
         root.color = BLACK;
     }
 
     private Node put(Node node, Key key, Value value){
         if (node == null) {
+            ++size;
             return new Node(key, value);
         }
         if (key.compareTo(node.key) < 0) {
@@ -176,8 +164,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        if (key == null) {
-            throw new IllegalArgumentException();
+        if (root == null) {
+            return null;
         }
 
         if (!containsKey(key)) {
@@ -195,7 +183,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         if (root != null) {
             root.color = BLACK;
         }
-
+        --size;
         return result;
     }
 
@@ -277,9 +265,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        if (key == null) {
-            throw new IllegalArgumentException();
-        }
         Node result = floor(root, key);
         return (result == null) ? null : result.key;
     }
@@ -288,10 +273,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) {
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
             return floor(node.left, key);
         }
-        if (key.compareTo(node.key) == 0) {
+        if (cmp == 0) {
             return node;
         }
        Node right = floor(node.right, key);
@@ -301,9 +287,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        if (key == null) {
-            throw new IllegalArgumentException();
-        }
         Node result= ceil(root, key);
 
         return (result == null) ? null : result.key;
@@ -331,17 +314,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
 
     @Override
     public int size() {
-        return size(root);
+        return size;
     }
-
-    private int size(Node x) {
-        if (x == null) {
-            return 0;
-        }
-
-        return size(x.left) + size(x.right) + 1;
-    }
-
 
     @Override
     public int height() {
