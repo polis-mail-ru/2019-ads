@@ -1,9 +1,6 @@
 package ru.mail.polis.ads.marashov.alexander;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Task1 {
 
@@ -11,24 +8,24 @@ public class Task1 {
     private final static char WHITE = 'w';
     private final static char GREY = 'g';
 
-    private static ArrayList<LinkedList<Integer>> array;
+    private static List<Integer>[] array;
     private static char[] colors;
-    private static boolean hasCycle = false;
     private static Stack<Integer> answer;
 
-    private static void dfs(int current) {
-        if (hasCycle) {
+    private static void topologicalSort(int current) {
+        if (colors[current] == BLACK) {
             return;
         }
-        if (colors[current] != WHITE) {
-            hasCycle |= colors[current] == GREY;
+        if (colors[current] == GREY) {
+            System.out.println(-1);
+            System.exit(0);
             return;
         }
 
         colors[current] = GREY;
 
-        for (Integer integer: array.get(current)) {
-            dfs(integer);
+        for (Integer integer: array[current]) {
+            topologicalSort(integer);
         }
 
         answer.push(current);
@@ -39,10 +36,10 @@ public class Task1 {
         final Scanner in = new Scanner(System.in);
 
         final int n = in.nextInt();
-        array = new ArrayList<>(n);
+        array = new LinkedList[n + 1];
         colors = new char[n + 1];
         for (int i = 0; i <= n; ++i) {
-            array.add(new LinkedList<>());
+            array[i] = new LinkedList<>();
             colors[i] = WHITE;
         }
 
@@ -54,22 +51,16 @@ public class Task1 {
                 System.out.println(-1);
                 return;
             }
-            array.get(first).add(second);
+            array[first].add(second);
         }
-
-
 
         answer = new Stack<>();
         for (int i = 1; i <= n; ++i) {
-            dfs(i);
+            topologicalSort(i);
         }
 
-        if (hasCycle) {
-            System.out.println(-1);
-        } else {
-            while (!answer.empty()) {
-                System.out.print(answer.pop() + " ");
-            }
+        while (!answer.empty()) {
+            System.out.print(answer.pop() + " ");
         }
 
     }

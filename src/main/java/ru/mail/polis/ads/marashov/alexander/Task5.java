@@ -1,82 +1,67 @@
 package ru.mail.polis.ads.marashov.alexander;
 
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 public class Task5 {
+
     public static void main(String[] args) {
-        final int inf = 200000001;
         final Scanner in = new Scanner(System.in);
         final int n = in.nextInt();
         final int m = in.nextInt();
         final int s = in.nextInt();
         final int f = in.nextInt();
 
-        boolean[] visited = new boolean[n];
-        int[] dist = new int[n];
-        int[] prev = new int[n];
+        List<Integer>[] nodes = new LinkedList[n + 1];
+        int[] dist = new int[n + 1];
+        int[] prev = new int[n + 1];
 
-        for (int i = 0; i < n; i++) {
-            dist[i] = inf;
-            visited[i] = false;
-            prev[i] = inf;
+        for (int i = 1; i <= n; i++) {
+            dist[i] = -1;
+            prev[i] = -1;
+            nodes[i] = new LinkedList<>();
         }
 
-        int[][] mass = new int[n][n];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                mass[i][j] = -1;
-            }
-        }
-
-        for (int i = 0; i < m; ++i) {
+        for (int i = 1; i <= m; ++i) {
             final int first = in.nextInt();
             final int second = in.nextInt();
-            final int weight = in.nextInt();
-            mass[first - 1][second - 1] = weight;
-            mass[second - 1][first - 1] = weight;
+            nodes[first].add(second);
+            nodes[second].add(first);
         }
 
-        int cnt = 0;
-        dist[s - 1] = 0;
-        int now = 0;
+        dist[s] = 0;
+        prev[s] = s;
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(s);
+        while (!queue.isEmpty()) {
 
-        while (cnt != n) {
+            Integer current = queue.poll();
 
-            int mn = inf;
+            if (current == f) {
+                break;
+            }
 
-            for (int i = 0; i < n; i++) {
-                if (!visited[i] && dist[i] < mn) {
-                    mn = dist[i];
-                    now = i;
+            for (Integer integer: nodes[current]) {
+                if (prev[integer] == -1) {
+                    prev[integer] = current;
+                    dist[integer] = dist[current] + 1;
+                    queue.add(integer);
                 }
             }
 
-            for (int j = 0; j < n; j++) {
-                if (mass[now][j] >= 0 && !visited[j] && dist[j] > mass[now][j] + dist[now]) {
-                    dist[j] = mass[now][j] + dist[now];
-                    prev[j] = now;
-                }
-            }
-            visited[now] = true;
-            cnt++;
-
         }
 
-        if (dist[f - 1] == inf) {
-            System.out.println(-1);
-        } else {
-            System.out.println(dist[f - 1]);
-            int current = f - 1;
+        System.out.println(dist[f]);
+        if (dist[f] != -1) {
+            int current = f;
             Stack<Integer> stack = new Stack<>();
-            while (current != s - 1) {
+            while (current != s) {
                 stack.push(prev[current]);
                 current = prev[current];
             }
             while (!stack.empty()) {
-                System.out.print((stack.pop() + 1) + " ");
+                System.out.print(stack.pop() + " ");
             }
-            System.out.print(f + " ");
+            System.out.print(f);
         }
     }
 }
