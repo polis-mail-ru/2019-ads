@@ -62,19 +62,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         }
     }
 
-    /**
-     * Class for {@code remove}. Contains contains a reference to a subtree without removed node and removed value
-     */
-    private class TreeWithoutValue {
-        @Nullable Node node;
-        @Nullable Value value;
-
-        TreeWithoutValue(@Nullable Node node, @Nullable Value value) {
-            this.node = node;
-            this.value = value;
-        }
-    }
-
     /* ------------------ Fields ------------------ */
 
     /**
@@ -167,18 +154,18 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        TreeWithoutValue treeWithoutValue = delete(key, new TreeWithoutValue(root, null));
-        root = treeWithoutValue.node;
-
-        if (treeWithoutValue.value != null) {
-            size--;
+        Node removedNode = searchRemovedNode(root, key);
+        if (removedNode == null) {
+            return null;
         }
+        Value removedValue = removedNode.value;
 
+        root = delete(key, root);
+        size--;
         if (root != null) {
             root.color = BLACK;
         }
-
-        return treeWithoutValue.value;
+        return removedValue;
     }
 
     /**
@@ -314,50 +301,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     public void clear() {
         root = null;
         size = 0;
-    }
-
-    /**
-     * Removes node with min {@code key} or returns null if {@code root} == {@code null}
-     *
-     * @return {@code value} which mapped a min {@code key} or {@code null}
-     */
-    @Override
-    @Nullable
-    public Value deleteMin() {
-        TreeWithoutValue treeWithoutValue = deleteMin(new TreeWithoutValue(root, null));
-        root = treeWithoutValue.node;
-
-        if (treeWithoutValue.value != null) {
-            size--;
-        }
-
-        if (root != null) {
-            root.color = BLACK;
-        }
-
-        return treeWithoutValue.value;
-    }
-
-    /**
-     * Removes node with max {@code key} or returns null if {@code root} == {@code null}
-     *
-     * @return {@code value} which mapped a max {@code key} or {@code null}
-     */
-    @Override
-    @Nullable
-    public Value deleteMax() {
-        TreeWithoutValue treeWithoutValue = deleteMax(new TreeWithoutValue(root, null));
-        root = treeWithoutValue.node;
-
-        if (treeWithoutValue.value != null) {
-            size--;
-        }
-
-        if (root != null) {
-            root.color = BLACK;
-        }
-
-        return treeWithoutValue.value;
     }
 
     /* -------------- Package-private operations -------------- */
@@ -680,33 +623,22 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Method for {@code deleteMin} with main implementation
+     * Method for {@code delete} which searching min node for replace
      *
-     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed min value
-     * @return treeWithoutValue which contain node and removed min value
+     * @param node current node for recursive method
+     * @return node from tree
      */
-    private TreeWithoutValue deleteMin(TreeWithoutValue treeWithoutValue) {
-        if (treeWithoutValue.node == null) {
-            return treeWithoutValue;
+    private Node deleteMin(Node node) {
+        if (node.left == null) {
+            return null;
         }
-        if (treeWithoutValue.node.left == null) {
-            treeWithoutValue.value = treeWithoutValue.node.value;
-            treeWithoutValue.node = null;
-            return treeWithoutValue;
+        if (!isRed(node.left) && !isRed(node.left.left)) {
+            node = moveRedLeft(node);
         }
-        if (!isRed(treeWithoutValue.node.left) && !isRed(treeWithoutValue.node.left.left)) {
-            treeWithoutValue.node = moveRedLeft(treeWithoutValue.node);
-        }
-        TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
-            treeWithoutValue.node.left,
-            treeWithoutValue.value
-        );
-        deleteMin(tempTreeWithoutValue);
-        treeWithoutValue.node.left = tempTreeWithoutValue.node;
-        treeWithoutValue.value = tempTreeWithoutValue.value;
-        treeWithoutValue.node = fixUp(treeWithoutValue.node);
-        fixHeight(treeWithoutValue.node);
-        return treeWithoutValue;
+        node.left = deleteMin(node.left);
+        node = fixUp(node);
+        fixHeight(node);
+        return node;
     }
 
     /**
@@ -725,154 +657,68 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     /**
-     * Method for {@code deleteMax} with main implementation
-     *
-     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed max value
-     * @return treeWithoutValue which contain node and removed max value
-     */
-    private TreeWithoutValue deleteMax(TreeWithoutValue treeWithoutValue) {
-        if (treeWithoutValue.node == null) {
-            return treeWithoutValue;
-        }
-        if (isRed(treeWithoutValue.node.left)) {
-            treeWithoutValue.node = rotateRight(treeWithoutValue.node);
-        }
-        if (treeWithoutValue.node.right == null) {
-            treeWithoutValue.value = treeWithoutValue.node.value;
-            treeWithoutValue.node = null;
-            return treeWithoutValue;
-        }
-        if (!isRed(treeWithoutValue.node.right) && !isRed(treeWithoutValue.node.right.right)) {
-            treeWithoutValue.node = moveRedRight(treeWithoutValue.node);
-        }
-        TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
-            treeWithoutValue.node.right,
-            treeWithoutValue.value
-        );
-        deleteMax(tempTreeWithoutValue);
-        treeWithoutValue.node.right = tempTreeWithoutValue.node;
-        treeWithoutValue.value = tempTreeWithoutValue.value;
-        treeWithoutValue.node = fixUp(treeWithoutValue.node);
-        fixHeight(treeWithoutValue.node);
-        return treeWithoutValue;
-    }
-
-    /**
      * Method for {@code remove} with main implementation
      *
      * @param key key whose mapping is to be removed from the tree
-     * @param treeWithoutValue treeWithoutValue treeWithoutValue of the current node and removed value
+     * @param node current node at the tree
      * @return treeWithoutValue which contain node and removed value
      */
-    private TreeWithoutValue delete(Key key, TreeWithoutValue treeWithoutValue) {
-        if (treeWithoutValue.node == null) {
-            return treeWithoutValue;
-        }
-        int result = key.compareTo(treeWithoutValue.node.key);
-        if (result < 0) {
-            if (treeWithoutValue.node.left != null) {
-                if (!isRed(treeWithoutValue.node.left) && !isRed(treeWithoutValue.node.left.left)) {
-                    treeWithoutValue.node = moveRedLeft(treeWithoutValue.node);
-                }
-                TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
-                    treeWithoutValue.node.left,
-                    treeWithoutValue.value
-                );
-                delete(key, tempTreeWithoutValue);
-                treeWithoutValue.node.left = tempTreeWithoutValue.node;
-                treeWithoutValue.value = tempTreeWithoutValue.value;
-            }
-        } else if (result > 0) {
-            if (treeWithoutValue.node.right != null) {
-                if (isRed(treeWithoutValue.node.left)) {
-                    treeWithoutValue.node = rotateRight(treeWithoutValue.node);
-                }
-                if (!isRed(treeWithoutValue.node.right) && !isRed(treeWithoutValue.node.right.left)) {
-                    treeWithoutValue.node = moveRedRight(treeWithoutValue.node);
-                }
-                TreeWithoutValue tempTreeWithoutValue = new TreeWithoutValue(
-                    treeWithoutValue.node.right,
-                    treeWithoutValue.value
-                );
-                delete(key, tempTreeWithoutValue);
-                treeWithoutValue.node.right = tempTreeWithoutValue.node;
-                treeWithoutValue.value = tempTreeWithoutValue.value;
-            }
-        } else {
-            if (isRed(treeWithoutValue.node.left)) {
-                treeWithoutValue.node = rotateRight(treeWithoutValue.node);
-                if (treeWithoutValue.node.right != null){
-                    Node tempNode = treeWithoutValue.node.right;
-                    treeWithoutValue.value = tempNode.value;
-                    if (tempNode.right == null) {
-                        treeWithoutValue.node.right = treeWithoutValue.node.right.left;
-                    } else {
-                        treeWithoutValue.node.right.key = searchMinNode(tempNode.right).key;
-                        treeWithoutValue.node.right.value = searchValue(
-                            treeWithoutValue.node.right.key,
-                            treeWithoutValue.node.right.right
-                        );
-                        treeWithoutValue.node.right.right = deleteMin(tempNode.right);
-                        if (treeWithoutValue.node.right.right == null
-                            && treeWithoutValue.node.right.left != null
-                            && !isRed(treeWithoutValue.node.right.left)) {
-
-                            treeWithoutValue.node.right.left.color = RED;
-                            treeWithoutValue.node.right.color = BLACK;
-                        }
-                    }
-                    treeWithoutValue.node = fixUp(treeWithoutValue.node);
-                    fixHeight(treeWithoutValue.node);
-                    return treeWithoutValue;
-                }
-            }
-            if (treeWithoutValue.node.right == null) {
-                treeWithoutValue.value = treeWithoutValue.node.value;
-                treeWithoutValue.node = null;
-                return treeWithoutValue;
-            }
-            if (treeWithoutValue.node.left != null
-                && !isRed(treeWithoutValue.node)
-                && !isRed(treeWithoutValue.node.right)
-                && !isRed(treeWithoutValue.node.left)) {
-
-                flipColors(treeWithoutValue.node);
-                treeWithoutValue.node.color = BLACK;
-            }
-            Node tempNode = treeWithoutValue.node;
-            treeWithoutValue.value = tempNode.value;
-            treeWithoutValue.node.key = searchMinNode(tempNode.right).key;
-            treeWithoutValue.node.value = searchValue(treeWithoutValue.node.key, treeWithoutValue.node.right);
-            treeWithoutValue.node.right = deleteMin(tempNode.right);
-            if (treeWithoutValue.node.right == null
-                && treeWithoutValue.node.left != null
-                && !isRed(treeWithoutValue.node.left)) {
-
-                treeWithoutValue.node.left.color = RED;
-                treeWithoutValue.node.color = BLACK;
-            }
-        }
-        treeWithoutValue.node = fixUp(treeWithoutValue.node);
-        fixHeight(treeWithoutValue.node);
-        return treeWithoutValue;
-    }
-
-    /**
-     * Method for {@code delete} which searching min node for replace
-     *
-     * @param node current node for recursive method
-     * @return node from tree
-     */
-    private Node deleteMin(Node node) {
-        if (node.left == null) {
+    private Node delete(Key key, Node node) {
+        if (node == null) {
             return null;
         }
-        if (!isRed(node.left) && !isRed(node.left.left)) {
-            node = moveRedLeft(node);
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
+            if (node.left != null) {
+                if (!isRed(node.left) && !isRed(node.left.left)) {
+                    node = moveRedLeft(node);
+                }
+                node.left = delete(key, node.left);
+            }
+        } else {
+            if (isRed(node.left)) {
+                node = rotateRight(node);
+                node.right = delete(key, node.right);
+            } else {
+                if (node.right == null && cmp == 0) {
+                    return null;
+                }
+                if (node.right != null && !isRed(node.right) && !isRed(node.right.left)) {
+                    node = moveRedRight(node);
+                }
+                cmp = key.compareTo(node.key);
+                if (cmp == 0) {
+                    Node min = searchMinNode(node.right);
+                    node.key = min.key;
+                    node.value = min.value;
+                    node.right = deleteMin(node.right);
+                } else {
+                    node.right = delete(key, node.right);
+                }
+            }
         }
-        node.left = deleteMin(node.left);
         node = fixUp(node);
         fixHeight(node);
         return node;
+    }
+
+    /**
+     * Method search min node which need remove for return removed value
+     * @param node current node at the tree
+     * @param key key of node which need remove
+     * @return path to removed node without remove
+     */
+    private Node searchRemovedNode(Node node, Key key) {
+        if (node == null) {
+            return null;
+        }
+        int cmp = key.compareTo(node.key);
+        if (cmp > 0) {
+            return searchRemovedNode(node.right, key);
+        } else if (cmp < 0) {
+            return searchRemovedNode(node.left, key);
+        } else {
+            return node;
+        }
     }
 }

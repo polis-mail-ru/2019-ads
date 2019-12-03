@@ -25,10 +25,6 @@ public interface Bst<Key extends Comparable<Key>, Value> {
 
     @Nullable Key ceil(@NotNull Key key);
 
-    @Nullable Value deleteMin();
-
-    @Nullable Value deleteMax();
-
     int size();
 
     int height();
