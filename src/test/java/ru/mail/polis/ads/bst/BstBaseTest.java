@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.*;
  * Basic binary search tree invariants.
  */
 class BstBaseTest {
-    
+
     Bst<String, String> newBst() {
         return new RedBlackBst<>();
-    } 
-    
+    }
+
     @Test
     void emptyBst() {
         Bst<String, String> bst = newBst();
@@ -39,9 +39,9 @@ class BstBaseTest {
     void put() {
         Bst<String, String> bst = newBst();
         bst.put("foo", "bar");
-        
+
         assertEquals("bar", bst.get("foo"));
-        
+
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
@@ -61,7 +61,7 @@ class BstBaseTest {
     @Test
     void morePut() {
         Bst<String, String> bst = newBst();
-        
+
         int size = 0;
         assertEquals(bst.size(), size);
         assertNull(bst.max());
@@ -157,7 +157,7 @@ class BstBaseTest {
     @Test
     void max() {
         Bst<String, String> bst = newBst();
-        
+
         assertNull(bst.max());
         assertNull(bst.maxValue());
 
@@ -205,7 +205,7 @@ class BstBaseTest {
     @Test
     void min() {
         Bst<String, String> bst = newBst();
-        
+
         assertNull(bst.min());
         assertNull(bst.minValue());
 
@@ -253,7 +253,7 @@ class BstBaseTest {
     @Test
     void contains() {
         Bst<String, String> bst = newBst();
-        
+
         assertFalse(bst.containsKey("testStringKey"));
         assertFalse(bst.containsKey("testStringKey1"));
 
@@ -277,7 +277,7 @@ class BstBaseTest {
     @Test
     void empty() {
         Bst<String, String> bst = newBst();
-       
+
         assertTrue(bst.isEmpty());
 
         bst.put("testStringKey", "testStringValue");
@@ -296,7 +296,7 @@ class BstBaseTest {
     @Test
     void ceil() {
         Bst<String, String> bst = newBst();
-        
+
         bst.put("1", "testStringValue3");
         bst.put("3", "testStringValue4");
         bst.put("5", "testStringValue2");
@@ -318,7 +318,7 @@ class BstBaseTest {
     @Test
     void floor() {
         Bst<String, String> bst = newBst();
-        
+
         bst.put("1", "testStringValue3");
         bst.put("3", "testStringValue4");
         bst.put("5", "testStringValue2");
@@ -340,7 +340,7 @@ class BstBaseTest {
     @Test
     void moreReplace() {
         Bst<String, String> bst = newBst();
-       
+
         assertNull(bst.get("1"));
 
         bst.put("1", "testStringValue3");
@@ -355,5 +355,19 @@ class BstBaseTest {
         bst.put("7", "testStringValue5");
         assertEquals(bst.get("7"), "testStringValue5");
         assertEquals(bst.get("1"), "testStringValue2");
+    }
+
+    @Test
+    void checkSize() {
+        Bst<String, String> bst = newBst();
+
+        assertEquals(0, bst.size());
+
+        bst.put("1", "testStringValue1");
+        bst.put("2", "testStringValue2");
+        assertEquals(2, bst.size());
+
+        bst.remove("2");
+        assertEquals(1, bst.size());
     }
 }
