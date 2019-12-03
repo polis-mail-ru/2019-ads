@@ -232,6 +232,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return balanceTree(node);
     }
 
+
     private Node remove(Key key, Node node, Node found) {
         int cmp = key.compareTo(node.key);
         if (cmp < 0) {
