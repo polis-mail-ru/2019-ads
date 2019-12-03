@@ -32,7 +32,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
             return null;
         }
         for (Pair pair : lst) {
-            if (pair != null && pair.equals(key)) {
+            if (pair != null && pair.key.equals(key)) {
                 return pair.value;
             }
         }
@@ -44,7 +44,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         ArrayList<Pair> lst= arr.get(hash(key.hashCode())& (capacity-1));
 
         for (int i = 0; i < lst.size(); i++){
-            if (lst.get(i).equals(key)){
+            if (lst.get(i).key.equals(key)){
                 arr.get(hash(key.hashCode())& (capacity-1)).set(i, new Pair(key, value));
                 return;
             }
@@ -70,7 +70,6 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         }
         for (ArrayList<Pair> pairs : arr) {
             for (Pair j : pairs) {
-
                 arr_new.get(hash(j.key.hashCode()) & (capacity - 1)).add(j);
             }
         }
@@ -88,7 +87,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
             return null;
         }
         for (int i = 0; i < lst.size(); i++) {
-            if (lst.get(i).equals(key)){
+            if (lst.get(i).key.equals(key)){
                 Value res = lst.get(i).value;
                 arr.get(hash(key.hashCode()) & (capacity-1)).remove(i);
                 n-=1;
