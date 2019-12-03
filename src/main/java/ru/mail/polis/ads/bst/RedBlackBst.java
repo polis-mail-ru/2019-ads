@@ -231,25 +231,27 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         recalcHeight(node);
         return balanceTree(node);
     }
+
     private Node remove(Key key, Node node, Node found) {
-        if (key.compareTo(node.key) < 0){
-            if (isBlack(node.left) && isBlack(node.left.left)){
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
+            if (isBlack(node.left) && isBlack(node.left.left)) {
                 node = moveRedLeft(node);
             }
             node.left = remove(key, node.left, found);
         }
         else {
-            if (isRed(node.left)){
+            if (isRed(node.left)) {
                 node = pivotRight(node);
             }
-            if (key.compareTo(node.key) == 0 && node.right == null){
+            if (node.right == null && cmp == 0) {
                 found.value = node.value;
                 return null;
             }
-            if (isBlack(node.right) && isBlack(node.right.left)){
+            if (isBlack(node.right) && isBlack(node.right.left)) {
                 node = moveRedRight(node);
             }
-            if (key.compareTo(node.key) == 0){
+            if (key.compareTo(node.key) == 0) {
                 found.value = node.value;
                 Node min = new Node(null, null);
                 node.right = deleteMin(node.right, min);
@@ -263,6 +265,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         recalcHeight(node);
         return balanceTree(node);
     }
+
+
     private Node deleteMin(Node node, Node min){
         if (node.left == null){
             min.key = node.key;
