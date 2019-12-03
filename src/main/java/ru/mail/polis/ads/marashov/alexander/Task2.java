@@ -1,79 +1,100 @@
 package ru.mail.polis.ads.marashov.alexander;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Task2 {
-
-    private static int dfs(int current, int prev, int min, char[] colors, ArrayList<LinkedList<Integer>> array, boolean[] hasCycle) {
-        if (colors[current] == 'b') { // если вершина посещена ранее (цвет чёрный), то выйти
-            return min;
-        }
-
-        if (colors[current] == 'g') { // если вершина посещена этим заходом (серый цвет), то нашли цикл
-            hasCycle[0] = true;
-            colors[current] = 'c'; // вершина помечена цикличной
-            return Math.min(current, min); // вернуть минимум текущего минимума и номера вершины
-        }
-
-        colors[current] = 'g'; // пометить серым, что зашли сюда
-
-        for (Integer integer: array.get(current)) { // перебираем все рёбра из вершины
-            if (hasCycle[0]) { // если уже найден цикл, то дальше никуда не идём
-                break;
-            }
-            if (integer == prev) { // обратно - тоже не идём
-                continue;
-            }
-            min = Math.min(min, dfs(integer, current, min, colors, array, hasCycle)); // проходимся по доступным вершинам
-        }
-
-        if (colors[current] != 'c') {
-            colors[current] = 'b'; // "выходим" из вершины и красим в чёрный цвет
-        }
-
-        if (colors[current] == 'c') { // если вершина отмечена окончанием найденного цикла, то выводим ответ
-            System.out.println("Yes");
-            System.out.println(Math.min(current, min));
-            return min;
-        }
-
-        if (hasCycle[0]) {
-            return Math.min(current, min);
-        }
-
-        return min;
-    }
 
     public static void main(String[] args) {
         final Scanner in = new Scanner(System.in);
 
-        final int n = in.nextInt();
-        ArrayList<LinkedList<Integer>> array = new ArrayList<>(n);
+        final int n = Integer.parseInt(in.next());
+        Queue<Integer>[] array = new PriorityQueue[n + 1];
         char[] colors = new char[n + 1];
-        for (int i = 0; i <= n; ++i) {
-            array.add(new LinkedList<>());
+        int[] prev = new int[n + 1];
+
+        for (int i = 1; i <= n; ++i) {
+            array[i] = new PriorityQueue<>(8);
             colors[i] = 'w';
+            prev[i] = -1;
         }
 
-        final int m = in.nextInt();
+        final int m = Integer.parseInt(in.next());
         for (int i = 1; i <= m; ++i) {
             final int first = Integer.parseInt(in.next());
             final int second = Integer.parseInt(in.next());
-            array.get(first).add(second);
-            array.get(second).add(first);
+            array[first].add(second);
+            array[second].add(first);
         }
 
-        boolean[] hasCycle = new boolean[1];
+        int min = n + 1;
+
+        Stack<Integer> stack = new Stack<>();
         for (int i = 1; i <= n; ++i) {
-            dfs(i, -1, n + 1, colors, array, hasCycle);
-            if (hasCycle[0]) {
-                return;
+            if (min <= i) {
+                break;
+            }
+            boolean hasCycle = false;
+            if (colors[i] == 'w') {
+                stack.push(i);
+            }
+
+            while (!stack.isEmpty()) {
+                Integer current = stack.peek();
+
+                if (colors[current] == 'c') {
+                    hasCycle = false;
+                    min = Math.min(current, min);
+                }
+
+                colors[current] = 'g';
+
+                boolean goNext = false;
+                while(!array[current].isEmpty()) {
+                    if (hasCycle) {
+                        break;
+                    }
+
+                    int next = array[current].poll();
+
+                    if (next == prev[current]) {
+                        continue;
+                    }
+
+                    if (colors[next] == 'g') {
+                        hasCycle = true;
+                        colors[next] = 'c';
+                        break;
+                    }
+
+                    if (colors[next] == 'w') {
+                        prev[next] = current;
+                        stack.push(next);
+                        goNext = true;
+                        break;
+                    }
+                }
+
+                if (goNext) {
+                    continue;
+                }
+
+                if (hasCycle) {
+                    min = Math.min(current, min);
+                }
+
+                if (colors[current] != 'w') {
+                    colors[current] = 'b';
+                    stack.pop();
+                }
             }
         }
 
-        System.out.println("No");
+        if (min == n + 1) {
+            System.out.println("No");
+        } else {
+            System.out.println("Yes");
+            System.out.println(min);
+        }
 
     }
 }
