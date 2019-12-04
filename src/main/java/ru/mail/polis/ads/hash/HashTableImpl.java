@@ -31,7 +31,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     @Override
     public Value get(@NotNull Key key) {
         int hash = key.hashCode();
-        Node<Key, Value> current = nodes[hash % currentCapacity];
+        Node<Key, Value> current = nodes[getIndex(hash)];
 
         if (current == null) {
             return null; // Ничего не нашли, по такому хешкоду вообще ни одного элемента
@@ -50,22 +50,11 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public boolean containsKey(@NotNull Key key) {
-        int hash = key.hashCode();
-        Node<Key, Value> current = nodes[hash % currentCapacity];
-
-        if (current == null) {
-            return false; // Ничего не нашли, по такому хешкоду вообще ни одного элемента
+        if (get(key) == null) {
+            return false;
         }
 
-        while (current != null) {
-            if (current.hash == hash && key.equals(current.key)) {
-                return true; // Если нашли, то возвращаем true
-            }
-
-            current = current.next;
-        }
-
-        return false; // Если до этой строки дошло, значит ничего не нашлось, вернём false
+        return true;
     }
 
     @Override
@@ -79,7 +68,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
             resize();
         }
 
-        int index = node.hash % currentCapacity;
+        int index = getIndex(node.hash);
         Node<Key, Value> current = nodes[index];
         Node<Key, Value> prev = null;
 
@@ -124,7 +113,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     @Override
     public Value remove(@NotNull Key key) {
         int hash = key.hashCode();
-        int index = hash % currentCapacity;
+        int index = getIndex(hash);
         Node<Key, Value> current = nodes[index];
         // Будем хранить ссылку на предыдущий элемент, поскольку при удалении элемента n нужно элементу n-1 присвоить ссылку на n+1
         Node<Key, Value> prev = null;
@@ -164,10 +153,10 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public boolean isEmpty() {
-        if (amountOfKeys == 0) {
-            return true;
-        }
+        return amountOfKeys == 0;
+    }
 
-        return false;
+    private int getIndex(int hash) {
+        return (hash & 0x7fffffff) % currentCapacity;
     }
 }
