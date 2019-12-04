@@ -58,17 +58,25 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
         }
 
         if (size > capacity * LOAD_FACTOR) {
-            expandBuckets();
+            rehash();
         }
     }
 
-    private void expandBuckets() {
+    private void rehash() {
         capacity *= 2;
+        size = 0;
 
         Entry<Key, Value>[] entries = buckets;
         buckets = new Entry[capacity];
 
-        System.arraycopy(entries, 0, buckets, 0, entries.length);
+        for (Entry<Key, Value> entry : entries) {
+            Entry<Key, Value> head = entry;
+
+            while (head != null) {
+                put(head.key, head.value);
+                head = head.next;
+            }
+        }
     }
 
     @Nullable
