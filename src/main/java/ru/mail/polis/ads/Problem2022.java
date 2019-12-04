@@ -20,29 +20,13 @@ import java.io.BufferedReader;
 public class Problem2022 {
     private static ArrayList<LinkedList<Integer>> nodes;
     private static int[] colors;
+    private static int[] prev;
     private static int res;
     private static LinkedList<Integer> r;
 
 
-    public static void sort(int a, int b, LinkedList<Integer> c){
-        if (colors[a] == 1){
-            if (a == b){
-                System.out.println(c);
-                Collections.sort(c);
-                int min = c.get(0);
-                if (min < res){
-                    res = min;
-                }
-                c.clear();
-            return;
-            }
-        }
-        colors[a] = 1;
-        c.add(a);
-        for (int i: nodes.get(a)) {
-                sort(i, b, c);
-        }
-        colors[a] = 0;
+    public static void bfs(int a){
+        return;
     }
 
 
@@ -73,6 +57,7 @@ public class Problem2022 {
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
         PrintWriter out = new PrintWriter(System.out);
+
         r = new LinkedList<>();
         int n = in.nextInt();
         int m = in.nextInt();
@@ -94,7 +79,7 @@ public class Problem2022 {
 
 
         for (int i = 1; i <= n; i++){
-            sort(i, i, new LinkedList<>());
+            bfs(i);
         }
         if (res == 10000001){
             out.println("No");

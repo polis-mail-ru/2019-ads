@@ -1,5 +1,5 @@
 package ru.mail.polis.ads;
-
+// https://www.e-olymp.com/ru/submissions/6263672
 import java.io.*;
 import java.util.*;
 
@@ -7,10 +7,11 @@ public class Problem4856 {
     private static ArrayList<HashMap<Integer, Integer>> nodes;
     private static int[] colors;
     private static int[] res1;
-    private static ArrayList<LinkedList<Integer>> res;
+    private static int[] res;
+
     public static void bfs(int a){
         res1[a] = 0;
-        res.get(a).add(a);
+        res[a] = a;
         int u;
         Queue<Integer> q = new ArrayDeque<>();
         q.add(a);
@@ -20,8 +21,7 @@ public class Problem4856 {
             if (!nodes.get(u).isEmpty()){
                 for (Map.Entry<Integer, Integer> i:nodes.get(u).entrySet()) {
                     if (res1[i.getKey()] > res1[u]+i.getValue()){
-                        res.set(i.getKey(), (LinkedList<Integer>) res.get(u).clone());
-                        res.get(i.getKey()).add(i.getKey());
+                        res[i.getKey()] = u;
                         res1[i.getKey()] = res1[u]+i.getValue();
                     }
                     if (colors[i.getKey()] != 1){
@@ -48,10 +48,8 @@ public class Problem4856 {
         }
         colors = new int[n+1];
         res1 = new int[n+1];
-        res = new ArrayList<>(n+1);
-        for (int i=0; i < n+1; i++){
-            res.add(new LinkedList<>());
-        }
+        res = new int[n+1];
+
         Arrays.fill(res1, 10000000);
         for (int i = 0; i < m; i++){
             a = in.nextInt();
@@ -62,14 +60,20 @@ public class Problem4856 {
         }
 
         bfs(from);
-        LinkedList<Integer> st = res.get(to);
         if (res1[to] == 10000000 ||res1[to] == 0){
             out.print(-1);
         }
         else{
             out.println(res1[to]);
-            for (int i = 0; i < st.size()-1; i++){
-                out.print(st.get(i)+" ");
+            int curr = res[to];
+            Stack<Integer> stack = new Stack<>();
+            stack.push(res[to]);
+            while (curr != from) {
+                stack.push(res[curr]);
+                curr = res[curr];
+            }
+            while (!stack.empty()) {
+                out.print(stack.pop() + " ");
             }
             out.print(to);
 

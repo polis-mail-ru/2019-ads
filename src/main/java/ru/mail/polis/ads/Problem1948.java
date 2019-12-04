@@ -1,5 +1,5 @@
 package ru.mail.polis.ads;
-
+// https://www.e-olymp.com/ru/submissions/6262649
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class Problem1948 {
-    private static Node[] nodes;
+    private static ArrayList<ArrayList<Integer>> nodes;
     private static int[] colors;
     private static Stack<Integer> res;
 
@@ -17,20 +17,17 @@ public class Problem1948 {
 
         if (colors[a] == 1){
             res.add(-1);
+            return;
         }
         if (colors[a] == 0){
             colors[a] = 1;
-            if (nodes[a] != null){
-                for (int i:nodes[a].childrens) {
-                    sort(i);
-                }
+            for (int i: nodes.get(a)) {
+                sort(i);
             }
             res.add(a);
             colors[a] = 2;
 
         }
-
-
     }
 
 private static class FastScanner {
@@ -56,16 +53,6 @@ private static class FastScanner {
         return Integer.parseInt(next());
     }
 }
-    public static class Node{
-        LinkedList<Integer> childrens;
-
-        Node(){
-            childrens = new LinkedList<>();
-        }
-        void add(Integer a){
-            childrens.add(a);
-        }
-    }
 
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
@@ -74,16 +61,16 @@ private static class FastScanner {
             int m = in.nextInt();
             Integer a;
             Integer b;
-            nodes = new Node[n+1];
+            nodes = new ArrayList<>(n+1);
+            for (int i = 0; i <= n; ++i) {
+                nodes.add(new ArrayList<>());
+        }
             colors = new int[n+1];
             res = new Stack<>();
             for (int i = 0; i < m; i++){
                 a = in.nextInt();
                 b = in.nextInt();
-                if (nodes[a] == null){
-                    nodes[a] = new Node();
-                }
-                nodes[a].add(b);
+                nodes.get(a).add(b);
             }
 
 

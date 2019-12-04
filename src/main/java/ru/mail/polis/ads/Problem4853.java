@@ -1,5 +1,5 @@
 package ru.mail.polis.ads;
-
+// https://www.e-olymp.com/ru/submissions/6263587
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,37 +8,32 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class Problem4853 {
-    private static Node[] nodes;
+    private static ArrayList<ArrayList<Integer>> nodes;
     private static int[] colors;
     private static int[] res1;
-    private static ArrayList<LinkedList<Integer>> res;
+    private static int[] res;
 
 
-    public static void bfs(int a){
+    public static void bfs(int a, int to){
         res1[a] = 0;
-        res.get(a).add(a);
+        res[a] = a;
         int u;
-        Queue<Integer> q = new ArrayDeque<>();
+        Queue<Integer> q = new LinkedList<>();
         q.add(a);
         while (!q.isEmpty()){
-            u = q.remove();
-            colors[u] = 1;
-            if (nodes[u] != null){
-                for (int i:nodes[u].childrens) {
-                    if (res1[i] > res1[u]+1){
-                        res.set(i, (LinkedList<Integer>) res.get(u).clone());
-                        res.get(i).add(i);
-                        res1[i] = res1[u]+1;
-                    }
-                    if (colors[i] != 1){
-                        q.add(i);
-                    }
+            u = q.poll();
+            if (u == to) {
+                break;
+            }
+
+            for (int i: nodes.get(u)) {
+                if (res[i] == 0){
+                    res[i] = u;
+                    res1[i] = res1[u]+1;
+                    q.add(i);
                 }
             }
         }
-
-
-
     }
 
     private static class FastScanner {
@@ -64,16 +59,6 @@ public class Problem4853 {
             return Integer.parseInt(next());
         }
     }
-    public static class Node{
-        LinkedList<Integer> childrens;
-
-        Node(){
-            childrens = new LinkedList<>();
-        }
-        void add(Integer a){
-            childrens.add(a);
-        }
-    }
 
     public static void main(final String[] arg) {
         final FastScanner in = new FastScanner(System.in);
@@ -84,36 +69,37 @@ public class Problem4853 {
         int to = in.nextInt();
         Integer a;
         Integer b;
-        nodes = new Node[n+1];
+        nodes = new ArrayList<>();
         colors = new int[n+1];
         res1 = new int[n+1];
-        res = new ArrayList<>(n+1);
-        for (int i=0; i < n+1; i++){
-            res.add(new LinkedList<>());
+        res = new int[n+1];
+        for (int i=0; i <= n; i++){
+            nodes.add(new ArrayList<>());
         }
         Arrays.fill(res1, 10000000);
         for (int i = 0; i < m; i++){
             a = in.nextInt();
             b = in.nextInt();
-            if (nodes[a] == null){
-                nodes[a] = new Node();
-            }
-            nodes[a].add(b);
-            if (nodes[b] == null){
-                nodes[b] = new Node();
-            }
-            nodes[b].add(a);
+            nodes.get(a).add(b);
+            nodes.get(b).add(a);
         }
 
-        bfs(from);
-        LinkedList<Integer> st = res.get(to);
+        bfs(from, to);
         if (res1[to] == 10000000 ||res1[to] == 0){
             out.print(-1);
         }
         else{
-            out.println(st.size()-1);
-            for (int i = 0; i < st.size()-1; i++){
-                out.print(st.get(i)+" ");
+           // out.println(Arrays.toString(res));
+            out.println(res1[to]);
+            int curr = res[to];
+            Stack<Integer> stack = new Stack<>();
+            stack.push(res[to]);
+            while (curr != from) {
+                stack.push(res[curr]);
+                curr = res[curr];
+            }
+            while (!stack.empty()) {
+                out.print(stack.pop() + " ");
             }
             out.print(to);
 
