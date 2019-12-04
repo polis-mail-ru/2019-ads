@@ -24,7 +24,7 @@ class HashTableBaseTest {
         assertNull(table.get("some key"));
         assertEquals(0, table.size());
     }
-
+https://github.com/polis-mail-ru/2019-ads.git
 
     @Test
     void put() {
