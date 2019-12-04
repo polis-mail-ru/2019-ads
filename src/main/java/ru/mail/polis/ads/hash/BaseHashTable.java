@@ -41,7 +41,6 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
         int hash = hash(key);
-        System.out.println(hash);
         Entry<Key, Value> entry = buckets[hash];
 
         if (entry == null) {
@@ -59,7 +58,6 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
         }
 
         if (size > capacity * LOAD_FACTOR) {
-            System.out.println("EXPANDED");
             expandBuckets();
         }
     }
