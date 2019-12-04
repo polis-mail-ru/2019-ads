@@ -130,9 +130,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (!containsKey(key)) return null;
         if (!isRed(root.left) && !isRed(root.right))
             root.color = RED;
+        Value deleted = get(key);
         root = remove(root, key);
         if (!isEmpty()) root.color = BLACK;
-        return root.value;
+        return deleted;
     }
 
     private Node remove(Node h, Key key) {
@@ -149,7 +150,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 h = rotateRight(h);
                 h.right = remove(h.right, key);
             }
-            if (key.compareTo(h.key) == 0 && (h.right == null))
+            if (key.compareTo(h.key) == 0 && h.right == null)
                 return null;
             if (h.right != null && !isRed(h.right) && !isRed(h.right.left))
                 h = moveRedRight(h);
