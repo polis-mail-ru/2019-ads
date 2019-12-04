@@ -34,12 +34,12 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        for (int i = 0; i < prime[indexPrime]; ++i) {
-            if (array[i] != null) {
-                for (Pair pair : array[i]) {
-                    if (pair.key.equals(key))
-                        return pair.value;
-                }
+        final int index = (key.hashCode() & 0x7fffffff) % prime[indexPrime];
+        if (array[index] == null)
+            return null;
+        for (Pair pair : array[index]) {
+            if (pair.key.equals(key)) {
+                return pair.value;
             }
         }
 
@@ -93,15 +93,15 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        for (int i = 0; i < prime[indexPrime]; ++i) {
-            if (array[i] != null) {
-                for (Pair pair : array[i]) {
-                    if (pair.key == key) {
-                        array[i].remove(pair);
-                        size--;
-                        return pair.value;
-                    }
-                }
+        final int index = (key.hashCode() & 0x7fffffff) % prime[indexPrime];
+        if (array[index] == null)
+            return null;
+        for (Pair pair : array[index]) {
+            if (pair.key.equals(key)) {
+                Value tmp = pair.value;
+                array[index].remove(pair);
+                --size;
+                return tmp;
             }
         }
 
