@@ -36,8 +36,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         public boolean equals(Object o) {
             if (o == this) {
                 return true;
-            }
-            else if (o != null && o.getClass() == Node.class) {
+            } else if (o != null && o.getClass() == Node.class) {
                 return Objects.equals(this.key, ((Node) o).key) &&
                         Objects.equals(this.value, ((Node) o).value);
             }

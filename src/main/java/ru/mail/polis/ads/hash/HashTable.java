@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public interface HashTable<Key, Value> {
     @Nullable Value get(@NotNull Key key);
-    
+
     default boolean containsKey(@NotNull Key key) {
         return get(key) != null;
     }
@@ -18,6 +18,6 @@ public interface HashTable<Key, Value> {
     @Nullable Value remove(@NotNull Key key);
 
     int size();
-    
+
     boolean isEmpty();
 }
