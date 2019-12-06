@@ -5,6 +5,21 @@ import org.jetbrains.annotations.Nullable;
 
 public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
+    private class Node {
+        Key key;
+        Value value;
+        Node left;
+        Node right;
+        int height;
+        boolean color;
+
+        Node(@NotNull Key key, @NotNull Value value, int height, boolean color) {
+            this.key = key;
+            this.value = value;
+            this.height = height;
+            this.color = color;
+        }
+    }
 
     static final boolean RED = true;
     static final boolean BLACK = false;
@@ -50,6 +65,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             node.value = value;
         }
         node = fixUp(node);
+        fixHeight(node);
         return node;
     }
 
@@ -91,42 +107,42 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        Node removing = remove(root, key);
-        return removing == null ? null : removing.value;
+        if (!containsKey(key) || root == null) {
+            return null;
+        }
+        Value value = get(key);
+        if (!isRed(root.left) && !isRed(root.right)) {
+            root.color = RED;
+        }
+        root = remove(root, key);
+        return value;
     }
 
     private Node remove(Node node, Key key) {
-        if (node == null) {
-            return null;
-        }
         int comparing = key.compareTo(node.key);
         if (comparing < 0) {
-            if (node.left != null) {
-                if (!isRed(node.left) && !isRed(node.left.left)) {
-                    node = moveRedLeft(node);
-                }
-                node.left = remove(node.left, key);
+            if (!isRed(node.left) && !isRed(node.left.left)) {
+                node = moveRedLeft(node);
             }
-        } else if (comparing > 0) {
-            if (node.right != null) {
-                if (isRed(node.left)) {
-                    node = rotateRight(node);
-                }
-                if (!isRed(node.right.left) && !isRed(node.right.left)) {
-                    node = moveRedRight(node);
-                }
-                node.right = remove(node.right, key);
-            }
+            node.left = remove(node.left, key);
         } else {
             if (isRed(node.left)) {
                 node = rotateRight(node);
             }
-            if (node.right == null) {
+            if (node.right == null && comparing == 0) {
                 return null;
             }
-            node.key = min(node.right).key;
-            node.value = get(node.right, node.key);
-            node.right = deleteMin(node.right);
+            if (!isRed(node.right) && !isRed(node.right.left)) {
+                node = moveRedRight(node);
+            }
+            if (key.compareTo(node.key) == 0) {
+                Node min = min(node.right);
+                node.key = min.key;
+                node.value = min.value;
+                node.right = deleteMin(node.right);
+            } else {
+                node.right = remove(node.right, key);
+            }
         }
         return fixUp(node);
     }
@@ -176,46 +192,56 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         if (node.right == null) {
             return node;
         }
-        return max(node);
+        return max(node.right);
     }
 
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
-        return floor(root, key);
+        return floor(root, key, null);
     }
 
-    private Key floor(Node node, Key key) {
-        if (node == null) {
-            return null;
+    private Key floor(Node x, Key key, Key max) {
+        if (x == null) {
+            return max;
         }
-        if (key.compareTo(node.key) < 0) {
-            return floor(node.left, key);
+        int comp = key.compareTo(x.key);
+        if (comp < 0) {
+            max = floor(x.left, key, max);
+        } else if (comp > 0) {
+            if (max == null || max.compareTo(x.key) < 0) {
+                max = x.key;
+            }
+            max = floor(x.right, key, max);
+        } else {
+            max = x.key;
         }
-        if (key.compareTo(node.right.key) > 0) {
-            return floor(node.right, key);
-        }
-        return node.key;
+        return max;
     }
+
 
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
-        return ceil(root, key);
+        return ceil(root, key, null);
     }
 
-    private Key ceil(Node node, Key key) {
+    private Key ceil(Node node, Key key, Key min) {
         if (node == null) {
-            return null;
+            return min;
         }
-        int comparing = key.compareTo(node.key);
-        if (comparing > 0) {
-            return ceil(node.right, key);
+        int comp = key.compareTo(node.key);
+        if (comp > 0) {
+            min = ceil(node.right, key, min);
+        } else if (comp < 0) {
+            if (min == null || min.compareTo(node.key) > 0) {
+                min = node.key;
+            }
+            min = ceil(node.left, key, min);
+        } else {
+            min = node.key;
         }
-        if (comparing < 0) {
-            return ceil(node.left, key);
-        }
-        return node.key;
+        return min;
     }
 
     @Override
@@ -244,6 +270,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         right.left = node;
         right.color = node.color;
         node.color = RED;
+        fixHeight(node);
         return right;
     }
 
@@ -253,6 +280,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         left.right = node;
         left.color = node.color;
         node.color = RED;
+        fixHeight(node);
         return left;
     }
 
@@ -276,6 +304,10 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
         return node;
     }
 
+    private void fixHeight(Node node) {
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+    }
+
     private Node moveRedLeft(Node node) {
         flipColors(node);
         if (isRed(node.right.left)) {
@@ -297,21 +329,5 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private boolean isRed(Node x) {
         return x != null && x.color == RED;
-    }
-
-    private class Node {
-        Key key;
-        Value value;
-        Node left;
-        Node right;
-        int height;
-        boolean color;
-
-        Node(@NotNull Key key, @NotNull Value value, int height, boolean color) {
-            this.key = key;
-            this.value = value;
-            this.height = height;
-            this.color = color;
-        }
     }
 }
