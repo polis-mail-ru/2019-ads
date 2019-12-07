@@ -131,7 +131,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     public Value remove(@NotNull Key key) {
         Value value = get(key);
         delete(root, key);
-        size--;
+        size = size == 0 ? 0 : size-1;
         return value;
     }
 
@@ -140,9 +140,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
         int comparatorResult = key.compareTo(element.key);
+
         if (comparatorResult < 0) {
 
             if (element.left != null) {
+
                 if (!isRed(element.left) && !isRed(element.left.left)) {
                     element = moveRedLeft(element);
                 }
@@ -152,7 +154,6 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
         }
         else if (comparatorResult > 0) {
-
             if (element.right != null) {
                 if (isRed(element.left)) {
                     element = rightRotate(element);
@@ -224,7 +225,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     }
 
     private Node deleteMin(Node element) {
-        if (element.left == null) {
+        if (element == null || element.left == null) {
             return null;
         }
 
