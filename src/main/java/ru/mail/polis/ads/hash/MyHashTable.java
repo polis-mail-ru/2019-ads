@@ -38,10 +38,10 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         return key.hashCode() % currentCapacity;
     }
 
-    private int getIndex(int hashCode) {
+    private int getIndex(int hashCode, Key key) {
         if (!isEmpty()) {
             for (int i = 0; i < baskets[hashCode].size(); i++) {
-                if (hashFunction(baskets[hashCode].get(i).key) == hashCode) {
+                if (this.baskets[hashCode].get(i).key.equals(key)) {
                     return i;
                 }
             }
@@ -77,7 +77,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
 
         int hashedIndex = hashFunction(key);
 
-        int listIndex = getIndex(hashedIndex);
+        int listIndex = getIndex(hashedIndex, key);
 
         return listIndex == NOT_FOUND
                 ? null
@@ -88,7 +88,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     public boolean containsKey(@NotNull Key key) {
         int hashedIndex = hashFunction(key);
 
-        int listIndex = getIndex(hashedIndex);
+        int listIndex = getIndex(hashedIndex, key);
 
         return listIndex != NOT_FOUND;
     }
@@ -97,7 +97,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     public void put(@NotNull Key key, @NotNull Value value) {
         int hashedIndex = hashFunction(key);
 
-        int listIndex = getIndex(hashedIndex);
+        int listIndex = getIndex(hashedIndex, key);
 
         if ((double) amountOfItems / currentCapacity >= LOAD_FACTOR) {
             increaseCapacity();
@@ -118,7 +118,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     public Value remove(@NotNull Key key) {
         int hashedIndex = hashFunction(key);
 
-        int listIndex = getIndex(hashedIndex);
+        int listIndex = getIndex(hashedIndex, key);
 
         if (listIndex != NOT_FOUND) {
             Value value = baskets[hashedIndex].get(listIndex).value;
