@@ -1,7 +1,7 @@
 package ru.mail.polis.ads.part9.makaryb;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 /**
@@ -9,62 +9,65 @@ import java.util.StringTokenizer;
  * 08.12.19
  * gr. Java-10, Технополис
  * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
- * e-olymp 100%: https://www.e-olymp.com/ru/submissions/6304171
+ * e-olymp 100%: https://www.e-olymp.com/ru/submissions/6304796
  */
-public final class FirstTask {
-    private static int[] prev;
-    private static int checker = 0;
+public final class ThirdTask {
 
-    private static ArrayList<ArrayList<Integer>> graph;
-    private static ArrayList<Integer> head = new ArrayList<>();
+    private ThirdTask() {}
 
-    private FirstTask() {}
+    private static class E {
+        int x;
+        int y;
+        int w;
+
+        E(int x, int y, int w) {
+            this.x = x;
+            this.y = y;
+            this.w = w;
+        }
+    }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
         int m = in.nextInt();
 
-        graph = new ArrayList<>();
-        prev = new int[n +1];
+        int[] d = new int[n+1];
+        Arrays.fill(d, 30000);
+        d[1] = 0;
 
-        for (int i = 0; i <= n; i++) {
-            graph.add(new ArrayList<>());
-        }
+        E[] edge = new E[m];
 
         for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            graph.get(a).add(b);
+            int startPoint = in.nextInt();
+            int endPoint = in.nextInt();
+            int weight = in.nextInt();
+            // наше ребро
+            edge[i] = new E(startPoint, endPoint, weight);
         }
 
-        for(int i = 1; i <= n; i++) {
-            if (prev[i] == 0) dfs(i);
-        }
+        FordBellman(n, m, edge, d);
 
-        if (checker == 1) {
-            out.println("-1");
-        } else {
-            for(int i = head.size() - 1; i >= 0; i--) {
-                out.print(head.get(i) + " ");
-            }
-            out.print("\n");
+        for (int i = 1; i < n + 1; i++) {
+            out.print(d[i] + " ");
         }
     }
 
-    private static void dfs(int v) {
-        prev[v] = 1;
-        for(int i = 0; i < graph.get(v).size(); i++) {
-            int to = graph.get(v).get(i);
-            if (prev[to] == 1) {
-                checker = 1;
-            }
-            if (prev[to] == 0) {
-                dfs(to);
+    private static void FordBellman(final int n, final int m, E[] edge, int[] d) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (d[edge[j].x] < 30000 && d[edge[j].y] >
+                        d[edge[j].x] + edge[j].w) {
+
+                    d[edge[j].y] = d[edge[j].x] + edge[j].w;
+                }
+
+                if (d[edge[j].x] < 30000) {
+                    d[edge[j].y] =
+                            Math.min(d[edge[j].y],
+                                    d[edge[j].x] + edge[j].w);
+                }
             }
         }
-
-        prev[v] = 2;
-        head.add(v);
     }
 
     private static class FastScanner {
