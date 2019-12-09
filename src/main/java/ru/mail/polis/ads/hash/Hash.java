@@ -52,14 +52,7 @@ public class Hash<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public boolean containsKey(@NotNull Key key) {
-        int hash = hash(key);
-        int index = hash % values.length;
-        Node<Key, Value> node = values[index];
-        while (node != null) {
-            if (key.equals(node.key)) return true;
-            node = node.next;
-        }
-        return false;
+        return get(key) != null;
     }
 
     @Override
@@ -75,8 +68,13 @@ public class Hash<Key, Value> implements HashTable<Key, Value> {
                     temp.value = node.value;
                     return;
                 }
+                if (temp.next == null) {
+                    temp.next = node;
+                    break;
+                }
                 temp = temp.next;
             }
+
         } else {
             values[index] = node;
             sizeArr++;
