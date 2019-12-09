@@ -17,6 +17,8 @@ public class ThirdTask {
         }
     }
 
+    private static final int MAX_WEIGHT = 30_000;
+
     private static void solve() {
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
@@ -24,7 +26,7 @@ public class ThirdTask {
         ;
 
         int[] distance = new int[n + 1];
-        Arrays.fill(distance, 30000);
+        Arrays.fill(distance, MAX_WEIGHT);
         distance[1] = 0;
 
         Link[] links = new Link[m];
@@ -38,11 +40,11 @@ public class ThirdTask {
         while (true) {
             boolean isChanged = false;
             for (int j = 0; j < m; j++) {
-                if (distance[links[j].from] < 30000 && distance[links[j].to] > distance[links[j].from] + links[j].weight) {
+                if (distance[links[j].from] < MAX_WEIGHT && distance[links[j].to] > distance[links[j].from] + links[j].weight) {
                     distance[links[j].to] = distance[links[j].from] + links[j].weight;
                     isChanged = true;
                 }
-                if (distance[links[j].from] < 30000) {
+                if (distance[links[j].from] < MAX_WEIGHT) {
                     distance[links[j].to] = Math.min(distance[links[j].to], distance[links[j].from] + links[j].weight);
                 }
             }

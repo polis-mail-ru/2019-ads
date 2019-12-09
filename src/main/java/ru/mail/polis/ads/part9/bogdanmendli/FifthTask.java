@@ -4,47 +4,47 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 public class FifthTask {
 
     static class Node {
-        private int color;
         private int id;
         private List<Node> links;
 
-        Node(int color, int id) {
-            this.color = color;
+        Node(int id) {
             this.id = id;
-            this.links = new ArrayList<>();
+            this.links = new LinkedList<>();
         }
 
     }
 
-    private static int[] distance;
-    private static int[] parents;
-    private static Queue<Node> links;
-
     private static void solve() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String[] entered = br.readLine().split(" ");
-        links = new ArrayDeque<>();
+        Queue<Integer> queue = new ArrayDeque<>();
         int n = Integer.parseInt(entered[0]);
         int m = Integer.parseInt(entered[1]);
         entered = br.readLine().split(" ");
         int fromNode = Integer.parseInt(entered[0]);
         int toNode = Integer.parseInt(entered[1]);
+
         Node[] nodes = new Node[n + 1];
-        distance = new int[n + 1];
-        parents = new int[n + 1];
+        int[] distance = new int[n + 1];
+        int[] parents = new int[n + 1];
+
         Arrays.fill(distance, Integer.MAX_VALUE);
+        Arrays.fill(parents, -1);
+
         distance[fromNode] = 0;
+        parents[fromNode] = fromNode;
+
         for (int i = 1; i <= n; i++) {
-            nodes[i] = new Node(0, i);
+            nodes[i] = new Node(i);
         }
 
         for (int i = 0; i < m; i++) {
@@ -56,15 +56,28 @@ public class FifthTask {
             nodes[to].links.add(nodes[from]);
         }
 
-        deykstra(nodes[fromNode]);
-        while (!links.isEmpty()) {
-            deykstra(links.remove());
+        queue.add(fromNode);
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            if (node == toNode) {
+                break;
+            }
+
+            for (Node subNode : nodes[node].links) {
+                int idSubNode = subNode.id;
+                if (parents[idSubNode] == -1) {
+                    parents[idSubNode] = node;
+                    distance[idSubNode] = distance[node] + 1;
+                    queue.add(idSubNode);
+                }
+            }
         }
 
         if (distance[toNode] == Integer.MAX_VALUE) {
             System.out.println(-1);
             System.exit(0);
         }
+
         System.out.println(distance[toNode]);
         Deque<Integer> path = new ArrayDeque<>();
         path.push(toNode);
@@ -76,21 +89,6 @@ public class FifthTask {
         while (!path.isEmpty()) {
             System.out.print(path.pop() + " ");
         }
-    }
-
-    private static void deykstra(Node from) {
-        from.color = 1;
-        for (int i = 0; i < from.links.size(); i++) {
-            Node to = from.links.get(i);
-            if (distance[to.id] > distance[from.id] + 1) {
-                distance[to.id] = distance[from.id] + 1;
-                parents[to.id] = from.id;
-            }
-            if (to.color == 0) {
-                links.add(to);
-            }
-        }
-        from.color = 2;
     }
 
     public static void main(String[] args) {
