@@ -2,8 +2,7 @@ package ru.mail.polis.ads.bst;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Basic binary search tree invariants.
@@ -61,7 +60,7 @@ class BstBaseTest {
     }
 
     @Test
-    void remove() {
+    void remove2() {
         Bst<String, String> bst = newBst();
         bst.put("foo", "bar");
         bst.remove("foo");
