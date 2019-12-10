@@ -10,13 +10,13 @@ import java.util.List;
 
 public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
 
-    private static class KeyValuePair<Key1, Value1> {
+    private class KeyValuePair {
 
         private final int hash;
-        private final Key1 key;
-        Value1 value;
+        private final Key key;
+        Value value;
 
-        private KeyValuePair(int hash, Key1 key, Value1 value) {
+        private KeyValuePair(int hash, Key key, Value value) {
             this.hash = hash;
             this.key = key;
             this.value = value;
@@ -27,7 +27,7 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     private static final float LOAD_FACTOR = 0.75f;
     private static final int SCALE_FACTOR = 2;
 
-    private List<KeyValuePair<Key, Value>>[] buckets;
+    private List<KeyValuePair>[] buckets;
     private int size;
     private int power;
     private int threshold;
@@ -47,8 +47,8 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         if (buckets[index] == null || buckets[index].isEmpty()) {
             return null;
         }
-        KeyValuePair<Key, Value> pair = null;
-        for (KeyValuePair<Key, Value> p : buckets[index]) {
+        KeyValuePair pair = null;
+        for (KeyValuePair p : buckets[index]) {
             if (hash == p.hash && p.key.equals(key)) {
                 pair = p;
                 break;
@@ -74,16 +74,16 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         if (buckets[index] == null) {
             buckets[index] = new ArrayList<>();
         }
-        List<KeyValuePair<Key, Value>> bucket = buckets[index];
-        KeyValuePair<Key, Value> pair = null;
-        for (KeyValuePair<Key, Value> p : bucket) {
+        List<KeyValuePair> bucket = buckets[index];
+        KeyValuePair pair = null;
+        for (KeyValuePair p : bucket) {
             if (hash == p.hash && p.key.equals(key)) {
                 pair = p;
                 break;
             }
         }
         if (pair == null) {
-            buckets[index].add(new KeyValuePair<>(hash, key, value));
+            buckets[index].add(new KeyValuePair(hash, key, value));
             size++;
         } else {
             pair.value = value;
@@ -93,12 +93,12 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
     private void resize() {
         int newCapacity = buckets.length * SCALE_FACTOR;
         power++;
-        List<KeyValuePair<Key, Value>>[] buckets = new List[newCapacity];
-        for (List<KeyValuePair<Key, Value>> bucket : this.buckets) {
+        List<KeyValuePair>[] buckets = new List[newCapacity];
+        for (List<KeyValuePair> bucket : this.buckets) {
             if (bucket == null) {
                 continue;
             }
-            for (KeyValuePair<Key, Value> pair : bucket) {
+            for (KeyValuePair pair : bucket) {
                 int index = getIndex(pair.hash);
                 if (buckets[index] == null) {
                     buckets[index] = new LinkedList<>();
@@ -118,10 +118,10 @@ public class HashTableImpl<Key, Value> implements HashTable<Key, Value> {
         if (buckets[index] == null || buckets[index].isEmpty()) {
             return null;
         }
-        KeyValuePair<Key, Value> pair = null;
-        Iterator<KeyValuePair<Key, Value>> iterator = buckets[index].iterator();
+        KeyValuePair pair = null;
+        Iterator<KeyValuePair> iterator = buckets[index].iterator();
         while (iterator.hasNext()) {
-            KeyValuePair<Key, Value> p = iterator.next();
+            KeyValuePair p = iterator.next();
             if (hash == p.key.hashCode() && p.key.equals(key)) {
                 pair = p;
                 iterator.remove();
