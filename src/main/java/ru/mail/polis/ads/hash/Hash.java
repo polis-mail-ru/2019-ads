@@ -63,7 +63,7 @@ public class Hash<Key, Value> implements HashTable<Key, Value> {
 
         if (values[index] != null) {
             Node<Key, Value> temp = values[index];
-            while (temp.next != null) {
+            while (temp != null) {
                 if (temp.key.equals(node.key)) {
                     temp.value = node.value;
                     return;
