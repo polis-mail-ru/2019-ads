@@ -3,164 +3,51 @@ package ru.mail.polis.ads.bst;
 /**
  * AVL implementation of binary search tree.
  */
-public class AvlBst<Key extends Comparable<Key>, Value>
+public class RedBlackBst<Key extends Comparable<Key>, Value>
         implements Bst<Key, Value> {
 
-    private Node root;
+    private static final boolean BLACK = false;
+    private static final boolean RED = true;
+
+    private Node node;
 
     private class Node {
         Key key;
         Value value;
         Node left;
         Node right;
+        boolean color;
         int height;
-        public Node(Key key, Value value, int height){
+
+        Node(Key key, Value value, boolean color, int height) {
             this.key = key;
             this.value = value;
+            this.color = color;
             this.height = height;
         }
     }
 
     @Override
     public Value get(Key key) {
-        return get(root, key);
-    }
-
-    private Value get(Node node, Key key) {
-        if (node == null) {
-            return null;
-        }
-        if (key.compareTo(node.key) < 0) {
-            return get(node.left, key);
-        } else if (key.compareTo(node.key) > 0) {
-            return get(node.right, key);
-        }
-        return node.value;
+        return get(node, key);
     }
 
     @Override
     public void put(Key key, Value value) {
-        root = put(root, key, value);
-    }
-
-    private Node put(Node node, Key key, Value value) {
-        if (node == null) {
-            return new Node(key, value, 1);
-        }
-        if (key.compareTo(node.key) < 0) {
-            node.left = put(node.left, key, value);
-        }
-        else if (key.compareTo(node.key) > 0) {
-            node.right = put(node.right, key, value);
-        }
-        else {
-            node.value = value;
-        }
-
-        fixHeight(node);
-        node = balance(node);
-        return node;
-    }
-    private int factor(Node node) {
-        return height(node.left) - height(node.right);
-    }
-
-    private Node balance(Node node) {
-        if (factor(node) == 2) {
-            if (factor(node.left) < 0) {
-                node.left = rotateLeft(node.left);
-            }
-            return rotateRight(node);
-        }
-        if (factor(node) == -2) {
-            if (factor(node.right) > 0) {
-                node.right = rotateRight(node.right);
-            }
-            return rotateLeft(node);
-        }
-        return node;
-    }
-
-    private Node rotateRight(Node node) {
-        Node gotoMin = node.left;
-        node.left = gotoMin.right;
-        gotoMin.right = node;
-        fixHeight(node);
-        fixHeight(gotoMin);
-        return gotoMin;
-    }
-
-    private Node rotateLeft(Node node) {
-        Node right = node.right;
-        node.right = right.left;
-        right.left = node;
-        fixHeight(node);
-        fixHeight(right);
-        return right;
+        node = put(node, key, value);
+        node.color = BLACK;
     }
 
     @Override
     public Value remove(Key key) {
-        return remove(root, key).value;
-    }
-
-    private Node remove(Node node, Key key) {
-        if (node == null) {
-            return null;
-        }
-        if (key.compareTo(node.key) < 0) {
-            node.left = remove(node.left, key);
-        }
-        else if (key.compareTo(node.key) > 0) {
-            node.right = remove(node.right, key);
-        }
-        else node = innerDelete(node);
-        fixHeight(node);
-        balance(node);
-        return node;
-    }
-
-    private Node innerDelete(Node node) {
-        if (node.right == null) {
-            return node.left;
-        }
-        if (node.left == null) {
-            return node.right;
-        }
-        Node nodeHelp = node;
-        node = minNode(nodeHelp.right);
-        node.right = deleteMin(nodeHelp.right);
-        node.left = nodeHelp.left;
-        return node;
-    }
-
-    private Node minNode(Node node) {
-        if (node.left == null) {
-            return node;
-        }
-        return minNode(node.left);
-    }
-
-    private Node deleteMin(Node node) {
-        if (node.left == null) {
-            return node.right;
-        }
-        node.left = deleteMin(node.left);
-        return node;
+        Value remove = get(node, key);
+        node = remove(node, key);
+        return remove;
     }
 
     @Override
     public Key min() {
-        return min(root);
-    }
-    private Key min(Node node) {
-        if (node == null) {
-            return null;
-        }
-        if (node.left == null) {
-            return node.key;
-        }
-        return min(node.left);
+        return min(node);
     }
 
     @Override
@@ -170,19 +57,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key max() {
-        return max(root);
+        return max(node);
     }
-
-    private Key max(Node node) {
-        if (node == null) {
-            return null;
-        }
-        if (node.right == null) {
-            return node.key;
-        }
-        return max(node.right);
-    }
-
 
     @Override
     public Value maxValue() {
@@ -191,70 +67,234 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     @Override
     public Key floor(Key key) {
-        if (root == null){
-            return null;
-        }
-        return floor(root, key);
-    }
-    private Key floor(Node node, Key key){
-        if (node == null){
-            return null;
-        }
-        if (key.compareTo(node.key) == 0) {
-            return node.key;
-        }
-        if (key.compareTo(node.key) < 0) {
-            return floor(node.left, key);
-        }
-        Key result = floor(node.right, key);
-        return (result == null) ? node.key : result;
-
+        return floor(node, key, null);
     }
 
     @Override
     public Key ceil(Key key) {
-        if (root == null){
-            return null;
-        }
-        return ceil(root, key);
-    }
-
-    private Key ceil(Node node, Key key){
-        if (node == null){
-            return null;
-        }
-        if (key.compareTo(node.key) == 0) {
-            return node.key;
-        }
-        if (key.compareTo(node.key) > 0) {
-            return ceil(node.right, key);
-        }
-        Key result = ceil(node.left, key);
-        return (result == null) ? node.key : result;
+        return ceil(node, key, null);
     }
 
     @Override
     public int size() {
-        return size(root);
-    }
-
-    private int size(Node node) {
-        if (node == null) {
-            return 0;
-        }
-        return size(node.left) + size(node.right) + 1;
+        return size(node);
     }
 
     @Override
     public int height() {
-        return height(root);
+        return height(node);
+    }
+
+    private Value get(Node node, Key key) {
+        if (node != null) {
+            int compare = key.compareTo(node.key);
+            if (compare < 0) {
+                return get(node.left, key);
+            } else if (compare > 0) {
+                return get(node.right, key);
+            } else {
+                return node.value;
+            }
+        }
+        return null;
+    }
+
+    private Node put(Node node, Key key, Value value) {
+        if (node != null) {
+            int compare = key.compareTo(node.key);
+            if (compare < 0) {
+                node.left = put(node.left, key, value);
+            } else if (compare > 0) {
+                node.right = put(node.right, key, value);
+            } else {
+                node.value = value;
+            }
+            setNewHeight(node);
+            return fixedNode(node);
+        }
+        return new Node(key, value, RED, 1);
+    }
+
+    private Node moveRedLeft(Node node) {
+        invertColor(node);
+        if (node.right != null && isRed(node.right.left)) {
+            node.right = rotateNodeRight(node.right);
+            node = rotateNodeLeft(node);
+            invertColor(node);
+        }
+        return node;
+    }
+
+    private Node deleteMinNode(Node node) {
+        if (node.left != null) {
+            if (!isRed(node.left) && !isRed(node.left.left)) {
+                node = moveRedLeft(node);
+            }
+            node.left = deleteMinNode(node.left);
+            return fixedNode(node);
+        }
+        return null;
+    }
+
+    private Node moveRedRight(Node node) {
+        invertColor(node);
+        if (node.left != null && isRed(node.left.left)) {
+            node = rotateNodeRight(node);
+            invertColor(node);
+        }
+        return node;
+    }
+
+    private Node remove(Node node, Key key) {
+        if (node != null) {
+            int compare = key.compareTo(node.key);
+            if (compare < 0) {
+                if (node.left != null) {
+                    if (!isRed(node.left) && !isRed(node.left.left)) {
+                        node = moveRedLeft(node);
+                    }
+                    node.left = remove(node.left, key);
+                }
+            } else if (compare > 0) {
+                if (node.right != null) {
+                    if (isRed(node.left)) {
+                        node = rotateNodeRight(node);
+                    }
+                    if (!isRed(node.right) && !isRed(node.right.left)) {
+                        node = moveRedRight(node);
+                    }
+                    node.right = remove(node.right, key);
+                }
+            } else {
+                Node remove = node;
+                if (isRed(node.left)) {
+                    node = rotateNodeRight(node);
+                    remove = node.right;
+                }
+                if (remove.right == null) {
+                    if (remove.left == null) {
+                        return null;
+                    }
+                    return remove.left;
+                }
+                remove.key = min(remove.right);
+                remove.value = get(remove.right, remove.key);
+                remove.right = deleteMinNode(remove.right);
+            }
+            return fixedNode(node);
+        }
+        return null;
+    }
+
+    private Key min(Node node) {
+        if (node != null) {
+            if (node.left == null) {
+                return node.key;
+            }
+            return min(node.left);
+        }
+        return null;
+    }
+
+    private Key max(Node node) {
+        if (node != null) {
+            if (node.right != null) {
+                return max(node.right);
+            }
+            return node.key;
+        }
+        return null;
+    }
+
+    private Key floor(Node node, Key key, Key max) {
+        if (node != null) {
+            int compare = key.compareTo(node.key);
+            if (compare < 0) {
+                max = floor(node.left, key, max);
+            } else if (compare > 0) {
+                if (max == null || max.compareTo(node.key) < 0) {
+                    max = node.key;
+                }
+                max = floor(node.right, key, max);
+            } else {
+                max = node.key;
+            }
+        }
+        return max;
+    }
+
+    private Key ceil(Node node, Key key, Key min) {
+        if (node != null) {
+            int compare = key.compareTo(node.key);
+            if (compare > 0) {
+                min = ceil(node.right, key, min);
+            } else if (compare < 0) {
+                if (min == null || min.compareTo(node.key) > 0) {
+                    min = node.key;
+                }
+                min = ceil(node.left, key, min);
+            } else {
+                min = node.key;
+            }
+        }
+        return min;
+    }
+
+    private int size(Node node) {
+        return node != null ? size(node.left) + size(node.right) + 1 : 0;
     }
 
     private int height(Node node) {
-        return node == null ? 0 : node.height;
+        return node != null ? node.height : 0;
     }
 
-    private void fixHeight(Node node) {
-        node.height = 1 + Math.max(height(node.left), height(node.right));
+    private Node fixedNode(Node node) {
+        if (isRed(node.right) && !isRed(node.left)) {
+            node = rotateNodeLeft(node);
+        }
+        if (isRed(node.left) && isRed(node.left.left)) {
+            node = rotateNodeRight(node);
+        }
+        if (isRed(node.left) && isRed(node.right)) {
+            invertColor(node);
+        }
+        return node;
+    }
+
+    private void setNewHeight(Node node) {
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+    }
+
+    private boolean isRed(Node node) {
+        return node != null && node.color == RED;
+    }
+
+    private Node rotateNodeRight(Node node) {
+        Node left = node.left;
+        node.left = left.right;
+        left.right = node;
+        left.color = node.color;
+        node.color = RED;
+        return left;
+    }
+
+    private Node rotateNodeLeft(Node node) {
+        Node right = node.right;
+        node.right = right.left;
+        right.left = node;
+        right.color = node.color;
+        node.color = RED;
+        return right;
+    }
+
+    private Node invertColor(Node node) {
+        node.color = !node.color;
+        if (node.left != null ) {
+            node.left.color = !node.left.color;
+        }
+        if (node.right != null) {
+            node.right.color = !node.right.color;
+        }
+        return node;
     }
 }
