@@ -28,4 +28,12 @@ public interface Bst<Key extends Comparable<Key>, Value> {
     int size();
 
     int height();
+
+    default boolean containsKey(@NotNull Key key) {
+        return get(key) != null;
+    }
+
+    default boolean isEmpty() {
+        return size() == 0;
+    }
 }
