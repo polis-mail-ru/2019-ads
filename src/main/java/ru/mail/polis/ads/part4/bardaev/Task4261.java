@@ -15,45 +15,62 @@ public class Task4261 {
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
-        int[] arr = new int[n];
+        long[] arr = new long[n];
 
         for (int i = 0; i < n; i++) {
             arr[i] = in.nextInt();
         }
 
-        merge(arr, 0, arr.length);
+        Merge_Sort(arr);
 
         out.println(count);
         out.flush();
     }
 
-    public static void merge(int[] arr, int start, int end) {
-        if (end - start < 2) return;
-        int mid = (start + end) / 2;
+    public static long[] Merge_Sort(long[] arr)
+    {
+        if (arr.length == 1)
+            return arr;
+        int mid_point = arr.length / 2;
 
-        merge(arr, start, mid);
-        merge(arr, mid, end);
-        sort(arr, start, mid, end);
+
+        long[] left = Arrays.copyOfRange(arr, 0, mid_point);
+        long[] right = Arrays.copyOfRange(arr, mid_point, arr.length);
+
+
+
+        arr = Merge(Merge_Sort(left), Merge_Sort(right));
+        return arr;
     }
 
-    public static void sort(int[] arr, int start, int mid, int end) {
-        int[] res = new int[end];
-        int[] left = Arrays.copyOfRange(arr, start, mid);
-        int[] right = Arrays.copyOfRange(arr, mid, end);
+    public static long[] Merge(long[] mass1, long[] mass2)
+    {
 
-        int leftPos = 0, rightPos = 0, i = 0;
-
-        while (leftPos < left.length && rightPos < right.length) {
-            if (left[leftPos] < right[rightPos]) {
-                res[i++] = left[leftPos];
-                leftPos++;
-            } else {
-                res[i++] = right[rightPos];
-                rightPos++;
-                count = count + left.length - leftPos;
+        int a = 0, b = 0;
+        long[] merged = new long[mass1.length + mass2.length];
+        for (int i = 0; i < mass1.length + mass2.length; i++)
+        {
+            if (b < mass2.length && a < mass1.length)
+                if (mass1[a] > mass2[b])
+                {
+                    merged[i] = mass2[b++];
+                    count = count + (mass1.length - a);
+                }
+                else //if int go for
+                {
+                    merged[i] = mass1[a++];
+                }
+            else
+            if (b < mass2.length)
+            {
+                merged[i] = mass2[b++];
+            }
+            else
+            {
+                merged[i] = mass1[a++];
             }
         }
-
+        return merged;
     }
 
     private static class FastScanner {
