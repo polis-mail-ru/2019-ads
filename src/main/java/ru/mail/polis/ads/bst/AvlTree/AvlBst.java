@@ -1,6 +1,9 @@
 package ru.mail.polis.ads.bst.AvlTree;
 
-public class AvlBst <Key extends Comparable<Key>, Value>{
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+public class AvlBst <Key extends Comparable<Key>, Value> implements Bst<Key, Value> {
 
     private Node root;
     private int size;
@@ -36,7 +39,9 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return x;
     }
 
-    public Value get(Key key) {
+    @Nullable
+    @Override
+    public Value get(@NotNull Key key) {
         return get(root, key).value;
     }
 
@@ -50,7 +55,8 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return x;
     }
 
-    public void put(Key key, Value value) {root = put(root, key, value);}
+    @Override
+    public void put(@NotNull Key key, @NotNull Value value) {root = put(root, key, value);}
 
     public Node remove(Node x, Key key) {
         if (x == null) return null;
@@ -60,9 +66,11 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return x;
     }
 
-    public Node remove(Key key) {
+    @Nullable
+    @Override
+    public Value remove(@NotNull Key key) {
         size--;
-        return remove(root, key);
+        return remove(root, key).value;
     }
 
     // Key Based Methods
@@ -75,15 +83,21 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return x;
     }
 
+    @Nullable
+    @Override
     public Key min() {
         return min(root).key;
     }
 
+    @Nullable
+    @Override
     public Value minValue() {
         if (root == null) return null;
         return get(min());
     }
 
+    @Nullable
+    @Override
     public Key max() {
         return max(root);
     }
@@ -96,12 +110,16 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return x.key;
     }
 
+    @Nullable
+    @Override
     public Value maxValue() {
         if (root == null) return null;
         return get(max());
     }
 
-    public Key floor(Key key) {
+    @Nullable
+    @Override
+    public Key floor(@NotNull Key key) {
         Node node = root;
         Key max = null;
         if (node == null) return null;
@@ -120,7 +138,9 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
         return max;
     }
 
-    public Key ceil(Key key) {
+    @Nullable
+    @Override
+    public Key ceil(@NotNull Key key) {
         Node node = root;
         Node nodeNext = null;
         Key min = null;
@@ -147,9 +167,13 @@ public class AvlBst <Key extends Comparable<Key>, Value>{
 
     // Utility Methods
 
+    @Override
     public int size() {
         return size;
     }
+
+    @Override
+    public int height() {return root.height;}
 
     public int height(Node x) {
         return x == null ? 0 : x.height;
