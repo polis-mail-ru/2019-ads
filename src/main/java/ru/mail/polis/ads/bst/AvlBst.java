@@ -1,5 +1,8 @@
 package ru.mail.polis.ads.bst;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * AVL implementation of binary search tree.
  */
@@ -231,7 +234,6 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         }
         Key result = ceil(node.left, key);
         return (result == null) ? node.key : result;
-    }
 
     @Override
     public int size() {
