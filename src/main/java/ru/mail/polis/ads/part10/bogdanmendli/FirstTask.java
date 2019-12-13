@@ -52,7 +52,7 @@ public class FirstTask {
     private static int n;
     private static int m;
     private static int timer;
-    private static List<Integer> bridges;
+    private static ArrayList<Integer> bridges;
     private static int[] tin;
     private static int[] fup;
     private static List<List<Integer>> nodes;
@@ -69,9 +69,9 @@ public class FirstTask {
             used = new byte[n + 1];
             Arrays.fill(used, (byte) 0);
 
-            nodes = new ArrayList<>();
+            nodes = new ArrayList<>(n + 1);
             for (int i = 0; i < n + 1; i++) {
-                nodes.add(new ArrayList<>());
+                nodes.add(new ArrayList<>(100));
             }
 
             links = new Link[m + 1];
@@ -81,10 +81,6 @@ public class FirstTask {
 
                 links[i] = new Link(from, to, i);
 
-                if (from == to) {
-                    continue;
-                }
-
                 nodes.get(from).add(to);
                 nodes.get(to).add(from);
             }
@@ -92,7 +88,7 @@ public class FirstTask {
             fup = new int[n + 1];
             tin = new int[n + 1];
 
-            bridges = new ArrayList<>();
+            bridges = new ArrayList<>(100);
             findBridges();
 
             printWriter.println(bridges.size());
@@ -100,6 +96,7 @@ public class FirstTask {
                 System.exit(0);
             }
 
+            bridges.trimToSize();
             bridges.sort(Integer::compare);
             for (int id : bridges) {
                 printWriter.print(id);
@@ -128,7 +125,7 @@ public class FirstTask {
                 } else {
                     dfs(subNodeId, nodeId);
                     fup[nodeId] = Math.min(fup[nodeId], fup[subNodeId]);
-                    if (fup[subNodeId] > tin[nodeId]) {
+                    if (fup[subNodeId] > tin[nodeId] && subNodeId != nodeId) {
                         markBridge(nodeId, subNodeId);
                     }
                 }
