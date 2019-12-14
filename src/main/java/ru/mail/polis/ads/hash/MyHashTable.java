@@ -8,8 +8,8 @@ import java.util.LinkedList;
 public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
 
     private class Node {
-        private Key key;
-        private Value value;
+        Key key;
+        Value value;
         private int hashCode;
 
         public Node(@NotNull Key key, @NotNull Value value) {
@@ -18,27 +18,8 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
             this.hashCode = key.hashCode();
         }
 
-        public Key getKey() {
-            return key;
-        }
-
-        public Value getValue() {
-            return value;
-        }
-
-        public void setValue(Value value) {
-            this.value = value;
-        }
-
-        @Override
-        public int hashCode() {
-            return key.hashCode() % m;
-        }
-
-        public boolean equalsKey(Object o) {
-            if (this == o) return true;
-            if (o == null || key.getClass() != o.getClass()) return false;
-            Key key = (Key) o;
+        public boolean equalsKey(Key key) {
+            if (this.key == key) return true;
             return key.hashCode() == hashCode;
         }
     }
@@ -54,32 +35,13 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        int hashCode = key.hashCode() % m;
-        if (data[hashCode] == null) {
-            return null;
-        }
-        LinkedList<Node> currentList = data[hashCode];
-        for (Node node : currentList) {
-            if (node.equalsKey(key)) {
-                return node.value;
-            }
-        }
-        return null;
+        Node node = getNode(key);
+        return node == null ? null : node.value;
     }
 
     @Override
     public boolean containsKey(@NotNull Key key) {
-        int hashCode = key.hashCode() % m;
-        if (data[hashCode] == null) {
-            return false;
-        }
-        LinkedList<Node> currentList = data[hashCode];
-        for (Node node : currentList) {
-            if (node.equalsKey(key)) {
-                return true;
-            }
-        }
-        return false;
+        return getNode(key) != null;
     }
 
     @Override
@@ -130,6 +92,20 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
             }
         }
         return size;
+    }
+
+    private Node getNode(Key key) {
+        int hashCode = key.hashCode() % m;
+        if (data[hashCode] == null) {
+            return null;
+        }
+        LinkedList<Node> currentList = data[hashCode];
+        for (Node node : currentList) {
+            if (node.equalsKey(key)) {
+                return node;
+            }
+        }
+        return null;
     }
 
     @Override
