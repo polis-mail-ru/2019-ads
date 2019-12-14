@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -15,11 +13,13 @@ public class SecondTask {
 
     private static class Edge {
 
-        private int to;
+        private int first;
+        private int second;
         private int weight;
 
-        public Edge(int to, int weight) {
-            this.to = to;
+        public Edge(int first, int second, int weight) {
+            this.first = first;
+            this.second = second;
             this.weight = weight;
         }
     }
@@ -48,63 +48,56 @@ public class SecondTask {
         }
     }
 
-    private static List<Integer> frame;
-    private static long minSum;
-    private static List<List<Edge>> edges;
-    private static Queue<Edge> queue;
+    private static int[] parent;
 
     private static void solve() {
         FastScanner fastScanner = new FastScanner(System.in);
         int n = fastScanner.nextInt();
         int m = fastScanner.nextInt();
+        int countSet = n;
 
-        edges = new ArrayList<>(n + 1);
-        for (int i = 0; i <= n; i++) {
-            edges.add(new ArrayList<>(50));
+        parent = new int[n + 1];
+        for (int i = 1; i <= n; i++) {
+            parent[i] = i;
         }
+
+        Queue<Edge> queue = new PriorityQueue<>(n, Comparator.comparing(edge -> edge.weight));
 
         for (int i = 0; i < m; i++) {
             int firstId = fastScanner.nextInt();
             int secondId = fastScanner.nextInt();
             int weight = fastScanner.nextInt();
 
-            if (firstId == secondId) {
-                continue;
-            }
-
-            edges.get(firstId).add(new Edge(secondId, weight));
-            edges.get(secondId).add(new Edge(firstId, weight));
+            queue.add(new Edge(firstId, secondId, weight));
         }
 
-        frame = new ArrayList<>(n);
-        queue = new PriorityQueue<>(Comparator.comparing(edge -> edge.weight));
-        minSum = 0;
+        long minSum = 0;
 
-        for (int i = n; i > 0; i--) {
-            if (frame.size() == n) {
-                System.out.println(minSum);
-                return;
+        while (countSet != 1) {
+            Edge edge = queue.poll();
+            if (findSet(edge.first) != findSet(edge.second)) {
+                unionSet(edge.first, edge.second);
+                minSum += edge.weight;
+                countSet--;
             }
+        }
 
-            if (!frame.contains(i)) {
-                frame.add(i);
-                visit(i);
-            }
+        System.out.println(minSum);
+    }
+
+    private static void unionSet(int firstNode, int secondNode) {
+        firstNode = findSet(firstNode);
+        secondNode = findSet(secondNode);
+        if (firstNode != secondNode) {
+            parent[secondNode] = firstNode;
         }
     }
 
-    private static void visit(int nodeId) {
-        queue.addAll(edges.get(nodeId));
-
-        while (!queue.isEmpty()) {
-            Edge edge = queue.poll();
-            if (!frame.contains(edge.to)) {
-                minSum += edge.weight;
-                frame.add(edge.to);
-                visit(edge.to);
-                break;
-            }
+    private static int findSet(int idNode) {
+        if (idNode == parent[idNode]) {
+            return idNode;
         }
+        return parent[idNode] = findSet(parent[idNode]);
     }
 
     public static void main(String[] args) {
