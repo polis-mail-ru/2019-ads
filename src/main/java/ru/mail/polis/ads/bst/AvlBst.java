@@ -28,8 +28,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private Value get(Node x, Key key) {
         if (x == null) return null;
-        if (key.compareTo(x.key) < 0) return get(x.left, key);
-        if (key.compareTo(x.key) > 0) return get(x.right, key);
+        final int comp = key.compareTo(x.key);
+        if (comp < 0) return get(x.left, key);
+        if (comp > 0) return get(x.right, key);
         return x.value;
     }
 
@@ -40,8 +41,9 @@ public class AvlBst<Key extends Comparable<Key>, Value>
 
     private Node put(Node x, Key key, Value value) {
         if (x == null) return new Node(key, value, 1);
-        if (key.compareTo(x.key) < 0) x.left = put(x.left, key, value);
-        else if (key.compareTo(x.key) > 0) x.right = put(x.right, key, value);
+        final int comp = key.compareTo(x.key);
+        if (comp < 0) x.left = put(x.left, key, value);
+        else if (comp > 0) x.right = put(x.right, key, value);
         else x.value = value;
 
         fixHeight(x);
@@ -97,9 +99,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node remove(Node x, Key key) {
         if (x == null)
             return null;
-        if (key.compareTo(x.key) < 0)
+        final int comp = key.compareTo(x.key);
+        if (comp < 0)
             x.left = remove(x.left, key);
-        else if (key.compareTo(x.key) > 0)
+        else if (comp > 0)
             x.right = remove(x.right, key);
         else x = innerDelete(x);
         fixHeight(x);
@@ -177,10 +180,11 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null){
             return null;
         }
-        if (key.compareTo(x.key) == 0) {
+        final int comp = key.compareTo(x.key);
+        if (comp == 0) {
             return x.key;
         }
-        if (key.compareTo(x.key) < 0) {
+        if (comp < 0) {
             return floor(x.left, key);
         }
         Key result = floor(x.right, key);
@@ -200,10 +204,11 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         if (x == null){
             return null;
         }
-        if (key.compareTo(x.key) == 0) {
+        final int comp = key.compareTo(x.key);
+        if (comp == 0) {
             return x.key;
         }
-        if (key.compareTo(x.key) > 0) {
+        if (comp > 0) {
             return ceil(x.right, key);
         }
         Key result = ceil(x.left, key);
