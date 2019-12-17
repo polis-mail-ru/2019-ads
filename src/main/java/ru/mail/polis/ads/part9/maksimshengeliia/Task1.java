@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /*
-*   https://www.e-olymp.com/ru/submissions/6329065
+*   https://www.e-olymp.com/ru/submissions/6368014
 * */
 public class Task1 {
 
@@ -19,7 +19,6 @@ public class Task1 {
     static List<Integer> result = new ArrayList<>();
     static Colors[] colorGraph;
     static int vertexes, edges;
-    static boolean flag = false;
 
 
     static void dfs(int v) {
@@ -29,17 +28,13 @@ public class Task1 {
         for (int cVertex : closeVertexes) {
             if (colorGraph[cVertex] == Colors.WHITE) {
                 dfs(cVertex);
-                // no matter to go next if condition is true
-                if (flag) {
-                    System.out.println("-1");
-                    System.exit(0);
-                }
-                result.add(cVertex);
             } else if (colorGraph[cVertex] == Colors.GREY) {
-                flag = true;
+                System.out.println("-1");
+                Runtime.getRuntime().exit(0);
             }
         }
         colorGraph[v] = Colors.BLACK;
+        result.add(v);
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
@@ -62,17 +57,13 @@ public class Task1 {
         for(int i = 1; i <= vertexes; i++) {
             if (colorGraph[i] == Colors.WHITE) {
                 dfs(i);
-                result.add(i);
             }
         }
 
-        if (false) {
-            out.println("-1");
-        } else {
-            for(int i = result.size() - 1; i >= 0; i--) {
-                out.print(result.get(i) + " ");
-            }
+        for(int i = result.size() - 1; i >= 0; i--) {
+            out.print(result.get(i) + " ");
         }
+        out.println();
     }
 
     private static class FastScanner {
