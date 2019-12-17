@@ -44,9 +44,6 @@ public class ThirdTask {
                     distance[links[j].to] = distance[links[j].from] + links[j].weight;
                     isChanged = true;
                 }
-                if (distance[links[j].from] < MAX_WEIGHT) {
-                    distance[links[j].to] = Math.min(distance[links[j].to], distance[links[j].from] + links[j].weight);
-                }
             }
             if (!isChanged) {
                 break;
