@@ -14,13 +14,11 @@ public class FirstTask {
 
     private static class Link {
 
-        private int firstId;
-        private int secondId;
+        private int to;
         private int id;
 
-        public Link(int firstId, int secondId, int id) {
-            this.firstId = firstId;
-            this.secondId = secondId;
+        public Link(int to, int id) {
+            this.to = to;
             this.id = id;
         }
     }
@@ -50,97 +48,82 @@ public class FirstTask {
     }
 
     private static int n;
-    private static int m;
     private static int timer;
-    private static ArrayList<Integer> bridges;
     private static int[] tin;
     private static int[] fup;
-    private static List<List<Integer>> nodes;
-    private static Link[] links;
-    private static byte[] used;
+    private static List<List<Link>> graph;
+    private static int countBridges;
+    private static boolean[] isBridge;
 
     private static void solve() {
         try (PrintWriter printWriter = new PrintWriter(System.out)) {
 
             FastScanner fastScanner = new FastScanner(System.in);
             n = fastScanner.nextInt();
-            m = fastScanner.nextInt();
+            int m = fastScanner.nextInt();
 
-            used = new byte[n + 1];
-            Arrays.fill(used, (byte) 0);
-
-            nodes = new ArrayList<>(n + 1);
-            for (int i = 0; i < n + 1; i++) {
-                nodes.add(new ArrayList<>(100));
+            fup = new int[n + 1];
+            tin = new int[n + 1];
+            graph = new ArrayList<>();
+            for (int i = 0; i <= n; i++) {
+                graph.add(new ArrayList<>());
+                tin[i] = 0;
+                fup[i] = 0;
             }
 
-            links = new Link[m + 1];
             for (int i = 1; i <= m; i++) {
                 final int from = fastScanner.nextInt();
                 final int to = fastScanner.nextInt();
 
-                links[i] = new Link(from, to, i);
-
-                nodes.get(from).add(to);
-                nodes.get(to).add(from);
+                graph.get(from).add(new Link(to, i));
+                graph.get(to).add(new Link(from, i));
             }
 
-            fup = new int[n + 1];
-            tin = new int[n + 1];
+            countBridges = 0;
 
-            bridges = new ArrayList<>(100);
+            isBridge = new boolean[m + 1];
+            Arrays.fill(isBridge, false);
+
             findBridges();
 
-            printWriter.println(bridges.size());
-            if (bridges.isEmpty()) {
-                System.exit(0);
-            }
+            printWriter.println(countBridges);
+            for (int i = 1; i <= m && countBridges > 0; i++) {
 
-            bridges.trimToSize();
-            bridges.sort(Integer::compare);
-            for (int id : bridges) {
-                printWriter.print(id);
-                printWriter.print(" ");
+                if (isBridge[i]) {
+                    printWriter.print(i + " ");
+                    countBridges--;
+                }
             }
         }
     }
 
-        private static void findBridges() {
-        timer = 1;
+    private static void findBridges() {
+        timer = 0;
         for (int i = 1; i <= n; i++) {
-            if (used[i] == 0) {
+            if (tin[i] == 0) {
                 dfs(i, -1);
             }
         }
     }
 
-    private static void dfs(int nodeId, int parentId) {
-        used[nodeId] = 1;
-        tin[nodeId] = fup[nodeId] = timer++;
+    private static void dfs(int nodeId, int prevLinkId) {
+        tin[nodeId] = fup[nodeId] = ++timer;
 
-        nodes.get(nodeId).forEach(subNodeId -> {
-            if (subNodeId != parentId) {
-                if (used[subNodeId] == 1) {
-                    fup[nodeId] = Math.min(fup[nodeId], tin[subNodeId]);
-                } else {
-                    dfs(subNodeId, nodeId);
-                    fup[nodeId] = Math.min(fup[nodeId], fup[subNodeId]);
-                    if (fup[subNodeId] > tin[nodeId] && subNodeId != nodeId) {
-                        markBridge(nodeId, subNodeId);
-                    }
-                }
+        for (Link link : graph.get(nodeId)) {
+            if (link.id == prevLinkId) {
+                continue;
             }
-        });
-    }
-
-    private static void markBridge(int firstId, int secondId) {
-        for (int i = 1; i < links.length; i++) {
-            Link link = links[i];
-            if (link.firstId == firstId && link.secondId == secondId
-                || link.firstId == secondId && link.secondId == firstId) {
-
-                bridges.add(link.id);
+            if (tin[link.to] == 0) {
+                dfs(link.to, link.id);
+                fup[nodeId] = Math.min(fup[nodeId], fup[link.to]);
+            } else {
+                fup[nodeId] = Math.min(fup[nodeId], tin[link.to]);
             }
+        }
+
+        if (prevLinkId != -1 && fup[nodeId] == tin[nodeId]) {
+            countBridges++;
+            isBridge[prevLinkId] = true;
         }
     }
 

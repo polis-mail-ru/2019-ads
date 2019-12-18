@@ -8,7 +8,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class ForthTask {
@@ -50,10 +52,22 @@ public class ForthTask {
         }
     }
 
+    private static class Edge {
+
+        int from;
+        int to;
+
+        public Edge(int from, int to) {
+            this.from = from;
+            this.to = to;
+        }
+    }
+
     private static int n;
     private static int m;
     private static Node[] nodes;
     private static Node[] backNodes;
+    private static Set<Edge> set;
     private static boolean[] used;
     private static int[] colors;
     private static Deque<Integer> stack;
@@ -67,6 +81,7 @@ public class ForthTask {
         backNodes = new Node[n + 1];
         colors = new int[n + 1];
         used = new boolean[n + 1];
+        set = new HashSet<>();
         Arrays.fill(used, false);
         Arrays.fill(colors, -1);
 
@@ -104,7 +119,16 @@ public class ForthTask {
             }
         }
 
-        System.out.println(color + 1);
+        for (int i = 1; i < nodes.length; i++) {
+            for (int j = 0; j < nodes[i].links.size(); j++) {
+                final int to = nodes[i].links.get(j).id;
+                if (colors[i] != colors[to]) {
+                    set.add(new Edge(i, to));
+                }
+            }
+        }
+
+        System.out.println(set.size());
     }
 
     private static void dfs1(Node node) {
