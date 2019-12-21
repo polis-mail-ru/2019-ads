@@ -1,57 +1,61 @@
-package part9;
+package part10;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.StringTokenizer;
-
-//https://www.e-olymp.com/ru/submissions/6321170
 
 public class Task3 {
 
-    private static final int INF = Integer.MAX_VALUE - 1;
+    private static final int MAX = 1000001;
+    private static int[] arr = new int [MAX];
 
     private static class Edge{
         int begin, end;
-        long weight;
+        int danger;
 
-        public Edge(int begin, int end, long weight) {
+        public Edge(int begin, int end, int danger) {
             this.begin = begin;
             this.end = end;
-            this.weight = weight;
+            this.danger = danger;
         }
+    }
+
+    private static int findRepresenter(int n)
+    {
+        if (n == arr[n]) return n;
+        return arr[n] = findRepresenter(arr[n]);
+    }
+
+    private static void union(int x, int y)
+    {
+        int x1 = findRepresenter(x), y1 = findRepresenter(y);
+        if (x1 != y1) arr[x1] = y1;
     }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt(), m = in.nextInt();
-        ArrayList<Edge> graph = new ArrayList<>(100001);
+        List<Edge> graph = new ArrayList<>(MAX);
+
         for (int i = 0; i < m; i++) {
-            graph.add(new Edge(in.nextInt(), in.nextInt(), in.nextLong()));
+            graph.add(new Edge(in.nextInt(), in.nextInt(), in.nextInt()));
         }
 
-        long[] d = new long[n];
-        for (int i = 0; i < n; i++) {
-            d[i] = INF;
-        }
-        d[0] = 0;
+        for (int i = 1; i <= n; i++) arr[i] = i;
 
-        for (int i = 0; i < n ; i++)
+        graph.sort(Comparator.comparingInt(o -> o.danger));
+
+        int fin = 0;
+        for (int i = 0; i < m; i++)
         {
-            for (int j = 0; j < m; j++)
-            {
-                int x = graph.get(j).begin;
-                int y = graph.get(j).end;
-                x--; y--;
-                long weight = graph.get(j).weight;
-                if (d[x] != INF){
-                    d[y] = Math.min(d[y], d[x] + weight);
-                }
+            union(graph.get(i).begin, graph.get(i).end);
+            if (findRepresenter(1) == findRepresenter(n)) {
+                fin = i;
+                break;
             }
         }
-
-        for (int i = 0; i < n; i++) {
-            if (d[i] == INF) d[i] = 30000;
-            out.print(d[i] + " ");
-        }
+        out.println(graph.get(fin).danger);
     }
 
     private static class FastScanner {
@@ -77,9 +81,6 @@ public class Task3 {
             return Integer.parseInt(next());
         }
 
-        long nextLong(){
-            return Long.parseLong(next());
-        }
     }
 
     public static void main(final String[] arg) {
