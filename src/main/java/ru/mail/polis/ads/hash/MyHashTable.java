@@ -1,5 +1,6 @@
 package ru.mail.polis.ads.hash;
 
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,11 +25,13 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         }
     }
 
-    private static int m;
+    private int m;
     private LinkedList<Node>[] data;
+    private int size;
 
     MyHashTable(int length) {
         m = length;
+        size = 0;
         data = new LinkedList[m];
     }
 
@@ -46,10 +49,11 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public void put(@NotNull Key key, @NotNull Value value) {
-        int hashCode = key.hashCode() % m;
+        int hashCode = keyHashCode(key);
         if (data[hashCode] == null) {
             data[hashCode] = new LinkedList<>();
             data[hashCode].add(new Node(key, value));
+            size++;
         } else {
             LinkedList<Node> currentList = data[hashCode];
             Node currentNode = null;
@@ -63,6 +67,7 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
                 currentNode.value = value;
             } else {
                 currentList.add(new Node(key, value));
+                size++;
             }
         }
     }
@@ -70,14 +75,15 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
     @Nullable
     @Override
     public Value remove(@NotNull Key key) {
-        int hashCode = key.hashCode() % m;
+        int hashCode = keyHashCode(key);
         if (data[hashCode] == null) {
             return null;
         }
         LinkedList<Node> currentList = data[hashCode];
-        for (int i = 0; i < currentList.size(); i++) {
-            if (currentList.get(i).equalsKey(key)) {
-                return currentList.remove(i).value;
+        for (Node node : currentList) {
+            if (node.equalsKey(key)) {
+                size--;
+                return currentList.remove(node) ? node.value : null;
             }
         }
         return null;
@@ -85,17 +91,11 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
 
     @Override
     public int size() {
-        int size = 0;
-        for (LinkedList<Node> list : data) {
-            if (list != null) {
-                size += list.size();
-            }
-        }
         return size;
     }
 
     private Node getNode(Key key) {
-        int hashCode = key.hashCode() % m;
+        int hashCode = keyHashCode(key);
         if (data[hashCode] == null) {
             return null;
         }
@@ -107,6 +107,11 @@ public class MyHashTable<Key, Value> implements HashTable<Key, Value> {
         }
         return null;
     }
+
+    private int keyHashCode(Key key) {
+        return Math.abs(key.hashCode() % m);
+    }
+
 
     @Override
     public boolean isEmpty() {
