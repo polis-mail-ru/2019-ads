@@ -30,7 +30,7 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
         int hash = hash(key);
         Entry<Key, Value> entry = buckets[hash];
 
-        while (entry != null && entry.key != key) {
+        while (entry != null && !entry.key.equals(key)) {
             entry = entry.next;
         }
 
@@ -47,7 +47,7 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
             buckets[hash] = new Entry<>(key, value, null);
             size++;
         } else {
-            while (entry != null && entry.key != key) {
+            while (entry != null && !entry.key.equals(key)) {
                 entry = entry.next;
             }
 
@@ -91,12 +91,12 @@ public class BaseHashTable<Key, Value> implements HashTable<Key, Value> {
             Value entryValue = entry.value;
             size--;
 
-            while (entry.next != null && entry.key != key) {
+            while (entry.next != null && !entry.key.equals(key)) {
                 prevEntry = entry;
                 entry = entry.next;
             }
 
-            if (entry.key == key) {
+            if (entry.key.equals(key)) {
                 if (prevEntry == null) {
                     buckets[hash] = entry.next;
                     return entryValue;
