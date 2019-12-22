@@ -78,11 +78,12 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             size++;
             return new Node(key, value, 1, RED);
         }
+        int comparatorResult = key.compareTo(element.key);
 
-        if (key.compareTo(element.key) == -1) {
+        if (comparatorResult < 0) {
             element.left = put(element.left, key, value);
         }
-        else if (key.compareTo(element.key) == 1) {
+        else if (comparatorResult > 0) {
             element.right = put(element.right, key, value);
         }
         else {
@@ -105,19 +106,15 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             return null;
         }
 
-        switch (element.key.compareTo(key)) {
-            case 0:
-                return element;
+        int comparatorResult = key.compareTo(element.key);
 
-            case 1:
-                return get(element.left, key);
-
-            case -1:
-                return get(element.right, key);
-
+        if (comparatorResult > 0) {
+            return get(element.right, key);
+        } else if (comparatorResult < 0) {
+            return get(element.left, key);
+        } else {
+            return element;
         }
-
-        return element;
     }
 
     @Override
@@ -167,18 +164,22 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             }
         }
         else {
-
+            Node toRemoveElement = element;
             if (isRed(element.left)) {
                 element = rightRotate(element);
+                toRemoveElement = element.right;
             }
 
             if (element.right == null) {
-                return null;
+                if (toRemoveElement.right == null) {
+                    return null;
+                }
+                return toRemoveElement.left;
             }
 
-            element = getMin(element.right);
-            element.right = deleteMin(element.right);
-
+            toRemoveElement.key = getMin(toRemoveElement.right).key;
+            toRemoveElement.value = get(toRemoveElement.right, toRemoveElement.key).value;
+            toRemoveElement.right = deleteMin(toRemoveElement.right);
         }
 
         return fixUp(element);
@@ -293,6 +294,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key floor(@NotNull Key key) {
+        floor = null;
         ceilFloor(key, root);
         return floor;
     }
@@ -300,30 +302,32 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Nullable
     @Override
     public Key ceil(@NotNull Key key) {
+        ceil = null;
         ceilFloor(key, root);
         return ceil;
     }
 
-    private Key ceil = null;
-    private Key floor = null;
+    private Key ceil;
+    private Key floor;
 
     private void ceilFloor(Key key, Node element) {
         if (element == null) {
             return;
         }
 
-        if (element.key.compareTo(key) == 0) {
-            ceil = element.key;
-            floor = element.key;
-        }
-        else if (element.key.compareTo(key) == 1) {
+        int comparatorResult = key.compareTo(element.key);
+
+        if (comparatorResult < 0) {
             ceil = element.key;
             ceilFloor(key, element.left);
-        }
-        else {
+        } else if (comparatorResult > 0) {
             floor = element.key;
             ceilFloor(key, element.right);
+        } else {
+            ceil = element.key;
+            floor = element.key;
         }
+
     }
 
     @Override
