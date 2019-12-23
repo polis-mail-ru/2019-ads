@@ -55,15 +55,19 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
 
     private void flipColors(Node element) {
         element.color = !element.color;
-        element.left.color = !element.left.color;
-        element.right.color = !element.right.color;
+        if (element.left != null) {
+            element.left.color = !element.left.color;
+        }
+       if (element.right != null) {
+           element.right.color = !element.right.color;
+       }
     }
 
     private Node fixUp(Node element) {
         if (isRed(element.right) && !isRed(element.left)) {
             element = leftRotate(element);
         }
-        else if (isRed(element.left) && !isRed(element.left.left)) {
+        else if (isRed(element.left) && isRed(element.left.left)) {
             element = rightRotate(element);
         }
         else if (isRed(element.left) && isRed(element.right)) {
@@ -127,8 +131,11 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     @Override
     public Value remove(@NotNull Key key) {
         Value value = get(key);
-        delete(root, key);
-        size = size == 0 ? 0 : size-1;
+        root = delete(root, key);
+        if (value != null) {
+            size = size == 0 ? 0 : size-1;
+        }
+
         return value;
     }
 
@@ -170,8 +177,8 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
                 toRemoveElement = element.right;
             }
 
-            if (element.right == null) {
-                if (toRemoveElement.right == null) {
+            if (toRemoveElement.right == null) {
+                if (toRemoveElement.left == null) {
                     return null;
                 }
                 return toRemoveElement.left;
@@ -188,7 +195,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node moveRedLeft(Node element) {
         flipColors(element);
 
-        if (isRed(element.right.left)) {
+        if (element.right != null && isRed(element.right.left)) {
             element.right = rightRotate(element.right);
             element = leftRotate(element);
             flipColors(element);
@@ -200,7 +207,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
     private Node moveRedRight(Node element) {
         flipColors(element);
 
-        if (isRed(element.left.left)) {
+        if (element.left != null && isRed(element.left.left)) {
             element = rightRotate(element);
             flipColors(element);
         }
