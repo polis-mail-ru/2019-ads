@@ -11,7 +11,7 @@ import java.util.StringTokenizer;
  * 24.12.19
  * gr. Java-10, Технополис
  * IntelliJ IDEA Ultimate 2019.2 (JetBrains Product Pack for Students)
- * e-olymp 88%: https://www.e-olymp.com/ru/submissions/6407821
+ * e-olymp 100%: https://www.e-olymp.com/ru/submissions/6407821
  */
 public final class SecondTask {
     private SecondTask() {}
