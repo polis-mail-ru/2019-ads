@@ -91,12 +91,16 @@ public class Hash<Key, Value> implements HashTable<Key, Value> {
 
         Node<Key, Value> prev = null;
         Node<Key, Value> current = values[index];
+        Node<Key, Value> firstEl;
 
         while (current != null) {
             if (key.equals(current.key)) {
                 if (prev == null) {
+                    firstEl = current;
                     values[index] = current.next;
                     if (values[index] == null) sizeArr--;
+                    sizeElem--;
+                    return firstEl.value;
                 } else {
                     prev.next = current.next;
                 }
@@ -106,6 +110,7 @@ public class Hash<Key, Value> implements HashTable<Key, Value> {
             current = current.next;
         }
 
+        if (current == null) return null;
         return current.value;
     }
 
