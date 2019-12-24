@@ -4,16 +4,15 @@ import java.io.*;
 import java.util.*;
 
 public class Task2022 {
-    static int n, m;
-    static ArrayList<Integer> adjList[];
-    static int color[];
-    static boolean cyclic = false;
-    static int cyclicV;
-    static ArrayList<Integer> topSort = new ArrayList<>();
+    private static ArrayList<Integer>[] adjList;
+    private static int[] color;
+    private static boolean cyclic = false;
+    private static ArrayList<Integer> cyclicV = new ArrayList<>();
+    private static ArrayList<Integer> topSort = new ArrayList<>();
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        n = in.nextInt();
-        m = in.nextInt();
+        int n = in.nextInt();
+        int m = in.nextInt();
 
         adjList = new ArrayList[n];
         for (int i = 0; i < n; i++) {
@@ -23,7 +22,8 @@ public class Task2022 {
         for (int i = 0; i < m; i++) {
             int a = in.nextInt();
             int b = in.nextInt();
-            a--; b--;
+            a--;
+            b--;
             adjList[a].add(b);
         }
 
@@ -42,7 +42,11 @@ public class Task2022 {
 
         if (cyclic) {
             out.println("Yes");
-            out.println(cyclicV);
+            int min = cyclicV.get(0);
+            if (cyclicV.size() > 1) {
+                for (int i = 0; i < cyclicV.size(); i++) min = Math.min(min, cyclicV.get(i));
+            }
+            out.println(min);
         } else {
             out.println("No");
         }
@@ -54,7 +58,7 @@ public class Task2022 {
         if (cyclic) return;
         if (color[v] == 1) {
             cyclic = true;
-            cyclicV = v + 1;
+            cyclicV.add(v + 1);
             return;
         }
         color[v] = 1;
@@ -64,7 +68,7 @@ public class Task2022 {
             if (cyclic) return;
         }
         color[v] = 2;
-        topSort.add(v+1);
+        topSort.add(v + 1);
     }
 
     private static class FastScanner {
