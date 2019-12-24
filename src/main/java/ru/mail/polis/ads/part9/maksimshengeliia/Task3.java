@@ -5,12 +5,9 @@ import java.io.*;
 import java.util.StringTokenizer;
 
 public class Task3 {
-    private Task3() {
-        // Should not be instantiated
-    }
 
     private static void solve(final FastScanner in, final PrintWriter out) {
-        // Write me
+
     }
 
     private static class FastScanner {
