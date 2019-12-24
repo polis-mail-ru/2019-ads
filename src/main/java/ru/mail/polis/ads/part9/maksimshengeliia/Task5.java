@@ -5,9 +5,12 @@ import java.util.*;
 
 public class Task5 {
 
+    static int from;
+    static int to;
     private static Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
     private static List<Integer> processed = new ArrayList<>();
     private static LinkedList<Integer> queue = new LinkedList<>();
+    private static Map<Integer, Integer> costs;
 
     private static Integer findLowestCostNode(Map<Integer, Integer> costs) {
         Integer lowestCost = Integer.MAX_VALUE;
@@ -31,8 +34,8 @@ public class Task5 {
         int a  = in.nextInt();
         int b  = in.nextInt();
 
-        int from  = in.nextInt();
-        int to  = in.nextInt();
+        from  = in.nextInt();
+        to  = in.nextInt();
 
         for (int i = 0; i < b; i++) {
             int q = in.nextInt();
@@ -48,7 +51,7 @@ public class Task5 {
 
 
         // The costs table
-        Map<Integer, Integer> costs = new HashMap<>();
+        costs = new HashMap<>();
 
         Map<Integer, Integer> friends = graph.get(from);
         for (Integer s : graph.keySet()) {
@@ -66,6 +69,12 @@ public class Task5 {
 
         // the parents table
         Map<Integer, Integer> parents = new HashMap<>();
+
+        dfs(from);
+        if (!found) {
+            out.println("-1");
+            return;
+        }
 
         Integer node = findLowestCostNode(costs);
         while (node != null) {
@@ -112,6 +121,24 @@ public class Task5 {
         Integer variable;
         while ((variable = queue.poll()) != null) {
             out.print(variable + " ");
+        }
+    }
+
+    private static Map<Integer, Integer> list = new HashMap<>();
+    private static boolean found = false;
+    private static void dfs(Integer node) {
+        list.put(node, node);
+        Set<Integer> set = graph.get(node).keySet();
+        if (set.isEmpty()) {
+            return;
+        }
+        for (Integer i : set) {
+            if (i == to) {
+                found = true;
+            }
+            if (list.get(i) == null) {
+                dfs(i);
+            }
         }
     }
 
