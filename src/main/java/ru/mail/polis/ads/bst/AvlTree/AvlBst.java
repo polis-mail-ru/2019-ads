@@ -18,9 +18,10 @@ public class AvlBst <Key extends Comparable<Key>, Value> implements Bst<Key, Val
         Node right;
         int height;
 
-        Node(Key key, Value value) {
+        Node(Key key, Value value, int height) {
             this.key = key;
             this.value = value;
+            this.height = height;
             size++;
         }
     }
@@ -42,11 +43,13 @@ public class AvlBst <Key extends Comparable<Key>, Value> implements Bst<Key, Val
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        return get(root, key).value;
+        Node node = get(root, key);
+        if (node == null) return null;
+        return node.value;
     }
 
     private Node put(Node x, Key key, Value value) {
-        if (x == null) return new Node(key, value);
+        if (x == null) return new Node(key, value, 1);
         if (key.compareTo(x.key) < 0) {x.left = put(x.left, key, value);}
         else if (key.compareTo(x.key) > 0) {x.right = put(x.right, key, value);}
         else {x.value = value;}
@@ -86,7 +89,9 @@ public class AvlBst <Key extends Comparable<Key>, Value> implements Bst<Key, Val
     @Nullable
     @Override
     public Key min() {
-        return min(root).key;
+        Node node = min(root);
+        if (node == null) return null;
+        return node.key;
     }
 
     @Nullable
@@ -173,7 +178,7 @@ public class AvlBst <Key extends Comparable<Key>, Value> implements Bst<Key, Val
     }
 
     @Override
-    public int height() {return root.height;}
+    public int height() {return height(root);}
 
     public int height(Node x) {
         return x == null ? 0 : x.height;
