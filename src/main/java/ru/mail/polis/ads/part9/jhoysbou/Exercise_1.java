@@ -12,12 +12,12 @@ import java.util.StringTokenizer;
 
 public class Exercise_1 {
 
-    private static class Vertice {
+    private static class Vertices {
         COLORS color;
         int number;
-        List<Vertice> edges;
+        List<Vertices> edges;
 
-        Vertice(int number) {
+        Vertices(int number) {
             this.color = COLORS.WHITE;
             this.number = number;
             edges = new ArrayList<>();
@@ -29,7 +29,7 @@ public class Exercise_1 {
         WHITE, GRAY, BLACK
     }
 
-    private static Vertice[] verticeArray;
+    private static Vertices[] verticesArray;
     private static ArrayList<Integer> sorted = new ArrayList<>();
 
 
@@ -37,19 +37,19 @@ public class Exercise_1 {
         FastScanner scanner = new FastScanner(System.in);
         final int n = scanner.nextInt();
         final int m = scanner.nextInt();
-        verticeArray = new Vertice[n + 1];
+        verticesArray = new Vertices[n + 1];
         for (int i = 1; i <= n; i++) {
-            verticeArray[i] = new Vertice(i);
+            verticesArray[i] = new Vertices(i);
         }
 
         for (int i = 0; i < m; i++) {
             int from = scanner.nextInt();
             int to = scanner.nextInt();
-            verticeArray[from].edges.add((verticeArray[to]));
+            verticesArray[from].edges.add((verticesArray[to]));
         }
 
-        for (int i = 1; i < verticeArray.length; i++) {
-            dfs(verticeArray[i]);
+        for (int i = 1; i < verticesArray.length; i++) {
+            dfs(verticesArray[i]);
         }
 
         for (int i = n - 1; i >= 0; i--) {
@@ -59,7 +59,7 @@ public class Exercise_1 {
 
     }
 
-    private static void dfs(Vertice element) {
+    private static void dfs(Vertices element) {
         if (element.color == COLORS.BLACK) {
             return;
         }
@@ -71,7 +71,7 @@ public class Exercise_1 {
 
         element.color = COLORS.GRAY;
 
-        for (Vertice subElement: element.edges) {
+        for (Vertices subElement: element.edges) {
             dfs(subElement);
         }
 
