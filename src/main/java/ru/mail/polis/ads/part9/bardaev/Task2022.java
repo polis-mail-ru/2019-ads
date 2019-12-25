@@ -4,71 +4,89 @@ import java.io.*;
 import java.util.*;
 
 public class Task2022 {
-    private static ArrayList<Integer>[] adjList;
-    private static int[] color;
-    private static boolean cyclic = false;
-    private static ArrayList<Integer> cyclicV = new ArrayList<>();
-    private static ArrayList<Integer> topSort = new ArrayList<>();
+    
+    private static List<List<Integer>> nodes;
+    private static boolean[] cycle;
+    private static byte[] used;
+    private static int[] prev;
 
     private static void solve(final FastScanner in, final PrintWriter out) {
+
+        int min = Integer.MAX_VALUE;
         int n = in.nextInt();
         int m = in.nextInt();
-
-        adjList = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            adjList[i] = new ArrayList<>();
+        nodes = new ArrayList<>(n + 1);
+        used = new byte[n + 1];
+        cycle = new boolean[n + 1];
+        prev = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            nodes.add(new ArrayList<>());
         }
 
         for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            a--;
-            b--;
-            adjList[a].add(b);
+            int from = in.nextInt();
+            int to = in.nextInt();
+
+            nodes.get(from).add(to);
+            nodes.get(to).add(from);
+            
         }
 
-        color = new int[n];
-        Arrays.fill(color, 0);
+        for (int i = 1; i < nodes.size(); i++) {
+            if (used[i] == 0) {
+                Deque<Integer> stack = new ArrayDeque<>();
+                stack.addFirst(i);
 
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < adjList.length; i++) map.put(i, i);
-        for (int i = 0; i < adjList.length; i++) {
-            for (int j = 0; j < adjList[i].size(); j++) {
-                map.remove(adjList[i].get(j));
+                while (!stack.isEmpty()) {
+                    int tmp = stack.peek();
+                    used[tmp] = 1;
+                    boolean nonCycle = false;
+
+                    for (int subNode : nodes.get(tmp)) {
+                        if (prev[tmp] == subNode || used[subNode] == 2) {
+                            continue;
+                        }
+                        if (used[subNode] == 0) {
+                            prev[subNode] = tmp;
+                            stack.addFirst(subNode);
+                            nonCycle = true;
+                            break;
+                        } else if (used[subNode] == 1) {
+                            int j = tmp;
+                            cycle[subNode] = true;
+                            if (cycle[j]) {
+                                continue;
+                            }
+                            while (j != subNode) {
+                                cycle[j] = true;
+                                j = prev[j];
+                                if (cycle[j]) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!nonCycle) {
+                        stack.pop();
+                        used[tmp] = 2;
+                    }
+                }
             }
         }
 
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) sort(entry.getKey());
-
-        if (cyclic) {
-            out.println("Yes");
-            int min = cyclicV.get(0);
-            if (cyclicV.size() > 1) {
-                for (int i = 0; i < cyclicV.size(); i++) min = Math.min(min, cyclicV.get(i));
+        for (int i = 0; i < cycle.length; i++) {
+            if (cycle[i] && min > i) {
+                min = i;
             }
-            out.println(min);
-        } else {
+        }
+
+        if (min == Integer.MAX_VALUE) {
             out.println("No");
+        } else {
+            out.println("Yes");
+            out.println(min);
         }
         out.flush();
-    }
-
-    private static void sort(int v) {
-        if (color[v] == 2) return;
-        if (cyclic) return;
-        if (color[v] == 1) {
-            cyclic = true;
-            cyclicV.add(v + 1);
-            return;
-        }
-        color[v] = 1;
-        for (int i = 0; i < adjList[v].size(); ++i) {
-            int w = adjList[v].get(i);
-            sort(w);
-            if (cyclic) return;
-        }
-        color[v] = 2;
-        topSort.add(v + 1);
     }
 
     private static class FastScanner {

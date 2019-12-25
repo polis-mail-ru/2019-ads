@@ -44,18 +44,6 @@ public final class Task4853 {
                 used[w] = true;
             }
         }
-//        from.color = 1;
-//        for (int i = 0; i < from.edge.size(); i++) {
-//            Node to = from.edge.get(i);
-//            if (distance[to.id] > distance[from.id] + 1) {
-//                distance[to.id] = distance[from.id] + 1;
-//                parents[to.id] = from.id;
-//            }
-//            if (to.color == 0) {
-//                edges.add(to);
-//            }
-//        }
-//        from.color = 2;
     }
 
     private static void readData(final FastScanner in) {
