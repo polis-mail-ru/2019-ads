@@ -1,35 +1,35 @@
 package ru.mail.polis.ads.part9.maksimshengeliia;
 
+
 import java.io.*;
 import java.util.*;
 
+/*  https://www.e-olymp.com/ru/submissions/6415175
+ * */
 public class Task5 {
 
     static int from;
     static int to;
-    private static Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
-    private static List<Integer> processed = new ArrayList<>();
-    private static LinkedList<Integer> queue = new LinkedList<>();
-    private static Map<Integer, Integer> costs;
+    private static List<List<Integer>> graph = new ArrayList<>();
+    private static PriorityQueue<Node> notUsed = new PriorityQueue<>();
+    private static int[] costs;
+    private static boolean[] visited;
+    private static Map<Integer, Integer> parents = new HashMap<>();
 
-    private static Integer findLowestCostNode(Map<Integer, Integer> costs) {
-        Integer lowestCost = Integer.MAX_VALUE;
-        Integer lowestCostNode = null;
+    static class Node implements Comparable<Node>{
+        int node;
+        int dist = Integer.MAX_VALUE;
 
-        // Go through each node
-        for (Map.Entry<Integer, Integer> node : costs.entrySet()) {
-            Integer cost = node.getValue();
-            // If it's the lowest cost so far and hasn't been processed yet...
-            if (cost < lowestCost && !processed.contains(node.getKey())) {
-                // ... set it as the new lowest-cost node.
-                lowestCost = cost;
-                lowestCostNode = node.getKey();
-            }
+        public Node(int node, int value) {
+            this.node = node;
+            this.dist = value;
         }
 
-        return lowestCostNode;
+        @Override
+        public int compareTo(Node node) {
+            return dist - node.dist;
+        }
     }
-
     private static void solve(final FastScanner in, final PrintWriter out) {
         int a  = in.nextInt();
         int b  = in.nextInt();
@@ -37,108 +37,59 @@ public class Task5 {
         from  = in.nextInt();
         to  = in.nextInt();
 
+        costs = new int[a + 1];
+        visited = new boolean[a + 1];
+
+        for (int i = 0; i <= a; i++) {
+            graph.add(new ArrayList<>());
+            costs[i] = Integer.MAX_VALUE;
+        }
         for (int i = 0; i < b; i++) {
             int q = in.nextInt();
             int w = in.nextInt();
-            int e = 1;
 
-            graph.computeIfAbsent(q, k -> new HashMap<>());
-            graph.get(q).put(w, e);
-
-            graph.computeIfAbsent(w, k -> new HashMap<>());
-            graph.get(w).put(q, e);
+            graph.get(q).add(w);
+            graph.get(w).add(q);
         }
 
 
-        // The costs table
-        costs = new HashMap<>();
+        notUsed.add(new Node(from, 0));
+        costs[from] = 0;
 
-        Map<Integer, Integer> friends = graph.get(from);
-        for (Integer s : graph.keySet()) {
-            if (s == from) {
-                costs.put(s, 0);
-                continue;
+        Node node;
+        while ((node = notUsed.poll()) != null) {
+            if (visited[node.node]) continue;
+            visited[node.node] = true;
+            List<Integer> neighbors = graph.get(node.node);
+
+            for (int n : neighbors) {
+                int newDist = node.dist + 1;
+                if (costs[n] > newDist) {
+                    costs[n] = newDist;
+                    notUsed.add(new Node(n, newDist));
+                    parents.put(n, node.node);
+                }
             }
-            Integer friendCost = friends.get(s);
-            if (friendCost != null) {
-                costs.put(s, friendCost);
-                continue;
-            }
-            costs.put(s, Integer.MAX_VALUE);
         }
 
-        // the parents table
-        Map<Integer, Integer> parents = new HashMap<>();
-
-        dfs(from);
-        if (!found) {
+        if (costs[to] == Integer.MAX_VALUE) {
             out.println("-1");
             return;
         }
 
-        Integer node = findLowestCostNode(costs);
-        while (node != null) {
-            Integer cost = costs.get(node);
-            // Go through all the neighbors of this node
+        out.println(costs[to]);
 
-            Map<Integer, Integer> neighbors = graph.get(node);
 
-            for (Integer n : neighbors.keySet()) {
-                int newCost = cost + neighbors.get(n);
-                // If it's cheaper to get to this neighbor by going through this node
-                if (costs.get(n) > newCost) {
-                    // ... update the cost for this node
-                    costs.put(n, newCost);
-                    // This node becomes the new parent for this neighbor.
-                    parents.put(n, node);
-                }
-            }
-            // Mark the node as processed
-            processed.add(node);
-
-            // Find the next node to process, and loop
-            node = findLowestCostNode(costs);
+        List<Integer> list = new ArrayList<>();
+        list.add(to);
+        Integer parent = parents.get(to);
+        while(parent != null) {
+            list.add(parent);
+            parent = parents.get(parent);
         }
-
-        //
-        queue.offer(to);
-        int curr = to;
-        do {
-            Set<Integer> set = graph.get(curr).keySet();
-            for (Integer i : set) {
-                int cost = costs.get(i);
-                int c = graph.get(i).get(curr);
-                if (c + cost == costs.get(curr)) {
-                    queue.offer(i);
-                    curr = i;
-                    break;
-                }
-            }
-        } while (curr != from);
-        Collections.reverse(queue);
-
-        out.println(costs.get(to));
-        Integer variable;
-        while ((variable = queue.poll()) != null) {
-            out.print(variable + " ");
-        }
-    }
-
-    private static Map<Integer, Integer> list = new HashMap<>();
-    private static boolean found = false;
-    private static void dfs(Integer node) {
-        list.put(node, node);
-        Set<Integer> set = graph.get(node).keySet();
-        if (set.isEmpty()) {
-            return;
-        }
-        for (Integer i : set) {
-            if (i == to) {
-                found = true;
-            }
-            if (list.get(i) == null) {
-                dfs(i);
-            }
+        Collections.reverse(list);
+        for (Integer integer : list) {
+            out.print(integer + " ");
         }
     }
 
