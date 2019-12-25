@@ -1,118 +1,122 @@
 package ru.mail.polis.ads.hash;
 
 import com.sun.jdi.Value;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.security.Key;
-import java.util.LinkedList;
 
-public class HTable implements HashTable<Key, Value> {
+public class HTable<Key, Value> implements HashTable<Key, Value> {
 
-    private static class Node {
+    private Node<Key,Value>[] hashTable;
+    private final int DEFAULT_CAPACITY = 16;
+    private final double LOAD_FACTOR = 0.75;
+    private int size;
+
+    private class Node<Key, Value> {
         Key key;
         Value value;
-        private int hashCode;
+        int hash;
+        Node<Key,Value> next;
 
-        public Node(@NotNull Key key, @NotNull Value value) {
+        Node(Key key, Value value, int hash) {
             this.key = key;
             this.value = value;
-            this.hashCode = key.hashCode();
+            this.hash = hash;
         }
 
-        public boolean equalsKey(Key key) {
-            if (this.key == key) return true;
-            return key.hashCode() == hashCode;
+        Node<Key, Value> setHash(int hash) {
+            this.hash = hash;
+            return this;
         }
     }
 
-    private static int m;
-    private LinkedList<Node>[] data;
-
-    HTable(int length) {
-        m = length;
-        data = new LinkedList[m];
+    public HTable(){
+        this.size = 0;
+        this.hashTable = new Node[DEFAULT_CAPACITY];
     }
 
-    @Nullable
+    private int hash(Key key){
+        int h;
+        return ((key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16)) % hashTable.length;
+    }
+
+    private void rehash(){
+        if (hashTable.length * LOAD_FACTOR < size ){
+            Node<Key, Value>[] oldHashTable = hashTable;
+            hashTable = new Node[hashTable.length * 2];
+            for (Node<Key, Value> node: oldHashTable) {
+                for (;node != null; node = node.next) {
+                    put(node.setHash(hash(node.key)));
+                }
+            }
+        }
+    }
+
     @Override
-    public Value get(@NotNull Key key) {
-        Node node = getNode(key);
+    public Value get(Key key) {
+        Node<Key, Value> node = hashTable[hash(key)];
+        while (node != null && !key.equals(node.key)){
+            node = node.next;
+        }
         return node == null ? null : node.value;
     }
 
     @Override
-    public boolean containsKey(@NotNull Key key) {
-        return getNode(key) != null;
+    public void put(Key key, Value value) {
+        put(new Node<>(key, value, hash(key)));
+        rehash();
     }
 
-    @Override
-    public void put(@NotNull Key key, @NotNull Value value) {
-        int hashCode = key.hashCode() % m;
-        if (data[hashCode] == null) {
-            data[hashCode] = new LinkedList<>();
-            data[hashCode].add(new Node(key, value));
-        } else {
-            LinkedList<Node> currentList = data[hashCode];
-            Node currentNode = null;
-            for (Node node : currentList) {
-                if (node.equalsKey(key)) {
-                    currentNode = node;
-                    break;
-                }
-            }
-            if (currentNode != null) {
-                currentNode.value = value;
+    private int put(Node<Key,Value> newNode) {
+        Node<Key, Value> node = hashTable[newNode.hash];
+        Node<Key,Value> prevNode = null;
+
+        while (node != null && !node.key.equals(newNode.key)) {
+            prevNode = node;
+            node = node.next;
+        }
+
+        if (node == null) {
+            if (prevNode == null) {
+                hashTable[newNode.hash] = newNode;
             } else {
-                currentList.add(new Node(key, value));
+                prevNode.next = newNode;
             }
+        } else {
+            node.value = newNode.value;
+            return 0;
         }
+        size++;
+        return 1;
     }
 
-    @Nullable
     @Override
-    public Value remove(@NotNull Key key) {
-        int hashCode = key.hashCode() % m;
-        if (data[hashCode] == null) {
-            return null;
+    public Value remove(Key key) {
+        int hash = hash(key);
+        Node<Key, Value> node = hashTable[hash];
+        Node<Key, Value> prevNode = null;
+
+        while (node != null && !node.key.equals(key)) {
+            prevNode = node;
+            node = node.next;
         }
-        LinkedList<Node> currentList = data[hashCode];
-        for (int i = 0; i < currentList.size(); i++) {
-            if (currentList.get(i).equalsKey(key)) {
-                return currentList.remove(i).value;
+
+        if (node != null) {
+            if (prevNode == null){
+                hashTable[hash] = node.next;
+            } else {
+                prevNode.next = node.next;
             }
+            size--;
         }
-        return null;
+        return node == null ? null : node.value;
     }
 
     @Override
     public int size() {
-        int size = 0;
-        for (LinkedList<Node> list : data) {
-            if (list != null) {
-                size += list.size();
-            }
-        }
         return size;
     }
 
     @Override
     public boolean isEmpty() {
-        return size() == 0;
+        return size == 0;
     }
-
-    private Node getNode(Key key) {
-        int hashCode = key.hashCode() % m;
-        if (data[hashCode] == null) {
-            return null;
-        }
-        LinkedList<Node> currentList = data[hashCode];
-        for (Node node : currentList) {
-            if (node.equalsKey(key)) {
-                return node;
-            }
-        }
-        return null;
-    }
-
 }
