@@ -159,7 +159,7 @@ N.B. Pull-реквесты нужно делать в ветку `red-black`.
 ### Часть 2. С `remove()`
 Ко всему прочему добавляется
   * `Value remove(Key key)` - удаляет заданный ключ (и связанное с ним значение, возвращая его)
-  
+
 ## ДЗ 8.
 
 Дэдлайн - 4.12
@@ -177,4 +177,21 @@ N.B. Pull-реквесты нужно делать в ветку `hash`.
   * `Value remove(Key key)` - удаляет заданный ключ (и связанное с ним значение, возвращая его)
   
 Служебные методы:
-  * `int size()` - вовзращает количество ключей
+  * `int size()` - вовзращает количество ключей  
+  
+## ДЗ 9.
+
+Дэдлайн - 12.12
+  * https://www.e-olymp.com/ru/problems/1948 - Топологическая сортировка
+  * https://www.e-olymp.com/ru/problems/2022 - Циклы в графе
+  * https://www.e-olymp.com/ru/problems/1453 - Форд-Беллман
+  * https://www.e-olymp.com/ru/problems/4856 - Кратчайший путь
+  * https://www.e-olymp.com/ru/problems/4853 - Кратчайший путь
+  
+## ДЗ 10.
+
+Дэдлайн - 27.12
+  * https://www.e-olymp.com/ru/problems/1943 - Мосты
+  * https://www.e-olymp.com/ru/problems/3835 - Минимальный каркас
+  * https://www.e-olymp.com/ru/problems/325 - Опасный маршрут
+  * https://www.e-olymp.com/ru/problems/1947 - Конденсация графа
