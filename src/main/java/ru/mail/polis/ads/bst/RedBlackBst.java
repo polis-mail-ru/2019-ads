@@ -233,29 +233,31 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Override
     public Key floor(@NotNull Key key) {
         if (topNode == null) return null;
-        return findFloor(topNode, key);
+        return findFloor(topNode, key, topNode.key);
     }
 
-    private Key findFloor(Node node, Key key) {
+    private Key findFloor(Node node, Key key, Key currentMin) {
         int cmp = key.compareTo(node.key);
 
         if (cmp > 0) {
-            if (node.right == null)
+            if (node.right == null) {
                 return node.key;
-            else {
-                // Если ключ, который мы ищем меньше минимального у правого сына текущего нода, то
-                // 1) такого ключа в дереве нет.
-                // 2) ключ текущего нода есть ближайший меньший к тому, которого мы ищем
-                return min(node.right).key.compareTo(key) > 0 ? node.key : findFloor(node.right, key);
+            } else {
+                return findFloor(node.right, key, currentMin);
             }
-
         } else if (cmp < 0) {
-            if (node.left == null)
-                return null;
-            else
-                return findFloor(node.left, key);
+            if (node.left == null) {
+                if (key.compareTo(min()) < 0) {
+                    return null;
+                } else {
+                    // то, которое ближайшее меньшее
+                    return currentMin;
+                }
+            } else {
+                return findFloor(node.left, key, node.left.key);
+            }
         } else {
-            return node.left != null ? node.left.key : node.key;
+            return node.key;
         }
     }
 
@@ -263,25 +265,31 @@ public class RedBlackBst<Key extends Comparable<Key>, Value> implements Bst<Key,
     @Override
     public Key ceil(@NotNull Key key) {
         if (topNode == null) return null;
-        return findCeil(topNode, key);
+        return findCeil(topNode, key, topNode.key);
     }
 
-    private Key findCeil(Node node, Key key) {
+    private Key findCeil(Node node, Key key, Key currentMax) {
         int cmp = key.compareTo(node.key);
 
         if (cmp > 0) {
-            if (node.right == null)
-                return null;
-            else
-                return max(node.left).key.compareTo(key) < 0 ? node.key : findCeil(node.right, key);
+            if (node.right == null) {
+                if (key.compareTo(max()) > 0) {
+                    return null;
+                } else {
+                    // то, которое ближайшее большое
+                    return currentMax;
+                }
+            } else {
+                return findCeil(node.right, key, node.right.key);
+            }
         } else if (cmp < 0) {
-            //
-            if (node.left == null)
+            if (node.left == null) {
                 return node.key;
-            else
-                return findCeil(node.left, key);
+            } else {
+                return findCeil(node.left, key, currentMax);
+            }
         } else {
-            return node.right != null ? node.right.key : node.key;
+            return node.key;
         }
     }
 
