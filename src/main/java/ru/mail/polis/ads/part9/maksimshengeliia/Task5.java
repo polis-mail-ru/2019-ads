@@ -1,19 +1,17 @@
 package ru.mail.polis.ads.part9.maksimshengeliia;
 
-
 import java.io.*;
 import java.util.*;
 
-/*  https://www.e-olymp.com/ru/submissions/6415175
- * */
+/*
+*   https://www.e-olymp.com/ru/submissions/6415175
+* */
 public class Task5 {
 
     static int from;
     static int to;
     private static List<List<Integer>> graph = new ArrayList<>();
-    private static PriorityQueue<Node> notUsed = new PriorityQueue<>();
-    private static int[] costs;
-    private static boolean[] visited;
+    private static PriorityQueue<Node> queue = new PriorityQueue<>();
     private static Map<Integer, Integer> parents = new HashMap<>();
 
     static class Node implements Comparable<Node>{
@@ -37,8 +35,8 @@ public class Task5 {
         from  = in.nextInt();
         to  = in.nextInt();
 
-        costs = new int[a + 1];
-        visited = new boolean[a + 1];
+        int[] costs = new int[a + 1];
+        boolean[] visited = new boolean[a + 1];
 
         for (int i = 0; i <= a; i++) {
             graph.add(new ArrayList<>());
@@ -53,11 +51,11 @@ public class Task5 {
         }
 
 
-        notUsed.add(new Node(from, 0));
+        queue.add(new Node(from, 0));
         costs[from] = 0;
 
         Node node;
-        while ((node = notUsed.poll()) != null) {
+        while ((node = queue.poll()) != null) {
             if (visited[node.node]) continue;
             visited[node.node] = true;
             List<Integer> neighbors = graph.get(node.node);
@@ -66,7 +64,7 @@ public class Task5 {
                 int newDist = node.dist + 1;
                 if (costs[n] > newDist) {
                     costs[n] = newDist;
-                    notUsed.add(new Node(n, newDist));
+                    queue.add(new Node(n, newDist));
                     parents.put(n, node.node);
                 }
             }

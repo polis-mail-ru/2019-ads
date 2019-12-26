@@ -1,13 +1,12 @@
 package ru.mail.polis.ads.part9.maksimshengeliia;
 
-
 import java.io.*;
 import java.util.StringTokenizer;
 
+/*
+*   https://www.e-olymp.com/ru/submissions/6417165
+* */
 public class Task3 {
-
-    private static Edge[] edges;
-    private static int[] dist;
 
     static class Edge {
         int first;
@@ -24,8 +23,8 @@ public class Task3 {
         int v = in.nextInt();
         int e = in.nextInt();
 
-        edges = new Edge[e];
-        dist = new int[v + 1];
+        Edge[] edges = new Edge[e];
+        int[] dist = new int[v + 1];
         for (int i = 0; i < dist.length; i++) {
             if (i == 1) {
                 dist[i] = 0;

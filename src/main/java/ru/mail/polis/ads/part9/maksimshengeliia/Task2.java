@@ -1,6 +1,5 @@
 package ru.mail.polis.ads.part9.maksimshengeliia;
 
-
 import java.io.*;
 import java.util.*;
 

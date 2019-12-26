@@ -3,7 +3,8 @@ package ru.mail.polis.ads.part9.maksimshengeliia;
 import java.io.*;
 import java.util.*;
 
-/*  https://www.e-olymp.com/ru/submissions/6414973
+/*
+*   https://www.e-olymp.com/ru/submissions/6414973
 * */
 public class Task4 {
 
@@ -20,6 +21,8 @@ public class Task4 {
 
         public Node(int node, int value) {
             this.node = node;
+            // для графа это поле - вес ребра
+            // для очереди с приоритетом - минимальный путь до узла
             this.value = value;
         }
 
@@ -36,15 +39,15 @@ public class Task4 {
         to  = in.nextInt();
 
         for (int i = 0; i < b; i++) {
-            int q = in.nextInt();
-            int w = in.nextInt();
+            int s = in.nextInt();
             int e = in.nextInt();
+            int w = in.nextInt();
 
-            graph.computeIfAbsent(q, k -> new ArrayList<>());
-            graph.get(q).add(new Node(w, e));
+            graph.computeIfAbsent(s, k -> new ArrayList<>());
+            graph.get(s).add(new Node(e, w));
 
-            graph.computeIfAbsent(w, k -> new ArrayList<>());
-            graph.get(w).add(new Node(q, e));
+            graph.computeIfAbsent(e, k -> new ArrayList<>());
+            graph.get(e).add(new Node(s, w));
         }
 
         for (int s : graph.keySet()) {
