@@ -1,48 +1,89 @@
 package ru.mail.polis.ads;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class DZ4_Inversions {
-    public static int count = 0;
-    public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        int n = Integer.parseInt(in.readLine());
+    public static void main(String[] args) {
+        FastScanner in = new FastScanner(System.in);
+        int n = in.nextInt();
         int[] arr = new int[n];
-        String[] nums = in.readLine().split(" ");
         for (int i = 0; i < n; i++) {
-            arr[i] = Integer.parseInt(nums[i]);
+            arr[i] = in.nextInt();
         }
-        arr = logic(arr);
-        System.out.println(Arrays.toString(arr));
-        System.out.println(count);
+
+        System.out.println(getCountOfInversions(arr, 0, n - 1));
     }
 
-    private static int[] logic(int[] arr) {
-        if (arr.length < 2) return arr;
-        int m = arr.length / 2;
-        int[] arr1 = Arrays.copyOfRange(arr, 0, m);
-        int[] arr2 = Arrays.copyOfRange(arr, m, arr.length);
-        return merge(logic(arr1), logic(arr2));
+    static int getCountOfInversions(int[] arr, int left, int right) {
+        if (left >= right) {
+            return 0;
+        }
+
+        int middle = (left + right) / 2;
+        return getCountOfInversions(arr, left, middle)
+                + getCountOfInversions(arr, middle + 1, right)
+                + getCountOfSplitInversions(arr, left, right, middle);
     }
 
-    public static int[] merge(int[] arr1, int arr2[]) {
-        int[] arr = new int[arr1.length + arr2.length];
-        int i1 = 0;
-        int i2 = 0;
-        for (int i = 0; i < arr1.length + arr2.length; i++) {
-            if (i1 == arr1.length) {
-                arr[i] = arr2[i2++];
-            } else if (i2 == arr2.length) {
-                arr[i] = arr1[i1++];
+    static int getCountOfSplitInversions(int[] arr, int left, int right, int middle) {
+        int[] l = Arrays.copyOfRange(arr, left, middle + 1);
+        int[] r = Arrays.copyOfRange(arr, middle + 1, right + 1);
+
+        int i = 0, j = 0, k = left, count = 0;
+        while (i < l.length && j < r.length) {
+            if (l[i] < r[j]) {
+                arr[k] = l[i];
+                i++;
             } else {
-                if (arr1[i1] < arr2[i2]) {
-                    arr[i] = arr1[i1++];
-                } else {
-                    arr[i] = arr2[i2++];
+                arr[k] = r[j];
+                j++;
+                count += l.length - i;
+            }
+
+            k++;
+        }
+
+        while (i < l.length) {
+            arr[k] = l[i];
+            i++;
+            k++;
+        }
+
+        while (j < r.length) {
+            arr[k] = r[j];
+            j++;
+            k++;
+        }
+
+        return count;
+    }
+
+    private static class FastScanner {
+        private final BufferedReader reader;
+        private StringTokenizer tokenizer;
+
+        FastScanner(final InputStream in) {
+            reader = new BufferedReader(new InputStreamReader(in));
+        }
+
+        String next() {
+            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
+                try {
+                    tokenizer = new StringTokenizer(reader.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+            return tokenizer.nextToken();
         }
-        return arr;
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
     }
 }

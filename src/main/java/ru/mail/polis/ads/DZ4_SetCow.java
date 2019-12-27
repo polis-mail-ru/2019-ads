@@ -1,75 +1,44 @@
 package ru.mail.polis.ads;
 
-import java.io.*;
-import java.util.StringTokenizer;
+import java.util.Scanner;
 
 public class DZ4_SetCow {
-    static FastScanner scanner = new FastScanner(System.in);
-    static int n = scanner.nextInt();
-    static int k = scanner.nextInt();
-    static long[] arr = new long[n];
-
     public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n =sc.nextInt();
+        int k=sc.nextInt();
+        int[] arr = new int [n];
         for (int i = 0; i < n; i++) {
-            arr[i] = scanner.nextInt();
+            arr[i]=sc.nextInt();
         }
-        logic(arr);
+        System.out.println(maxMinDist(arr,k));
     }
 
-    private static void logic(long[] arr) {
-        long l = 0;
-        long r = Integer.MAX_VALUE;
-        long mid = (l + r) / 2;
-        while (r - l > 1) {
-            mid = (l + r) / 2;
-            if (may(mid)) {
-                l = mid;
-            } else {
-                r = mid;
-            }
-        }
-        System.out.println(mid);
-    }
-
-    private static boolean may(long mid) {
-        int g = 1;
-        int h = 1;
-        for(int i = 2; i < n; i++){
-            if(arr[i] - arr[g] >= mid){
-                g = i;
-                h++;
-            }
-        }
-        if(h >= k){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-
-    static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
+    public static int maxMinDist(int[] arr, int k){
+        int n=arr.length;
+        if (arr.length==3 || k==2)
+            return arr[n-1]-arr[0];
+        int left =0;
+        int right = arr[n-1]-arr[0];
+        int mid;
+        int j; //номер стойла3 с коровой
+        int g; //счетчик коров на выбранном расстоянии
+        while (left!=right){
+            mid=(left+right)/2;
+            g=1;
+            j=0;
+            for (int i = 1; i <n ; i++) {
+                if (arr[i]-arr[j]>=mid) {
+                    j = i;
+                    g++;
                 }
             }
-            return tokenizer.nextToken();
+            if(g>=k){
+                left=mid+1;
+            } else{
+                right=mid;
+            }
         }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
+        return left-1;
     }
 }
