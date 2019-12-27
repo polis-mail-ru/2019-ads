@@ -84,6 +84,7 @@ public class RedBlackBst<Key extends Comparable<Key>, Value>
             root.color = BLACK;
         }
         return del;
+
     }
 
     private Node remove(Node x, Key key) {
