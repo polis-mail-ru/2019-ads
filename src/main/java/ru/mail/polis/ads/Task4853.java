@@ -1,105 +1,100 @@
-package ru.mail.polis.ads.part9.bardaev;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+package ru.mail.polis.ads;
 import java.util.*;
 
-/**
- * Problem solution template.
- */
-public final class Task4853 {
+public class Task4853 {
+    private static final int BIG_INT = Integer.MAX_VALUE;
+    static class Rib {
+        private int color;
+        private int id;
+        private List<Rib> links;
+        private List<Integer> weights;
 
-    private static int n;
-    private static int m;
-    private static ArrayList<Integer> adj[];
-    private static boolean used[];
-    private static Queue<Integer> queue;
-    private static int start;
-    private static int end;
+        Rib(int color, int id) {
+            this.color = color;
+            this.id = id;
+            this.links = new ArrayList<>();
+            this.weights = new ArrayList<>();
+        }
+
+    }
+
     private static int[] distance;
     private static int[] parents;
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        readData(in);
-        bfs(start, out);
-        out.flush();
-    }
+    private static void solve(){
+        final Scanner in = new Scanner(System.in);
+        StringBuilder out = new StringBuilder();
 
-    private static void bfs(int v, final PrintWriter out) {
-        if (used[v]) {
-            return;
-        }
-        queue.add(v);
-        used[v] = true;
-        while (!queue.isEmpty()) {
-            v = queue.poll();
-            out.print((v + 1) + " ");
-            for (int i = 0; i < adj[v].size(); ++i) {
-                int w = adj[v].get(i);
-                if (used[w]) { continue; }
-                queue.add(w);
-                used[w] = true;
-            }
-        }
-    }
+        int n = in.nextInt();
+        int m = in.nextInt();
+        int fromNode = in.nextInt();
+        int toNode = in.nextInt();
 
-    private static void readData(final FastScanner in) {
-        n = in.nextInt();
-        m = in.nextInt();
-        start = in.nextInt()-1;
-        end = in.nextInt()-1;
-        adj = new ArrayList[n];
-        for (int i = 0; i < n; ++i) {
-            adj[i] = new ArrayList();
-        }
-        for (int i = 0; i < m; ++i) {
-            int v = in.nextInt();
-            int w = in.nextInt();
-            v--;
-            w--;
-            adj[v].add(w);
-            adj[w].add(v);
-            used = new boolean[n];
-            Arrays.fill(used, false);
-            queue = new LinkedList();
-        }
+        Rib[] graph = new Rib[n + 1];
         distance = new int[n + 1];
         parents = new int[n + 1];
-        Arrays.fill(distance, Integer.MAX_VALUE);
-        distance[start] = 0;
-    }
 
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
+        for (int i = 1; i <= n; i++) {
+            distance[i] = BIG_INT;
+            graph[i] = new Rib(0, i);
         }
 
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        distance[fromNode] = 0;
+
+        for (int i = 0; i < m; i++) {
+            int from = in.nextInt();
+            int to = in.nextInt();
+            int weight = in.nextInt();
+
+            graph[from].links.add(graph[to]);
+            graph[from].weights.add(weight);
+
+            graph[to].links.add(graph[from]);
+            graph[to].weights.add(weight);
+        }
+
+        workWithGraph(graph[fromNode]);
+
+        if (distance[toNode] == BIG_INT) {
+            System.out.println(-1);
+            System.exit(0);
+        }
+
+        out.append(distance[toNode]).append("\n");
+        Stack<Integer> path = new Stack<>();
+        path.push(toNode);
+        do {
+            toNode = parents[toNode];
+            path.push(toNode);
+        } while (toNode != fromNode);
+
+        while (!path.isEmpty()) {
+            out.append(path.pop() + " ");
+        }
+        System.out.println(out);
+    }
+
+    private static void workWithGraph(Rib from) {
+        from.color = 1;
+        Queue<Rib> links = new ArrayDeque<>();
+        for (int i = 0; i < from.links.size(); i++) {
+            Rib to = from.links.get(i);
+            int weight = from.weights.get(i);
+            if (distance[to.id] > distance[from.id] + weight) {
+                distance[to.id] = distance[from.id] + weight;
+                parents[to.id] = from.id;
             }
-            return tokenizer.nextToken();
+            if (to.color == 0) {
+                links.add(to);
+            }
         }
-
-        int nextInt() {
-            return Integer.parseInt(next());
+        from.color = 2;
+        while (!links.isEmpty()) {
+            workWithGraph(links.remove());
         }
     }
 
-    public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+    public static void main(String[] args) {
+        solve();
     }
 }

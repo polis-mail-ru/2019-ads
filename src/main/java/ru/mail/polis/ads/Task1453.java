@@ -1,5 +1,4 @@
-package ru.mail.polis.ads.part9.bardaev;
-
+package ru.mail.polis.ads;
 import java.io.*;
 import java.util.StringTokenizer;
 

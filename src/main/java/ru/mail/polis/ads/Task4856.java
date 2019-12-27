@@ -1,123 +1,96 @@
-package ru.mail.polis.ads.part9.bardaev;
+package ru.mail.polis.ads;
+import java.util.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+public class Task4856 {
+    private static final int BIG_INT = Integer.MAX_VALUE;
+    static class Rib {
+        private int color;
+        private int id;
+        private List<Rib> links;
 
-/**
- * Problem solution template.
- */
-public final class Task4856 {
-    private static int INF = Integer.MAX_VALUE / 2;
-    private static int start;
-    private static int end;
-    private static int n;
-    private static int m;
-    private static ArrayList<Integer>[] adj;
-    private static ArrayList<Integer>[] weight;
-    private static boolean[] used;
-    private static int[] dist;
-    private static int[] pred;
+        Rib(int color, int id) {
+            this.color = color;
+            this.id = id;
+            this.links = new ArrayList<>();
+        }
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        readData(in);
-        dejkstra(start);
-        out.println(dist[end]);
-        printWay(end, out);
     }
 
-    private static void printWay(int v, final PrintWriter out) {
-        if (v == -1) { return; }
-        printWay(pred[v], out);
-        out.print((v + 1) + " ");
+    private static int[] distance;
+    private static int[] parents;
+    private static Queue<Rib> links;
+
+    private static void solve(){
+        final Scanner in = new Scanner(System.in);
+        StringBuilder out = new StringBuilder();
+
+        links = new ArrayDeque<>();
+        int n = in.nextInt();
+        int m = in.nextInt();
+        int fromNode = in.nextInt();;
+        int toNode = in.nextInt();;
+
+        Rib[] graph = new Rib[n + 1];
+        distance = new int[n + 1];
+        parents = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            distance[i] = BIG_INT;
+            graph[i] = new Rib(0, i);
+        }
+
+        distance[fromNode] = 0;
+
+        for (int i = 0; i < m; i++) {
+            int from = in.nextInt();
+            int to = in.nextInt();
+
+            graph[from].links.add(graph[to]);
+            graph[to].links.add(graph[from]);
+        }
+
+        workWithGraph(graph[fromNode]);
+        while (!links.isEmpty()) {
+            workWithGraph(links.remove());
+        }
+
+        if (distance[toNode] == Integer.MAX_VALUE) {
+            System.out.println(-1);
+            System.exit(0);
+        }
+
+        out.append(distance[toNode]).append("\n");
+
+        Stack<Integer> path = new Stack<>();
+        path.push(toNode);
+
+        do {
+            toNode = parents[toNode];
+            path.push(toNode);
+        } while (toNode != fromNode);
+
+        while (!path.isEmpty()) {
+            out.append(path.pop()).append(" ");
+        }
+        System.out.println(out);
     }
 
-    private static void dejkstra(int s) {
-        dist[s] = 0;
-        for (int iter = 0; iter < n; ++iter) {
-            int v = -1;
-            int distV = INF;
-            for (int i = 0; i < n; ++i) {
-                if (used[i]) { continue; }
-                if (distV < dist[i]) { continue; }
-                v = i;
-                distV = dist[i];
+    private static void workWithGraph(Rib from) {
+        from.color = 1;
+        for (int i = 0; i < from.links.size(); i++) {
+            Rib to = from.links.get(i);
+            if (distance[to.id] > distance[from.id] + 1) {
+                distance[to.id] = distance[from.id] + 1;
+                parents[to.id] = from.id;
             }
-            for (int i = 0; i < adj[v].size(); ++i) {
-                int u = adj[v].get(i);
-                int weightU = weight[v].get(i);
-                if (dist[v] + weightU < dist[u]) {
-                    dist[u] = dist[v] + weightU;
-                    pred[u] = v;
-                }
+            if (to.color == 0) {
+                links.add(to);
             }
-            used[v] = true;
         }
+        from.color = 2;
     }
 
-    private static void readData(final FastScanner in) {
-        n = in.nextInt();
-        m = in.nextInt();
-        start = in.nextInt()-1;
-        end = in.nextInt()-1;
-        adj = new ArrayList[n];
-        for (int i = 0; i < n; ++i) {
-            adj[i] = new ArrayList<>();
-        }
-        weight = new ArrayList[n];
-        for (int i = 0; i < n; ++i) {
-            weight[i] = new ArrayList();
-        }
-        for (int i = 0; i < m; ++i) {
-            int u = in.nextInt();
-            int v = in.nextInt();
-            int w = in.nextInt();
-            u--;
-            v--;
-            adj[u].add(v);
-            weight[u].add(w);
-        }
-        used = new boolean[n];
-        Arrays.fill(used, false);
-        pred = new int[n];
-        Arrays.fill(pred, -1);
-        dist = new int[n];
-        Arrays.fill(dist, INF);
-    }
-
-    private static class FastScanner {
-        private final BufferedReader reader;
-        private StringTokenizer tokenizer;
-
-        FastScanner(final InputStream in) {
-            reader = new BufferedReader(new InputStreamReader(in));
-        }
-
-        String next() {
-            while (tokenizer == null || !tokenizer.hasMoreTokens()) {
-                try {
-                    tokenizer = new StringTokenizer(reader.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return tokenizer.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-    }
-
-    public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
-        }
+    public static void main(String[] args) {
+        solve();
     }
 }

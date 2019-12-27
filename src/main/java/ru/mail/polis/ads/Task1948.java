@@ -1,74 +1,75 @@
-package ru.mail.polis.ads.part9.bardaev;
-
+package ru.mail.polis.ads;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class Task1948 {
+    private static List<Integer> adjListArray[];
+    private static Color colors[];
+    private static int[] order;
+    private static int curLabel;
 
-    static int n, m;
-    static ArrayList<Integer> adjList[];
-    static int color[];
-    static boolean cyclic = false;
-    static ArrayList<Integer> topSort = new ArrayList<>();
-
-    private static void solve(final FastScanner in, final PrintWriter out) {
-        n = in.nextInt();
-        m = in.nextInt();
-
-        adjList = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            adjList[i] = new ArrayList<>();
-        }
-
-        for (int i = 0; i < m; i++) {
-            int a = in.nextInt();
-            int b = in.nextInt();
-            a--; b--;
-            adjList[a].add(b);
-        }
-
-        color = new int[n];
-        Arrays.fill(color, 0);
-
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < adjList.length; i++) map.put(i, i);
-        for (int i = 0; i < adjList.length; i++) {
-            for (int j = 0; j < adjList[i].size(); j++) {
-                map.remove(adjList[i].get(j));
-            }
-        }
-
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) sort(entry.getKey());
-
-        if (cyclic) {
-            out.print(-1);
-        } else {
-            for (int i = topSort.size() - 1; i >= 0; i--) {
-                out.print(topSort.get(i) + " ");
-            }
-        }
-        out.flush();
+    enum Color {
+        WHITE,
+        GREY,
+        BLACK
     }
 
-    private static void sort(int v) {
-        if (color[v] == 2) return;
-        if (cyclic) return;
-        if (color[v] == 1) {
-            cyclic = true;
-            return;
+    public static void main(String[] args) {
+        FastScanner fs = new FastScanner(System.in);
+        int n = fs.nextInt();
+        int m = fs.nextInt();
+
+        adjListArray = new LinkedList[n + 1];
+        for (int i = 1; i <= n; i++) {
+            adjListArray[i] = new LinkedList<>();
         }
-        color[v] = 1;
-        for (int i = 0; i < adjList[v].size(); ++i) {
-            int w = adjList[v].get(i);
-            sort(w);
-            if (cyclic) return;
+
+        for (int i = 1; i <= m; i++) {
+            adjListArray[fs.nextInt()].add(fs.nextInt());
         }
-        color[v] = 2;
-        topSort.add(v+1);
+
+        colors = new Color[n + 1];
+        for (int i = 1; i <= n; i++) {
+            colors[i] = Color.WHITE;
+        }
+        order = new int[n + 1];
+
+        try {
+            topoSort(n);
+            for (int i = 1; i <= n; i++) {
+                System.out.print(order[i] + " ");
+            }
+        } catch (IllegalArgumentException ex) {
+            System.out.println(-1);
+        }
+    }
+
+    public static void topoSort( int v) {
+        curLabel = v;
+        for (int i = 1; i <= v ; i++) {
+            if (colors[i] == Color.WHITE) {
+                dfsTopo(i);
+            }
+        }
+    }
+
+    public static void dfsTopo(int s) {
+        colors[s] = Color.GREY;
+        List<Integer> list = adjListArray[s];
+        for (Integer v : list) {
+            if (colors[v] == Color.WHITE) {
+                dfsTopo(v);
+            } else if (colors[v] == Color.GREY) {
+                throw new IllegalArgumentException("Cyclic graph");
+            }
+        }
+        colors[s] = Color.BLACK;
+        order[curLabel--] = s;
     }
 
     private static class FastScanner {
@@ -92,13 +93,6 @@ public class Task1948 {
 
         int nextInt() {
             return Integer.parseInt(next());
-        }
-    }
-
-    public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
         }
     }
 }

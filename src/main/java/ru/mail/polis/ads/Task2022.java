@@ -1,17 +1,17 @@
-package ru.mail.polis.ads.part9.bardaev;
-
+package ru.mail.polis.ads;
 import java.io.*;
 import java.util.*;
 
 public class Task2022 {
-    
-    private static List<List<Integer>> nodes;
+
+    private static ArrayList<ArrayList<Integer>> nodes;
     private static boolean[] cycle;
     private static byte[] used;
     private static int[] prev;
 
-    private static void solve(final FastScanner in, final PrintWriter out) {
-
+    public static void main(String[] args) {
+        final FastScanner in = new FastScanner(System.in);
+        PrintWriter out = new PrintWriter(System.out);
         int min = Integer.MAX_VALUE;
         int n = in.nextInt();
         int m = in.nextInt();
@@ -29,7 +29,7 @@ public class Task2022 {
 
             nodes.get(from).add(to);
             nodes.get(to).add(from);
-            
+
         }
 
         for (int i = 1; i < nodes.size(); i++) {
@@ -110,13 +110,6 @@ public class Task2022 {
 
         int nextInt() {
             return Integer.parseInt(next());
-        }
-    }
-
-    public static void main(final String[] arg) {
-        final FastScanner in = new FastScanner(System.in);
-        try (PrintWriter out = new PrintWriter(System.out)) {
-            solve(in, out);
         }
     }
 }
