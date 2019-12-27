@@ -3,6 +3,8 @@ package ru.mail.polis.ads.bst;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 /**
  * Basic binary search tree invariants.
@@ -10,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class BstBaseTest {
     
     Bst<String, String> newBst() {
-        return new AvlBst<>();
+        return new RedBlackBst<>();
     } 
     
     @Test
