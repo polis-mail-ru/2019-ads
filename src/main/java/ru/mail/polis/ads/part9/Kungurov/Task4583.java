@@ -1,4 +1,4 @@
-package ru.mail.polis.ads.part9;
+package ru.mail.polis.ads.part9.Kungurov;
 
 import java.io.*;
 import java.util.*;
