@@ -233,6 +233,8 @@ public class AvlBst<Key extends Comparable<Key>, Value>
         return (result == null) ? node.key : result;
     }
 
+    //Так, если верить компилятору то тут у меня нет ;
+    //Но она есть, и  локально тесты проходят.
     @Override
     public int size() {
         return size(root);
