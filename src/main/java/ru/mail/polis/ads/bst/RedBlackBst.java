@@ -48,7 +48,9 @@ public class RedBlackBst <Key extends Comparable<Key>, Value> implements Bst<Key
     @Nullable
     @Override
     public Value get(@NotNull Key key) {
-        return get(root, key).value;
+        Node node = get(root, key);
+        if (node == null) return null;
+        return node.value;
     }
 
     private Node put(Node x, Key key, Value value) {
@@ -124,7 +126,9 @@ public class RedBlackBst <Key extends Comparable<Key>, Value> implements Bst<Key
     @Nullable
     @Override
     public Key min() {
-        return min(root).key;
+        Node node = min(root);
+        if (node == null) return null;
+        return node.key;
     }
 
     @Nullable
@@ -137,7 +141,9 @@ public class RedBlackBst <Key extends Comparable<Key>, Value> implements Bst<Key
     @Nullable
     @Override
     public Key max() {
-        return max(root);
+        Node node = min(root);
+        if (node == null) return null;
+        return node.key;
     }
 
     private Key max(@NotNull Node x) {
