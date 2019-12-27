@@ -13,7 +13,6 @@ public class HashTableClass<Key, Value> implements HashTable<Key, Value> {
     private Node[] table;
     private int size;
     private int capacity = BASE_CAPACITY;
-    private int usedValues;
 
     public HashTableClass(){
         this.size = 0;
@@ -72,7 +71,6 @@ public class HashTableClass<Key, Value> implements HashTable<Key, Value> {
        if (table[hash] == null)
         {
             table[hash] = node;
-            usedValues++;
             size++;
         }
        else{
@@ -89,9 +87,8 @@ public class HashTableClass<Key, Value> implements HashTable<Key, Value> {
     }
 
     private void resize() {
-        if ((capacity * LOAD_FACTOR) < usedValues) {
+        if ((capacity * LOAD_FACTOR) < size) {
             capacity = capacity * 2;
-            usedValues = 0;
             Node[] prevTable = table;
             table = new Node[capacity];
             for (Node node : prevTable) {
@@ -115,7 +112,6 @@ public class HashTableClass<Key, Value> implements HashTable<Key, Value> {
                 size--;
                 if (prevEntry == null) {
                     table[hash] = entry.next;
-                    usedValues--;
                     return (Value) entry.value;
                 }
                 else {
