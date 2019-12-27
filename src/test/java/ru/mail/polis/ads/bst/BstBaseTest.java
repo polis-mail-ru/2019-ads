@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * Basic binary search tree invariants.
  */
 class BstBaseTest {
-
     Bst<String, String> newBst() {
         return new RedBlackBst<>();
     }
@@ -57,5 +56,4 @@ class BstBaseTest {
         assertEquals(1, bst.size());
         assertEquals(1, bst.height());
     }
-
 }

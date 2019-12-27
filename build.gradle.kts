@@ -19,6 +19,9 @@ dependencies {
     // Annotation
     implementation ("org.jetbrains:annotations:16.0.3")
 
+    // Annotation
+    implementation ("org.jetbrains:annotations:16.0.3")
+
     // JUnit Jupiter test framework
     testCompile("org.junit.jupiter:junit-jupiter-api:5.4.0")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.4.0")
